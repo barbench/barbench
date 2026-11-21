@@ -3,10 +3,13 @@
 import contextlib
 import copy
 import hashlib
+import importlib.metadata
 import io
 import json
 import os
 import stat
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -14,7 +17,8 @@ from unittest import mock
 import numpy as np
 
 from barbench import __main__ as cli
-from barbench import adapters, corpus, pgm, plot, score, split
+import barbench
+from barbench import adapters, corpus, pgm, photos, plot, score, source, split
 
 
 class PgmTest(unittest.TestCase):
@@ -510,6 +514,116 @@ class GateTest(unittest.TestCase):
         self.manifest["split"] = self.manifest["images"][0]["split"] = "test"
         self.write_manifest()
         self.assertEqual(self.run_cli("--split", "test", line=line), 0)
+
+
+class FakeDist:
+    """What importlib.metadata says of an installed barbench: its
+    `__init__.py` is this copy's (or under `here`), and its listed `files`
+    are under `root`."""
+
+    def __init__(self, direct_url, here=source.HERE, files=(), root=None):
+        self.direct_url, self.here, self.files, self.root = direct_url, here, list(files), root
+
+    def locate_file(self, name):
+        if name in self.files:
+            return os.path.join(self.root, *name.parts)
+        return os.path.join(os.path.dirname(self.here), name)
+
+    def read_text(self, name):
+        return self.direct_url if name == "direct_url.json" else None
+
+
+def git(path, *args):
+    # Without the user's settings, such as commit signing.
+    env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1")
+    return subprocess.run(
+        ["git", "-C", path, "-c", "user.name=t", "-c", "user.email=t@example.org", *args],
+        capture_output=True, text=True, check=True, env=env,
+    ).stdout.strip()
+
+
+class SourceTest(unittest.TestCase):
+    """A report names the barbench commit that made it."""
+
+    def test_an_install_from_git_names_its_commit(self):
+        url = json.dumps({"url": "https://example.org/barbench", "vcs_info": {"vcs": "git", "commit_id": "ab" * 20}})
+        self.assertEqual(source.commit(lambda name: FakeDist(url)), "ab" * 20)
+        for url in (json.dumps({"url": "https://example.org/b.whl", "archive_info": {}}), "not json", "[1]", None):
+            self.assertIsNone(source.commit(lambda name: FakeDist(url)), url)
+
+    def test_another_install_says_nothing_of_this_copy(self):
+        url = json.dumps({"url": "https://example.org/barbench", "vcs_info": {"vcs": "git", "commit_id": "ab" * 20}})
+        elsewhere = FakeDist(url, here="/nonexistent/barbench")
+        self.assertEqual(source.commit(lambda name: elsewhere), source.checkout_commit(os.path.dirname(source.HERE)))
+
+    def test_an_install_from_a_folder_names_its_checkout(self):
+        with tempfile.TemporaryDirectory() as d:
+            repo = os.path.join(d, "repo")
+            folder = os.path.join(repo, "a b")
+            os.makedirs(os.path.join(folder, "barbench"))
+            url = json.dumps({"url": "file://" + folder.replace(" ", "%20"), "dir_info": {}})
+            self.assertIsNone(source.commit(lambda name: FakeDist(url)))
+            try:
+                git(repo, "init", "-q")
+            except (OSError, subprocess.SubprocessError):
+                self.skipTest("no git")
+            for path in (os.path.join(folder, "barbench", "x.py"), os.path.join(repo, "outside")):
+                with open(path, "w") as f:
+                    f.write("1")
+            git(repo, "add", "outside")
+            git(repo, "commit", "-q", "-m", "one")
+            # A folder Git does not track tells nothing, though its
+            # checkout has a commit.
+            self.assertIsNone(source.commit(lambda name: FakeDist(url)))
+            git(repo, "add", ".")
+            git(repo, "commit", "-q", "-m", "two")
+            head = git(repo, "rev-parse", "HEAD")
+            self.assertEqual(source.commit(lambda name: FakeDist(url)), head)
+            # Only files under the folder make it dirty.
+            with open(os.path.join(repo, "outside"), "w") as f:
+                f.write("2")
+            self.assertEqual(source.commit(lambda name: FakeDist(url)), head)
+            with open(os.path.join(folder, "new"), "w") as f:
+                f.write("2")
+            self.assertEqual(source.commit(lambda name: FakeDist(url)), head + "-dirty")
+            os.remove(os.path.join(folder, "new"))
+            # Installed files that are not the checkout's: the checkout has
+            # moved on since the install.
+            installed = os.path.join(d, "site")
+            os.makedirs(os.path.join(installed, "barbench"))
+            name = __import__("pathlib").PurePosixPath("barbench/x.py")
+            with open(os.path.join(installed, "barbench", "x.py"), "w") as f:
+                f.write("1")
+            self.assertEqual(source.commit(lambda n: FakeDist(url, files=[name], root=installed)), head)
+            with open(os.path.join(installed, "barbench", "x.py"), "w") as f:
+                f.write("0")
+            self.assertIsNone(source.commit(lambda n: FakeDist(url, files=[name], root=installed)))
+
+    def test_the_report_names_the_commit(self):
+        with tempfile.TemporaryDirectory() as d:
+            pgm.write(os.path.join(d, "a.pgm"), np.full((8, 8), 255, np.uint8))
+            with open(os.path.join(d, "manifest.json"), "w") as f:
+                json.dump({"tier": "synthetic", "seed": 0, "split": "dev", "encoders": {}, "grid": {},
+                           "images": [{"file": "a.pgm", "expected": None, "split": "dev", "kind": "noise"}]}, f)
+            out = os.path.join(d, "r.json")
+            fake = {"fake": lambda paths: ([{"texts": []}], 0.1, "1")}
+            with mock.patch.dict(adapters.ADAPTERS, fake), mock.patch.object(source, "commit", return_value="cd" * 20):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(cli.main(["run", d, "--readers", "fake", "--out", out]), 0)
+            with open(out) as f:
+                self.assertEqual(json.load(f)["barbench_commit"], "cd" * 20)
+
+
+@unittest.skipUnless(os.environ.get("BARBENCH_INSTALLED"), "runs against an installed barbench")
+class InstalledTest(unittest.TestCase):
+    """scripts/ci.sh runs the tests against the wheel it installed, with
+    BARBENCH_INSTALLED set: barbench must work without this folder."""
+
+    def test_the_installed_wheel_is_what_runs(self):
+        self.assertTrue(barbench.__file__.startswith(sys.prefix), barbench.__file__)
+        self.assertEqual(barbench.__version__, importlib.metadata.version("barbench"))
+        # The photo lists ship inside it.
+        self.assertEqual(len(photos.load_lists()), 4)
 
 
 class AdapterTest(unittest.TestCase):

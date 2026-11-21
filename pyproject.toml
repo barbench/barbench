@@ -1,0 +1,27 @@
+# barbench as a package, so it runs the same from an installed wheel as
+# from this folder, and its photo lists ship inside it.
+#
+# Every dependency is pinned exactly: a new release of a reader or an
+# encoder would change the corpus or the numbers without a change here.
+# Licences: zxing-cpp Apache-2.0, python-barcode MIT, numpy BSD-3-Clause
+# AND 0BSD AND MIT AND Zlib AND CC0-1.0 (0BSD and CC0-1.0 are allowed for
+# barbench only; see AGENTS.md), flit_core BSD-3-Clause (with tomli, MIT,
+# inside it). They are tools the benchmark runs or is built with, not
+# dependencies of the reader.
+
+[build-system]
+requires = ["flit_core==3.12.0"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "barbench"
+version = "0.0.0"
+description = "A reproducible benchmark for 1D barcode readers"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy==2.5.5",
+    "python-barcode==0.16.1",
+    "zxing-cpp==3.1.1",
+]

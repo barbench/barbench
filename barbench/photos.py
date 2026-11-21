@@ -1,7 +1,7 @@
 """The photo tier: real photographs of Code 128 labels, and of retail
 barcodes that are not Code 128 as negatives.
 
-Each set of photos is a listing in `bench/photos/`, with every photo's
+Each set of photos is a listing in `lists/`, with every photo's
 SHA-256: ZXing's blackbox test images (Apache-2.0), downloaded one by one
 from a pinned commit; photos of Code 128 labels from Wikimedia Commons,
 each under its own licence, downloaded one by one from their pinned
@@ -30,7 +30,7 @@ from . import jpeg, pgm
 from .split import SPLITS, of_group
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-LISTINGS = os.path.join(HERE, os.pardir, "photos")
+LISTINGS = os.path.join(HERE, "lists")
 MANIFEST = os.path.join(LISTINGS, "zxing-blackbox.json")
 
 #: The most bytes one photo may hold: the largest is about 3.2 MB.
@@ -198,7 +198,7 @@ def check_split(listing):
 
 
 def load_lists(names=None, split="dev"):
-    """The listings in bench/photos of the given split, by name; all of
+    """The listings in `lists/` of the given split, by name; all of
     them by default."""
     if split not in SPLITS:
         raise ValueError(f"split is {split!r}, not one of {', '.join(SPLITS)}")

@@ -81,19 +81,19 @@ four shots each: angles, blur, glare, fingers in the frame) and, as
 negatives, 80 photos of EAN-13 and UPC-A barcodes, which a Code 128 reader
 should leave alone. They are ZXing's blackbox test images, © 2007-2020
 ZXing authors, Apache-2.0. The repository holds only their list
-(`bench/photos/zxing-blackbox.json`): each is downloaded from a pinned ZXing
-commit, checked against its SHA-256, and converted to PGM.
+(`bench/barbench/lists/zxing-blackbox.json`): each is downloaded from a
+pinned ZXing commit, checked against its SHA-256, and converted to PGM.
 
 zxing-cpp's test suite includes some of these images (and ZXing's includes
 all of them), so this tier favours it. Streepjes's misses here are to be
 fixed by better decoding, not by tuning to these files.
 
-**Wikimedia Commons** (`bench/photos/commons-code128.json`) adds 13 photos
-and scans of Code 128 labels that neither reader's own tests use: postal
-registration labels, GS1-128 pallet and parcel labels, a price tag, shelf,
-device and street-lamp tags, and thermal receipts. They come from
-Commons' Code 128, GS1-128 and Barcode categories. Each file has its own
-author and licence (CC0, CC BY 4.0 or public domain), which the list
+**Wikimedia Commons** (`bench/barbench/lists/commons-code128.json`) adds
+13 photos and scans of Code 128 labels that neither reader's own tests
+use: postal registration labels, GS1-128 pallet and parcel labels, a price
+tag, shelf, device and street-lamp tags, and thermal receipts. They come
+from Commons' Code 128, GS1-128 and Barcode categories. Each file has its
+own author and licence (CC0, CC BY 4.0 or public domain), which the list
 records with the file's page and pinned original, and so does
 `ATTRIBUTION.md`. Their `expected` text is the line printed under the
 symbol, read by eye, without its grouping spaces and without the
@@ -110,8 +110,8 @@ now, listed with their digits (`payload`, for all but three photos that
 the set gives none for) so they can become positives when Streepjes reads
 EAN:
 
-- **KAIST** (`bench/photos/kaist-real.json`): 524 cropped phone photos
-  from the dataset of the Quick Browser and Smart Inference papers
+- **KAIST** (`bench/barbench/lists/kaist-real.json`): 524 cropped phone
+  photos from the dataset of the Quick Browser and Smart Inference papers
   (Duy-Thao Do, [Zenodo 13586402](https://zenodo.org/records/13586402)),
   CC BY 4.0. Its `real` folder also holds crops of other sets, which are
   left out: 1,055 from the WWU Muenster database (non-commercial only) and
@@ -120,9 +120,9 @@ EAN:
   one photo that also shows a Code 128 label. The 524 kept are the
   baseline JPEGs among the photos named by their 13 digits, which match
   neither of those sets; their licence is the one the dataset states.
-- **ArTe-Lab** (`bench/photos/artelab-medium.json`): the 345 photos of the
-  Medium Barcode 1D Collection (University of Insubria; Zamberletti et
-  al., 2011), with and without autofocus, CC BY 3.0.
+- **ArTe-Lab** (`bench/barbench/lists/artelab-medium.json`): the 345
+  photos of the Medium Barcode 1D Collection (University of Insubria;
+  Zamberletti et al., 2011), with and without autofocus, CC BY 3.0.
 
 Their photos are read from each set's archive, pinned by size and SHA-256,
 which is downloaded only while a listed photo is missing from the cache
@@ -171,17 +171,26 @@ A reader that is not installed is skipped and reported as such.
 
 ## Running it
 
-It needs Python 3.12 or newer. From the repository root:
+It needs Python 3.12 or newer. barbench is a package
+(`bench/pyproject.toml`, which pins its dependencies exactly) and runs
+from where it is installed, photo lists included. From the repository root:
 
 ```bash
 python3 -m venv target/bench-venv
-target/bench-venv/bin/pip install -r bench/requirements.txt
+target/bench-venv/bin/pip install ./bench
 cargo build --release -p streepjes-cli
-cd bench
-../target/bench-venv/bin/python -m barbench corpus ../target/bench/corpus
-STREEPJES_BIN=../target/release/streepjes \
-    ../target/bench-venv/bin/python -m barbench run ../target/bench/corpus --out ../target/bench/results.json
+target/bench-venv/bin/python -m barbench corpus target/bench/corpus
+STREEPJES_BIN=target/release/streepjes \
+    target/bench-venv/bin/python -m barbench run target/bench/corpus --out target/bench/results.json
 ```
+
+Install again after changing barbench (`pip install ./bench` reinstalls
+it), or run it from `bench/`, where `python -m barbench` finds this folder
+before the installed copy. Each report names the barbench commit that made
+it (`barbench_commit`): the one pip installed from when that was a Git
+URL, else that of the checkout, with `-dirty` when files under `bench/`
+differ from it. It is `null` when an installed copy is no longer what its
+checkout holds, or when Git cannot tell.
 
 For the curves, `python -m barbench sweep DIR` in place of `corpus`, then
 `run` as above with `--out`, and `python -m barbench plot RESULTS --out

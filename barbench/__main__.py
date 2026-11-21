@@ -16,7 +16,7 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, corpus, photos, plot, score, split
+from . import __version__, adapters, corpus, photos, plot, score, source, split
 
 
 SEED_HELP = f"development or test images; test seeds are {split.TEST_SEEDS} and up"
@@ -131,6 +131,7 @@ def main(argv=None):
     paths = [os.path.join(args.dir, e["file"]) for e in manifest["images"]]
     report = {
         "barbench": __version__,
+        "barbench_commit": source.commit(),
         "tier": manifest["tier"],
         "seed": manifest["seed"],
         "split": args.split,
