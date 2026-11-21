@@ -1,0 +1,7 @@
+# barbench's Python dependencies, pinned. Licences: zxing-cpp Apache-2.0,
+# python-barcode MIT, numpy BSD-3-Clause AND 0BSD AND MIT AND Zlib AND
+# CC0-1.0 (0BSD and CC0-1.0 are allowed for barbench only; see AGENTS.md).
+# They are tools the benchmark runs, not dependencies of the reader.
+numpy==2.5.5
+python-barcode==0.16.1
+zxing-cpp==3.1.1
