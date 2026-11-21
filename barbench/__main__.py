@@ -1,9 +1,11 @@
 """Command line: build a corpus, run readers on it, report.
 
     python -m barbench corpus DIR [--seed N] [--per-cell N]
+    python -m barbench sweep DIR [--seed N] [--per-point N]
     python -m barbench photos DIR [--cache DIR] [--sets a,b]
     python -m barbench run DIR [--readers a,b] [--out results.json]
         [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4]
+    python -m barbench plot REPORT --out curves.svg
 """
 
 import argparse
@@ -11,7 +13,7 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, corpus, photos, score
+from . import __version__, adapters, corpus, photos, plot, score
 
 
 def main(argv=None):
@@ -22,6 +24,13 @@ def main(argv=None):
     make.add_argument("--seed", type=int, default=1)
     make.add_argument("--per-cell", type=int, default=2, help="images per grid cell")
     make.add_argument("--negatives", type=int, default=8)
+    sweep = sub.add_parser("sweep", help="write the sweep tier, for curves, to DIR")
+    sweep.add_argument("dir")
+    sweep.add_argument("--seed", type=int, default=1)
+    sweep.add_argument("--per-point", type=int, default=20, help="images per point of a sweep")
+    draw = sub.add_parser("plot", help="draw a sweep run's curves as SVG")
+    draw.add_argument("report", help="the JSON report of `run` on a sweep tier")
+    draw.add_argument("--out", required=True, help="where to write the SVG")
     shots = sub.add_parser("photos", help="write the photo tier to DIR, downloading as needed")
     shots.add_argument("dir")
     shots.add_argument("--cache", help="where downloads are kept (default: DIR-cache)")
@@ -58,6 +67,28 @@ def main(argv=None):
         print(f"wrote {len(manifest['images'])} photos to {args.dir}")
         return 0
 
+    if args.command == "sweep":
+        if args.per_point < 1:
+            parser.error("--per-point must be at least 1")
+        manifest = corpus.generate_sweep(args.dir, args.seed, args.per_point)
+        print(f"wrote {len(manifest['images'])} images to {args.dir}")
+        return 0
+
+    if args.command == "plot":
+        try:
+            with open(args.report, encoding="utf-8") as f:
+                report = json.load(f)
+        except (OSError, ValueError) as e:
+            parser.error(f"cannot read {args.report}: {e}")
+        if not isinstance(report, dict) or not report.get("sweeps"):
+            parser.error(f"{args.report} is not a report on a sweep tier")
+        # The SVG holds σ, ±, ° and the like: UTF-8, as XML assumes,
+        # whatever the platform's default.
+        with open(args.out, "w", encoding="utf-8") as f:
+            f.write(plot.svg(report))
+        print(f"wrote {args.out}")
+        return 0
+
     if args.command == "corpus":
         manifest = corpus.generate(args.dir, args.seed, args.per_cell, args.negatives)
         print(f"wrote {len(manifest['images'])} images to {args.dir}")
@@ -73,6 +104,8 @@ def main(argv=None):
         "encoders": manifest["encoders"],
         "photos": manifest.get("photos"),
         "grid": manifest["grid"],
+        "baseline": manifest.get("baseline"),
+        "sweeps": manifest.get("sweeps"),
         "readers": {},
     }
     readers = [r for r in args.readers.split(",") if r]

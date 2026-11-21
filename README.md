@@ -36,6 +36,44 @@ reading the files, and zbar starts a process per image. Each reader also
 runs with its own defaults: streepjes at its fast effort, zxing-cpp with
 its rotation, downscaling and inversion retries on.
 
+### Curves
+
+The **sweep** tier draws read-rate curves: from a baseline symbol (two
+pixels per module, blur 0.2 modules, noise 4 grey levels, tilted as a
+hand-held one is, up to 5° either way and upside down half the time), it
+moves one parameter at a time through a range, 20 symbols a point, from the
+same encoders and with the same checks as the grid:
+
+| Sweep      | Values |
+|------------|--------|
+| module     | 0.6, 0.8, 1, 1.2, 1.4, 1.6, 2, 2.5, 3, 4, 6 pixels |
+| blur       | 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1 module (Gaussian sigma) |
+| noise      | 0, 4, 8, 16, 24, 32, 48, 64 grey levels (Gaussian sigma) |
+| rotation   | 0° to 90° in steps of 10° |
+
+The baseline is tilted rather than turned at random because some readers
+read only near-upright symbols, and a random turn would make all their
+curves rotation curves; rotation has its own sweep, whose points are
+exact angles. Each symbol sits at a random sub-pixel offset, and its pitch
+is the point's module size within ±5%, as no camera lines its pixels up
+with the modules or holds a pitch exactly. At an exact whole number of
+pixels per module every edge falls at the same phase within its pixel, and
+a reader fares very differently there than just beside it: in one run
+with blur 0.6, zxing-cpp read 90% of symbols at one pixel against none at
+0.95 and 1.05, and 32% at two pixels against 95% and 80% at 1.9 and 2.1.
+
+The baseline's noise of 4 grey levels drives ZBar's module-size curve: in
+one run ZBar read none of ten symbols at 6 pixels per module with that
+noise, and all ten without it, so its fall at large modules is about noise
+it does not average away, not about size.
+
+`run` on a sweep tier reports each point's read rate with its 95% Wilson
+interval, and `plot` draws the curves as SVG, one panel per sweep, with
+the intervals as bands: where bands overlap, the run cannot tell the
+readers apart. Twenty symbols a point resolve a read rate to about ±20
+percentage points in the middle of a curve; at 20 of 20 the interval
+reaches down to 84%, and at 0 of 20 up to 16%.
+
 ### Photos
 
 The **photos** tier is 40 real photographs of Code 128 labels (ten symbols,
@@ -118,6 +156,10 @@ cd bench
 STREEPJES_BIN=../target/release/streepjes \
     ../target/bench-venv/bin/python -m barbench run ../target/bench/corpus --out ../target/bench/results.json
 ```
+
+For the curves, `python -m barbench sweep DIR` in place of `corpus`, then
+`run` as above with `--out`, and `python -m barbench plot RESULTS --out
+curves.svg`.
 
 For the photo tier, `python -m barbench photos DIR` in place of `corpus`
 downloads and converts the photos into `DIR-cache` (the archives are about

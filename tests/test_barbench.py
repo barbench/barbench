@@ -13,7 +13,7 @@ from unittest import mock
 import numpy as np
 
 from barbench import __main__ as cli
-from barbench import adapters, corpus, pgm, score
+from barbench import adapters, corpus, pgm, plot, score
 
 
 class PgmTest(unittest.TestCase):
@@ -49,6 +49,18 @@ class RenderTest(unittest.TestCase):
         self.assertEqual(sampled, modules)
         # Nothing but paper beyond the symbol.
         self.assertEqual(dark[-1], start + 2 * (len(modules) - 1) + 1)
+
+    def test_a_shift_moves_the_symbol_by_part_of_a_pixel(self):
+        modules = [1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1]
+        still = corpus.render(modules, 1.0, 0.0, 0.0, 0.0, np.random.default_rng(0))
+        moved = corpus.render(modules, 1.0, 0.0, 0.0, 0.0, np.random.default_rng(0), (0.5, 0.0))
+        self.assertEqual(still.shape, moved.shape)
+        row_still, row_moved = still[still.shape[0] // 2], moved[moved.shape[0] // 2]
+        # Unshifted, one pixel per module draws pure ink and paper; half a
+        # pixel over, every edge pixel is half of each.
+        mid = (corpus.PAPER + corpus.INK) / 2
+        self.assertFalse(np.any(np.abs(row_still.astype(float) - mid) < 2))
+        self.assertTrue(np.any(np.abs(row_moved.astype(float) - mid) < 2))
 
     def test_encoders_agree_with_a_reader(self):
         for name, encode in corpus.ENCODERS.items():
@@ -153,6 +165,190 @@ class ScoreTest(unittest.TestCase):
     def test_result_count_must_match(self):
         with self.assertRaises(ValueError):
             score.score(self.MANIFEST, [])
+
+
+class SweepTest(unittest.TestCase):
+    #: A short sweep, so the test renders few images.
+    SMALL = {"module_px": [1.5, 3.0], "blur": [0.0, 0.6], "rotation": [0.0, 45.0]}
+
+    def make(self, d, per_point=2, seed=3):
+        with mock.patch.dict(corpus.SWEEPS, self.SMALL, clear=True):
+            return corpus.generate_sweep(d, seed, per_point)
+
+    def test_each_point_moves_one_parameter(self):
+        with tempfile.TemporaryDirectory() as d:
+            manifest = self.make(d)
+            images = manifest["images"]
+            self.assertEqual(len(images), 6 * 2)
+            for e in images:
+                self.assertTrue(os.path.exists(os.path.join(d, e["file"])))
+                # Rotation is the point, or the point upside down.
+                if e["sweep"] == "rotation":
+                    self.assertIn(e["rotation"], (e["point"], (e["point"] + 180.0) % 360.0))
+                else:
+                    self.assertEqual(e[e["sweep"]], e["point"])
+                    # The baseline tilt: within TILT of upright either way round.
+                    off = (e["rotation"] + corpus.TILT) % 180.0
+                    self.assertLessEqual(off, 2 * corpus.TILT)
+                for key, base in corpus.BASELINE.items():
+                    if key != e["sweep"]:
+                        self.assertEqual(e[key], base)
+            # Each point gets each encoder once in two.
+            for axis, values in self.SMALL.items():
+                for v in values:
+                    at = [e["encoder"] for e in images if e["sweep"] == axis and e["point"] == v]
+                    self.assertEqual(sorted(at), sorted(corpus.ENCODERS))
+            self.assertEqual(manifest["sweeps"], self.SMALL)
+            self.assertEqual(manifest["grid"], {})
+
+    def test_shifts_pitches_and_flips_vary_image_by_image(self):
+        with tempfile.TemporaryDirectory() as d:
+            manifest = self.make(d, per_point=8, seed=4)
+            images = manifest["images"]
+            shifts = [s for e in images for s in e["shift"]]
+            self.assertTrue(all(0.0 <= s < 1.0 for s in shifts))
+            self.assertGreater(len(set(shifts)), 1)
+            for e in images:
+                ratio = e["pitch_px"] / e["module_px"]
+                self.assertLessEqual(abs(ratio - 1.0), corpus.JITTER)
+            self.assertGreater(len({e["pitch_px"] for e in images}), 1)
+            # The rotation sweep reads its angles both ways round.
+            turned = {(e["point"], e["rotation"]) for e in images if e["sweep"] == "rotation"}
+            for point in self.SMALL["rotation"]:
+                self.assertIn((point, point), turned)
+                self.assertIn((point, (point + 180.0) % 360.0), turned)
+            self.assertEqual(manifest["baseline"]["jitter"], corpus.JITTER)
+
+    def test_the_cli_writes_a_sweep_and_runs_it(self):
+        with tempfile.TemporaryDirectory() as d:
+            corpus_dir, out = os.path.join(d, "s"), os.path.join(d, "r.json")
+            with contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    cli.main(["sweep", corpus_dir, "--per-point", "0"])
+            with mock.patch.dict(corpus.SWEEPS, self.SMALL, clear=True):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(cli.main(["sweep", corpus_dir, "--per-point", "1"]), 0)
+
+            def reads_all(paths):
+                with open(os.path.join(corpus_dir, "manifest.json")) as f:
+                    images = json.load(f)["images"]
+                return [{"texts": [e["expected"]]} for e in images], 0.1, "test"
+
+            with mock.patch.dict(adapters.ADAPTERS, {"fake": reads_all}):
+                printed = io.StringIO()
+                with contextlib.redirect_stdout(printed):
+                    cli.main(["run", corpus_dir, "--readers", "fake", "--out", out])
+            with open(out) as f:
+                report = json.load(f)
+            self.assertEqual(report["sweeps"], self.SMALL)
+            self.assertEqual(report["baseline"]["module_px"], corpus.BASELINE["module_px"])
+            self.assertEqual(
+                [p["rate"] for p in report["readers"]["fake"]["score"]["curves"]["blur"]],
+                [1.0, 1.0],
+            )
+            # The table shows a row per sweep.
+            for axis in self.SMALL:
+                self.assertIn(axis, printed.getvalue())
+            svg_path = os.path.join(d, "c.svg")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(cli.main(["plot", out, "--out", svg_path]), 0)
+            with open(svg_path, encoding="utf-8") as f:
+                self.assertIn("σ", f.read())
+
+    def test_the_seed_decides_everything(self):
+        digests = []
+        for _ in range(2):
+            with tempfile.TemporaryDirectory() as d:
+                manifest = self.make(d, per_point=1, seed=9)
+                blob = json.dumps(manifest["images"]).encode()
+                for e in manifest["images"]:
+                    with open(os.path.join(d, e["file"]), "rb") as f:
+                        blob += f.read()
+                digests.append(hashlib.sha256(blob).hexdigest())
+        self.assertEqual(digests[0], digests[1])
+
+    def test_wilson_intervals(self):
+        # Known values: 0 of 10, 10 of 10, 5 of 10, and none.
+        low, high = score.wilson(0, 10)
+        self.assertEqual(low, 0.0)
+        self.assertAlmostEqual(high, 0.2775, places=4)
+        low, high = score.wilson(10, 10)
+        self.assertAlmostEqual(low, 0.7225, places=4)
+        self.assertEqual(high, 1.0)
+        low, high = score.wilson(5, 10)
+        self.assertAlmostEqual(low, 0.2366, places=4)
+        self.assertAlmostEqual(high, 0.7634, places=4)
+        self.assertEqual(score.wilson(0, 0), (0.0, 1.0))
+
+    def curve_report(self):
+        manifest = {
+            "grid": {},
+            "sweeps": {"blur": [0.0, 0.5], "module_px": [1.0, 2.0, 4.0]},
+            "images": [
+                {"expected": "A", "sweep": "blur", "point": 0.0},
+                {"expected": "B", "sweep": "blur", "point": 0.0},
+                {"expected": "C", "sweep": "blur", "point": 0.5},
+                {"expected": "D", "sweep": "module_px", "point": 1.0},
+                {"expected": "E", "sweep": "module_px", "point": 2.0},
+                {"expected": "F", "sweep": "module_px", "point": 4.0},
+            ],
+        }
+        results = [{"texts": t} for t in (["A"], ["B"], [], [], ["X"], ["F"])]
+        return manifest, results
+
+    def test_curves_follow_the_sweeps(self):
+        manifest, results = self.curve_report()
+        curves = score.score(manifest, results)["curves"]
+        self.assertEqual([p["value"] for p in curves["blur"]], [0.0, 0.5])
+        self.assertEqual([(p["read"], p["of"]) for p in curves["blur"]], [(2, 2), (0, 1)])
+        # A misread is not a read.
+        self.assertEqual([p["read"] for p in curves["module_px"]], [0, 0, 1])
+        for p in curves["blur"] + curves["module_px"]:
+            self.assertLessEqual(p["low"], p["rate"])
+            self.assertLessEqual(p["rate"], p["high"])
+        # A grid tier has no curves, and a point without symbols no rate.
+        self.assertEqual(score.score({"grid": {}, "images": []}, [])["curves"], {})
+        manifest["sweeps"]["blur"].append(0.9)
+        empty = score.score(manifest, results)["curves"]["blur"][-1]
+        self.assertEqual((empty["rate"], empty["of"]), (None, 0))
+
+    def test_plot_draws_every_reader_on_every_sweep(self):
+        import xml.etree.ElementTree as ET
+
+        manifest, results = self.curve_report()
+        scored = score.score(manifest, results)
+        report = {
+            "sweeps": manifest["sweeps"],
+            "baseline": corpus.BASELINE,
+            "grid": {},
+            "readers": {
+                "one": {"score": scored},
+                "two & co": {"score": scored},
+                "gone": {"skipped": "not installed"},
+            },
+        }
+        root = ET.fromstring(plot.svg(report))
+        ns = "{http://www.w3.org/2000/svg}"
+        # One line and one band per drawn reader and sweep.
+        self.assertEqual(len(root.findall(f"{ns}polyline")), 2 * 2)
+        self.assertEqual(len(root.findall(f"{ns}polygon")), 2 * 2)
+        texts = "".join(root.itertext())
+        self.assertIn("two & co", texts)
+        self.assertNotIn("gone", texts)
+        self.assertIn("Module size (pixels)", texts)
+
+    def test_plot_refuses_a_report_without_sweeps(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "r.json")
+            with open(path, "w") as f:
+                json.dump({"grid": {}, "readers": {}}, f)
+            broken = os.path.join(d, "broken.json")
+            with open(broken, "w") as f:
+                f.write("{not json")
+            for report in (path, broken, os.path.join(d, "missing.json")):
+                with contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit):
+                        cli.main(["plot", report, "--out", os.path.join(d, "c.svg")])
 
 
 class GateTest(unittest.TestCase):

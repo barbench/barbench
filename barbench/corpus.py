@@ -98,10 +98,12 @@ def encoder_versions():
     return {name: importlib.metadata.version(name) for name in ENCODERS}
 
 
-def render(modules, module_px, rotation, blur, noise, rng):
+def render(modules, module_px, rotation, blur, noise, rng, shift=(0.0, 0.0)):
     """`modules` (1 = bar) drawn as a symbol with quiet zones, rotated by
     `rotation` degrees about its centre, blurred and noised, as a uint8
-    image just large enough to hold it with a margin."""
+    image just large enough to hold it with a margin. `shift` moves the
+    symbol by a fraction of a pixel (x, y), so that its edges need not fall
+    on pixel boundaries."""
     import numpy as np
 
     pattern = np.array([0] * QUIET + list(modules) + [0] * QUIET, dtype=np.float64)
@@ -117,7 +119,7 @@ def render(modules, module_px, rotation, blur, noise, rng):
     ys, xs = np.mgrid[0:tall, 0:width].astype(np.float64)
     ink = np.zeros((tall, width))
     for oy, ox in itertools.product(offsets, offsets):
-        dx, dy = xs + ox - width / 2, ys + oy - tall / 2
+        dx, dy = xs + ox - width / 2 - shift[0], ys + oy - tall / 2 - shift[1]
         u = (dx * c + dy * s) / module_px + length / 2
         v = (-dx * s + dy * c) / module_px + height / 2
         inside = (u >= 0) & (u < length) & (v >= 0) & (v < height)
@@ -153,23 +155,12 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
     rejected = []
     for i in range(len(cells) * per_cell):
         (module_px, blur, rotation, noise), index = cells[i // per_cell]
-        text = payload(rng)
         # The encoder follows the parity of the cell's indices and the
         # image's place in it: every value of every axis gets each encoder
         # equally often, so no axis stands in for the encoder. (Any fixed
         # cycle over images would line up with some axis.)
         encoder = names[(sum(index) + i % per_cell) % len(names)]
-        modules = ENCODERS[encoder](text)
-        # A payload the encoder gets wrong is recorded and replaced, a
-        # bounded number of times.
-        tries = 0
-        while not round_trips(modules, text):
-            rejected.append({"encoder": encoder, "payload": text})
-            tries += 1
-            if tries >= MAX_REJECTS:
-                raise RuntimeError(f"{encoder} got {tries} payloads in a row wrong")
-            text = payload(rng)
-            modules = ENCODERS[encoder](text)
+        text, modules = symbol(rng, encoder, rejected)
         image = render(modules, module_px, rotation, blur, noise, rng)
         name = f"pos-{i:04d}.pgm"
         pgm.write(os.path.join(out_dir, name), image)
@@ -204,6 +195,125 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
         "seed": seed,
         "encoders": encoder_versions(),
         "grid": GRID,
+        "rejected": rejected,
+        "images": entries,
+    }
+    with open(os.path.join(out_dir, "manifest.json"), "w") as f:
+        json.dump(manifest, f, indent=1)
+        f.write("\n")
+    return manifest
+
+
+#: Where every sweep starts: a symbol most readers read. It is tilted as a
+#: hand-held one is (`TILT`), not turned at random: some readers read only
+#: near-upright symbols, and a random turn would make every curve of
+#: theirs a rotation curve. Rotation has its own sweep.
+BASELINE = {"module_px": 2.0, "blur": 0.2, "noise": 4.0}
+
+#: The baseline's tilt: up to this many degrees either way, and upside
+#: down half the time, so readers must read symbols both ways round.
+TILT = 5.0
+
+#: Each image's module pitch is its point's nominal value times a factor
+#: drawn within this much of 1, so that every point averages over where
+#: edges fall within pixels. At an exact whole number of pixels per module
+#: every edge falls at the same phase, and how a reader fares there differs
+#: from just beside it, by far more than a point's spread: in one run with
+#: blur 0.6 and 40 symbols a point, zxing-cpp read 90% at one pixel against
+#: none at 0.95 and 1.05, and 32% at two pixels against 95% and 80% at 1.9
+#: and 2.1. No camera holds a pitch that exact.
+JITTER = 0.05
+
+#: The values each sweep moves one parameter through, the others at the
+#: baseline. Rotation is swept from upright to a quarter turn (and upside
+#: down half the time); elsewhere it is the baseline's tilt. Blur is a
+#: Gaussian sigma in modules, noise one in grey levels. Module sizes are
+#: nominal: each image's pitch is jittered (`JITTER`).
+SWEEPS = {
+    "module_px": [0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 6.0],
+    "blur": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
+    "noise": [0.0, 4.0, 8.0, 16.0, 24.0, 32.0, 48.0, 64.0],
+    "rotation": [0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0],
+}
+
+
+def symbol(rng, encoder, rejected):
+    """A payload and its modules from `encoder`, read back before use: a
+    payload the encoder gets wrong is recorded in `rejected` and replaced,
+    a bounded number of times."""
+    text = payload(rng)
+    modules = ENCODERS[encoder](text)
+    tries = 0
+    while not round_trips(modules, text):
+        rejected.append({"encoder": encoder, "payload": text})
+        tries += 1
+        if tries >= MAX_REJECTS:
+            raise RuntimeError(f"{encoder} got {tries} payloads in a row wrong")
+        text = payload(rng)
+        modules = ENCODERS[encoder](text)
+    return text, modules
+
+
+def generate_sweep(out_dir, seed=1, per_point=20):
+    """Writes the sweep tier to `out_dir`: for each parameter in `SWEEPS`,
+    `per_point` symbols at each of its values, every other parameter at the
+    baseline, as PGM images and `manifest.json`. Encoders alternate image
+    by image, so each point gets each encoder equally often when
+    `per_point` is even. Returns the manifest."""
+    import numpy as np
+
+    rng = np.random.default_rng(seed)
+    os.makedirs(out_dir, exist_ok=True)
+    names = list(ENCODERS)
+    entries = []
+    rejected = []
+    i = 0
+    for axis, values in SWEEPS.items():
+        for value in values:
+            for k in range(per_point):
+                flip = 180.0 * int(rng.integers(0, 2))
+                tilt = float(rng.uniform(-TILT, TILT))
+                params = dict(BASELINE, rotation=(flip + tilt) % 360.0)
+                params[axis] = (flip + value) % 360.0 if axis == "rotation" else value
+                # A camera does not line its pixels up with the modules: at
+                # one pixel per module, edges on pixel boundaries would draw
+                # a symbol crisper than any photo of it.
+                shift = (float(rng.uniform(0.0, 1.0)), float(rng.uniform(0.0, 1.0)))
+                pitch = params["module_px"] * float(rng.uniform(1.0 - JITTER, 1.0 + JITTER))
+                encoder = names[k % len(names)]
+                text, modules = symbol(rng, encoder, rejected)
+                image = render(
+                    modules,
+                    pitch,
+                    params["rotation"],
+                    params["blur"],
+                    params["noise"],
+                    rng,
+                    shift,
+                )
+                name = f"sweep-{i:04d}.pgm"
+                pgm.write(os.path.join(out_dir, name), image)
+                entries.append(
+                    {
+                        "file": name,
+                        "expected": text,
+                        "encoder": encoder,
+                        "sweep": axis,
+                        "point": value,
+                        **params,
+                        "pitch_px": pitch,
+                        "shift": list(shift),
+                    }
+                )
+                i += 1
+    manifest = {
+        "tier": "sweep",
+        "seed": seed,
+        "encoders": encoder_versions(),
+        "grid": {},
+        "baseline": dict(BASELINE, tilt=TILT, jitter=JITTER),
+        "sweeps": {axis: list(values) for axis, values in SWEEPS.items()},
+        "per_point": per_point,
         "rejected": rejected,
         "images": entries,
     }
