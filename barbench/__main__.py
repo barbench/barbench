@@ -1,11 +1,14 @@
 """Command line: build a corpus, run readers on it, report.
 
-    python -m barbench corpus DIR [--seed N] [--per-cell N]
-    python -m barbench sweep DIR [--seed N] [--per-point N]
-    python -m barbench photos DIR [--cache DIR] [--sets a,b]
+    python -m barbench corpus DIR [--seed N] [--per-cell N] [--split test]
+    python -m barbench sweep DIR [--seed N] [--per-point N] [--split test]
+    python -m barbench photos DIR [--cache DIR] [--sets a,b] [--split test]
     python -m barbench run DIR [--readers a,b] [--out results.json]
-        [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4]
+        [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4] [--split test]
     python -m barbench plot REPORT --out curves.svg
+
+Every command that makes or runs a corpus works on development data
+unless given --split test; see split.py.
 """
 
 import argparse
@@ -13,7 +16,10 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, corpus, photos, plot, score
+from . import __version__, adapters, corpus, photos, plot, score, split
+
+
+SEED_HELP = f"development or test images; test seeds are {split.TEST_SEEDS} and up"
 
 
 def main(argv=None):
@@ -24,17 +30,20 @@ def main(argv=None):
     make.add_argument("--seed", type=int, default=1)
     make.add_argument("--per-cell", type=int, default=2, help="images per grid cell")
     make.add_argument("--negatives", type=int, default=8)
+    make.add_argument("--split", choices=split.SPLITS, default="dev", help=SEED_HELP)
     sweep = sub.add_parser("sweep", help="write the sweep tier, for curves, to DIR")
     sweep.add_argument("dir")
     sweep.add_argument("--seed", type=int, default=1)
     sweep.add_argument("--per-point", type=int, default=20, help="images per point of a sweep")
+    sweep.add_argument("--split", choices=split.SPLITS, default="dev", help=SEED_HELP)
     draw = sub.add_parser("plot", help="draw a sweep run's curves as SVG")
     draw.add_argument("report", help="the JSON report of `run` on a sweep tier")
     draw.add_argument("--out", required=True, help="where to write the SVG")
     shots = sub.add_parser("photos", help="write the photo tier to DIR, downloading as needed")
     shots.add_argument("dir")
     shots.add_argument("--cache", help="where downloads are kept (default: DIR-cache)")
-    shots.add_argument("--sets", help="comma-separated photo sets (default: every list in bench/photos)")
+    shots.add_argument("--sets", help="comma-separated photo sets (default: every list of the split)")
+    shots.add_argument("--split", choices=split.SPLITS, default="dev", help="development or test photos")
     run = sub.add_parser("run", help="run readers on the corpus in DIR")
     run.add_argument("dir")
     run.add_argument("--readers", default=",".join(adapters.ADAPTERS))
@@ -54,13 +63,27 @@ def main(argv=None):
         default="",
         help="comma-separated readers that must be available (else exit 1)",
     )
+    run.add_argument(
+        "--split",
+        choices=split.SPLITS,
+        default="dev",
+        help="the split the corpus must hold; test only when a release is tagged",
+    )
     args = parser.parse_args(argv)
+
+    if args.command in ("corpus", "sweep"):
+        try:
+            part = split.of_seed(args.seed)
+        except ValueError as e:
+            parser.error(str(e))
+        if part != args.split:
+            parser.error(f"seed {args.seed} makes {part} images, not {args.split} (test seeds are {split.TEST_SEEDS} and up)")
 
     if args.command == "photos":
         cache = args.cache or args.dir.rstrip("/") + "-cache"
         sets = [s for s in args.sets.split(",") if s] if args.sets else None
         try:
-            listings = photos.load_lists(sets)
+            listings = photos.load_lists(sets, args.split)
         except ValueError as e:
             parser.error(str(e))
         manifest = photos.generate(args.dir, cache, listings)
@@ -96,11 +119,21 @@ def main(argv=None):
 
     with open(os.path.join(args.dir, "manifest.json")) as f:
         manifest = json.load(f)
+    # Every look at test results tunes a reader to them a little, so a run
+    # scores test data only when asked to by name. A corpus that does not
+    # say its split, at the top and on every entry, is refused by any run.
+    marked = [manifest.get("split")] + [e.get("split") for e in manifest["images"]]
+    if None in marked:
+        parser.error(f"{args.dir} has entries without a split (written by an older barbench?); write it again")
+    if any(m != args.split for m in marked):
+        found = sorted(set(marked) - {args.split})
+        parser.error(f"{args.dir} holds {', '.join(found)} entries, not only {args.split} (see --split)")
     paths = [os.path.join(args.dir, e["file"]) for e in manifest["images"]]
     report = {
         "barbench": __version__,
         "tier": manifest["tier"],
         "seed": manifest["seed"],
+        "split": args.split,
         "encoders": manifest["encoders"],
         "photos": manifest.get("photos"),
         "grid": manifest["grid"],

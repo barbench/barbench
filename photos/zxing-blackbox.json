@@ -1,5 +1,6 @@
 {
  "name": "zxing-blackbox",
+ "split": "dev",
  "repository": "https://github.com/zxing/zxing",
  "commit": "1eb71d2557ffdf64c7a7af1a5464489d294e825a",
  "path": "core/src/test/resources/blackbox",

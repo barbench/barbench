@@ -1,6 +1,7 @@
 """Tests for barbench. Run from bench/: python -m unittest discover -s tests"""
 
 import contextlib
+import copy
 import hashlib
 import io
 import json
@@ -13,7 +14,7 @@ from unittest import mock
 import numpy as np
 
 from barbench import __main__ as cli
-from barbench import adapters, corpus, pgm, plot, score
+from barbench import adapters, corpus, pgm, plot, score, split
 
 
 class PgmTest(unittest.TestCase):
@@ -118,6 +119,9 @@ class CorpusTest(unittest.TestCase):
             self.assertEqual(len(first["images"]), cells + 2)
             self.assertTrue(all(corpus.round_trips(corpus.ENCODERS[e["encoder"]](e["expected"]), e["expected"])
                                 for e in first["images"] if e["expected"] is not None))
+            self.assertEqual({first["split"]} | {e["split"] for e in first["images"]}, {"dev"})
+            test = corpus.generate(b, seed=1000, per_cell=1, negatives=2)
+            self.assertEqual({test["split"]} | {e["split"] for e in test["images"]}, {"test"})
 
 
 class ScoreTest(unittest.TestCase):
@@ -240,6 +244,7 @@ class SweepTest(unittest.TestCase):
                     cli.main(["run", corpus_dir, "--readers", "fake", "--out", out])
             with open(out) as f:
                 report = json.load(f)
+            self.assertEqual(report["split"], "dev")
             self.assertEqual(report["sweeps"], self.SMALL)
             self.assertEqual(report["baseline"]["module_px"], corpus.BASELINE["module_px"])
             self.assertEqual(
@@ -351,6 +356,61 @@ class SweepTest(unittest.TestCase):
                         cli.main(["plot", report, "--out", os.path.join(d, "c.svg")])
 
 
+class SplitTest(unittest.TestCase):
+    """The rule that deals data into development and test is fixed: a
+    change would re-deal photos that have already been looked at."""
+
+    def test_groups_are_dealt_by_their_hash(self):
+        # SHA-256 of "a" starts ca97 (51863), of "b" 3e23 (15907); test is
+        # below 19661 of 65536, and the two edge groups start just either
+        # side of it (19660 and 19661).
+        known = {
+            "a": "dev",
+            "b": "test",
+            "edge-1574": "test",
+            "edge-59861": "dev",
+            "commons-code128/zlin-lamp": "test",
+            "own/2026-12-01-market": "dev",
+            "own/2026-12-02-depot": "test",
+        }
+        self.assertEqual({g: split.of_group(g) for g in known}, known)
+        share = sum(split.of_group(f"g{i}") == "test" for i in range(20000)) / 20000
+        self.assertAlmostEqual(share, 0.3, delta=0.01)
+
+    def test_seeds_from_1000_make_test_images(self):
+        self.assertEqual([split.of_seed(s) for s in (0, 1, 999, 1000, 5000)], ["dev"] * 3 + ["test"] * 2)
+        with self.assertRaises(ValueError):
+            split.of_seed(-1)
+
+    def test_the_cli_keeps_seeds_to_their_split(self):
+        with tempfile.TemporaryDirectory() as d:
+            for command in ("corpus", "sweep"):
+                for args in (["--seed", "1000"], ["--seed", "1", "--split", "test"], ["--seed", "-1"]):
+                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as e:
+                        cli.main([command, os.path.join(d, command), *args])
+                    self.assertEqual(e.exception.code, 2, (command, args))
+                    self.assertFalse(os.path.exists(os.path.join(d, command)), (command, args))
+            with mock.patch.dict(corpus.SWEEPS, {"blur": [0.2]}, clear=True):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(cli.main(["sweep", os.path.join(d, "t"), "--seed", "1000", "--split", "test",
+                                               "--per-point", "1"]), 0)
+            with open(os.path.join(d, "t", "manifest.json")) as f:
+                manifest = json.load(f)
+            self.assertEqual([manifest["split"]] + [e["split"] for e in manifest["images"]], ["test"] * 2)
+
+    def test_the_cli_writes_only_the_photos_of_its_split(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = os.path.join(d, "photos")
+            # Stubbed, so a broken check fails here rather than downloading.
+            with mock.patch("barbench.photos.generate") as generate:
+                for args in (["--split", "test"], ["--sets", "kaist-real", "--split", "test"], ["--sets", ","]):
+                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as e:
+                        cli.main(["photos", out, *args])
+                    self.assertEqual(e.exception.code, 2, args)
+            generate.assert_not_called()
+            self.assertEqual(os.listdir(d), [])
+
+
 class GateTest(unittest.TestCase):
     """The run's gates fail it, and refuse to pass without checking."""
 
@@ -358,15 +418,19 @@ class GateTest(unittest.TestCase):
         self.dir = tempfile.TemporaryDirectory()
         d = self.dir.name
         pgm.write(os.path.join(d, "a.pgm"), np.full((8, 8), 255, np.uint8))
-        manifest = {
+        self.manifest = {
             "tier": "synthetic",
             "seed": 0,
+            "split": "dev",
             "encoders": {},
             "grid": {"blur": [0.0]},
-            "images": [{"file": "a.pgm", "expected": "A", "blur": 0.0}],
+            "images": [{"file": "a.pgm", "expected": "A", "split": "dev", "blur": 0.0}],
         }
-        with open(os.path.join(d, "manifest.json"), "w") as f:
-            json.dump(manifest, f)
+        self.write_manifest()
+
+    def write_manifest(self):
+        with open(os.path.join(self.dir.name, "manifest.json"), "w") as f:
+            json.dump(self.manifest, f)
 
     def tearDown(self):
         self.dir.cleanup()
@@ -423,6 +487,29 @@ class GateTest(unittest.TestCase):
             with self.assertRaises(SystemExit) as e:
                 self.run_cli(*gate, line=line)
             self.assertEqual(e.exception.code, 2, gate)
+
+    def test_test_data_is_scored_only_when_asked_for(self):
+        line = {"file": "a.pgm", "codes": [{"text": "A", "bytes": "41"}]}
+        self.assertEqual(self.run_cli(line=line), 0)
+        # A development run refuses a test entry, the manifest's split, or
+        # a split left unsaid; a test run refuses development data.
+        base = copy.deepcopy(self.manifest)
+        for where, value in (("image", "test"), ("image", None), ("manifest", "test"), ("manifest", None)):
+            for args in ((), ("--split", "test")):
+                self.manifest = copy.deepcopy(base)
+                target = self.manifest["images"][0] if where == "image" else self.manifest
+                if value is None:
+                    del target["split"]
+                else:
+                    target["split"] = value
+                self.write_manifest()
+                with self.assertRaises(SystemExit) as e:
+                    self.run_cli(*args, line=line)
+                self.assertEqual(e.exception.code, 2, (where, value, args))
+        self.manifest = copy.deepcopy(base)
+        self.manifest["split"] = self.manifest["images"][0]["split"] = "test"
+        self.write_manifest()
+        self.assertEqual(self.run_cli("--split", "test", line=line), 0)
 
 
 class AdapterTest(unittest.TestCase):

@@ -1,5 +1,6 @@
 {
  "name": "artelab-medium",
+ "split": "dev",
  "archive": "https://artelab.dista.uninsubria.it/downloads/datasets/barcode/medium_barcode_1d/medium_barcode_1d.zip",
  "archive_sha256": "8824737b3345932bd00185cda97ba6a6e2d39756347a88e18c76b4a14c6b9749",
  "archive_bytes": 225594194,

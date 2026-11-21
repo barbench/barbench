@@ -15,7 +15,7 @@ import json
 import math
 import os
 
-from . import pgm
+from . import pgm, split
 
 #: Quiet zone on each side of a symbol, in modules (ISO/IEC 15417's minimum).
 QUIET = 10
@@ -145,6 +145,7 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
     Returns the manifest."""
     import numpy as np
 
+    part = split.of_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out_dir, exist_ok=True)
     # Cells as their values and their indices along each axis.
@@ -168,6 +169,7 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
             {
                 "file": name,
                 "expected": text,
+                "split": part,
                 "encoder": encoder,
                 "module_px": module_px,
                 "blur": blur,
@@ -189,10 +191,11 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
             image = render(modules, 2.0, float(rng.integers(0, 180)), 0.0, 4.0, rng)
             kind = "random-bars"
         pgm.write(os.path.join(out_dir, name), image)
-        entries.append({"file": name, "expected": None, "kind": kind})
+        entries.append({"file": name, "expected": None, "split": part, "kind": kind})
     manifest = {
         "tier": "synthetic",
         "seed": seed,
+        "split": part,
         "encoders": encoder_versions(),
         "grid": GRID,
         "rejected": rejected,
@@ -262,6 +265,7 @@ def generate_sweep(out_dir, seed=1, per_point=20):
     `per_point` is even. Returns the manifest."""
     import numpy as np
 
+    part = split.of_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out_dir, exist_ok=True)
     names = list(ENCODERS)
@@ -297,6 +301,7 @@ def generate_sweep(out_dir, seed=1, per_point=20):
                     {
                         "file": name,
                         "expected": text,
+                        "split": part,
                         "encoder": encoder,
                         "sweep": axis,
                         "point": value,
@@ -309,6 +314,7 @@ def generate_sweep(out_dir, seed=1, per_point=20):
     manifest = {
         "tier": "sweep",
         "seed": seed,
+        "split": part,
         "encoders": encoder_versions(),
         "grid": {},
         "baseline": dict(BASELINE, tilt=TILT, jitter=JITTER),

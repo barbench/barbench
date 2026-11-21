@@ -133,6 +133,7 @@ class FetchTest(unittest.TestCase):
         self.png = encode(np.full((4, 6, 3), 200, np.uint8), 2)
         self.listing = {
             "name": "test",
+            "split": "dev",
             "repository": "https://github.com/example/photos",
             "commit": "0" * 40,
             "path": "images",
@@ -140,7 +141,8 @@ class FetchTest(unittest.TestCase):
             "notice": "test",
             "images": [
                 {"file": "a/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), "expected": "ABC", "source": "a"},
-                {"file": "b/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), "expected": None, "kind": "ean13"},
+                {"file": "b/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), "expected": None, "kind": "ean13",
+                 "group": "test/b"},
             ],
         }
         self.urls = []
@@ -163,6 +165,8 @@ class FetchTest(unittest.TestCase):
             self.assertEqual([e["expected"] for e in manifest["images"]], ["ABC", None])
             self.assertEqual(manifest["images"][1]["kind"], "ean13")
             self.assertEqual([e["file"] for e in manifest["images"]], ["test-a-1.pgm", "test-b-1.pgm"])
+            self.assertEqual([manifest["split"]] + [e["split"] for e in manifest["images"]], ["dev"] * 3)
+            self.assertEqual([e.get("group") for e in manifest["images"]], [None, "test/b"])
             self.assertEqual(manifest["photos"][0]["license"], "Apache-2.0")
             image = pgm.read(os.path.join(out, manifest["images"][0]["file"]))
             self.assertEqual(image.shape, (4, 6))
@@ -226,6 +230,7 @@ class ArchiveTest(unittest.TestCase):
         self.archive = buffer.getvalue()
         self.listing = {
             "name": "zipped",
+            "split": "dev",
             "archive": "https://example.org/set.zip",
             "archive_sha256": hashlib.sha256(self.archive).hexdigest(),
             "archive_bytes": len(self.archive),
@@ -342,6 +347,7 @@ class CommonsTest(unittest.TestCase):
         digest = hashlib.sha256(self.photo).hexdigest()
         self.listing = {
             "name": "commons-test",
+            "split": "dev",
             "host": "upload.wikimedia.org",
             "source": "https://commons.wikimedia.org/wiki/Category:Code_128",
             "license": "CC0-1.0 AND CC-BY-4.0",
@@ -509,6 +515,89 @@ class ListTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "no photo set named nope"):
             photos.load_lists(["nope"])
         self.assertEqual([listing["name"] for listing in photos.load_lists(["kaist-real"])], ["kaist-real"])
+
+    def test_every_committed_photo_is_development_data(self):
+        # Each was run and tuned against before the split, so none may be
+        # a test photo, and none claims to have been dealt by the hash.
+        for listing in photos.load_lists():
+            self.assertEqual(listing["split"], "dev", listing["name"])
+            self.assertNotIn("split_by", listing, listing["name"])
+        with self.assertRaisesRegex(ValueError, "no test photos are listed"):
+            photos.load_lists(split="test")
+        with self.assertRaisesRegex(ValueError, "not test photos: kaist-real"):
+            photos.load_lists(["kaist-real"], "test")
+        with self.assertRaisesRegex(ValueError, "not one of"):
+            photos.load_lists(split="tuning")
+
+
+class SplitTest(unittest.TestCase):
+    """A listing says its split, and test photos are dealt by their group's
+    hash, never picked."""
+
+    def listing(self, split, groups, by="group"):
+        listing = {"name": "s", "split": split, "images": [{"file": f"{i}.jpg", "group": g} for i, g in enumerate(groups)]}
+        if by is not None:
+            listing["split_by"] = by
+        return listing
+
+    def test_groups_must_fall_in_their_listing_split(self):
+        photos.check_split(self.listing("test", ["own/2026-12-02-depot", "b"]))
+        photos.check_split(self.listing("dev", ["own/2026-12-01-market", "a"]))
+        with self.assertRaisesRegex(ValueError, "group 'a' falls in dev, not test"):
+            photos.check_split(self.listing("test", ["b", "a"]))
+        with self.assertRaisesRegex(ValueError, "group 'b' falls in test, not dev"):
+            photos.check_split(self.listing("dev", ["a", "b"]))
+        with self.assertRaisesRegex(ValueError, "has no group"):
+            photos.check_split(self.listing("test", ["b", ""]))
+        with self.assertRaisesRegex(ValueError, "split_by is 'hand'"):
+            photos.check_split(self.listing("test", ["b"], by="hand"))
+
+    def test_only_development_listings_may_skip_the_hash(self):
+        photos.check_split(self.listing("dev", ["b"], by=None))
+        with self.assertRaisesRegex(ValueError, "a test listing is split by group"):
+            photos.check_split(self.listing("test", ["b"], by=None))
+        for split in (None, "held-out"):
+            listing = self.listing("dev", ["a"], by=None)
+            listing["split"] = split
+            with self.assertRaisesRegex(ValueError, "not one of dev, test"):
+                photos.check_split(listing)
+        del listing["split"]
+        with self.assertRaisesRegex(ValueError, "not one of dev, test"):
+            photos.check_split(listing)
+
+    def test_lists_are_checked_as_they_load(self):
+        with tempfile.TemporaryDirectory() as d:
+            def write(name, listing):
+                with open(os.path.join(d, name + ".json"), "w") as f:
+                    json.dump(listing, f)
+
+            write("own", self.listing("test", ["own/session-6", "own/session-9"]))
+            unsaid = self.listing("dev", ["own/x"], by=None)
+            del unsaid["split"]
+            write("unsaid", unsaid)
+            with self.assertRaisesRegex(ValueError, "split is None"):
+                photos.load_list(os.path.join(d, "unsaid.json"))
+            with mock.patch.object(photos, "LISTINGS", d):
+                with self.assertRaisesRegex(ValueError, "split is None"):
+                    photos.load_lists()
+                os.remove(os.path.join(d, "unsaid.json"))
+                self.assertEqual([listing["name"] for listing in photos.load_lists(split="test")], ["s"])
+                with self.assertRaisesRegex(ValueError, "no photo sets named"):
+                    photos.load_lists([])
+                # Moving a group to development keeps its name; leaving it
+                # in the test list too would put it on both sides.
+                write("moved", {**self.listing("dev", ["own/session-9"], by=None), "name": "moved"})
+                with self.assertRaisesRegex(ValueError, "'own/session-9' is listed as both dev and test"):
+                    photos.load_lists()
+
+    def test_one_tier_holds_one_split(self):
+        dev = self.listing("dev", ["a"], by=None)
+        test = self.listing("test", ["b"])
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaisesRegex(ValueError, "photos of 2 splits"):
+                photos.generate(d, d, [dev, test], opener=None)
+            with self.assertRaisesRegex(ValueError, "a test listing is split by group"):
+                photos.generate(d, d, [self.listing("test", ["b"], by=None)], opener=None)
 
 
 if __name__ == "__main__":

@@ -85,12 +85,11 @@ ZXing authors, Apache-2.0. The repository holds only their list
 commit, checked against its SHA-256, and converted to PGM.
 
 zxing-cpp's test suite includes some of these images (and ZXing's includes
-all of them), so this tier favours it. Streepjes has not been tuned on
-them; its misses here are to be fixed by better decoding, not by tuning to
-these files.
+all of them), so this tier favours it. Streepjes's misses here are to be
+fixed by better decoding, not by tuning to these files.
 
 **Wikimedia Commons** (`bench/photos/commons-code128.json`) adds 13 photos
-and scans of Code 128 labels that neither reader was tuned on: postal
+and scans of Code 128 labels that neither reader's own tests use: postal
 registration labels, GS1-128 pallet and parcel labels, a price tag, shelf,
 device and street-lamp tags, and thermal receipts. They come from
 Commons' Code 128, GS1-128 and Barcode categories. Each file has its own
@@ -131,6 +130,33 @@ and deleted afterwards. barbench decodes their baseline JPEGs itself
 (`barbench/jpeg.py`): the Python JPEG libraries bundle libjpeg, whose IJG
 licence is not on the allowlist.
 
+### Development and test data
+
+Every list says which split its photos are in, and every manifest row
+says it again. **Development** data is what readers are run and tuned
+against: CI gates every commit on it, and its numbers catch regressions.
+**Test** data is what published numbers will come from, to be run only
+when a release is tagged. Every photo and seed above had been run on, and
+changes judged against them, before the split, so all of them are
+development data, and no test photos are listed yet.
+
+Test photos are never picked by hand. A list of them says `"split_by":
+"group"`, and gives each photo a `group`: its set plus its capture session
+or scene, so near-duplicates stay on one side. A group is test when the
+first two bytes of the SHA-256 of its name, read big-endian, are below
+19661 of 65536 (30%), and barbench refuses a list whose groups do not
+fall in its split (`barbench/split.py`), or a group listed on both sides.
+A group is named for what it is before anyone looks at where its hash
+falls; names tried until one lands on the wanted side would pick by hand
+again. Synthetic images from seeds 1000
+and up are test images, from seeds below that development images.
+
+Every command that makes or runs a corpus works on development data
+unless given `--split test`:
+`photos` writes only the lists of its split, `corpus` and `sweep` refuse a
+seed of the other split, and `run` refuses a corpus with any entry of
+another split or none, so a test result is never seen by accident.
+
 ## Readers
 
 Each reader runs through an adapter with the same contract: PGM paths in,
@@ -167,9 +193,9 @@ downloads and converts the photos into `DIR-cache` (the archives are about
 zxing-blackbox` limits it to the ZXing set, which is 20 MB.
 
 `scripts/ci.sh bench` does the same on a smaller corpus and on the
-photos, runs the tests in `bench/tests`, and fails if streepjes misreads,
-reads a code where there is none, fails on a file, or reads under half the
-synthetic symbols or 90% of the photos.
+development photos, runs the tests in `bench/tests`, and fails if
+streepjes misreads, reads a code where there is none, fails on a file, or
+reads under half the synthetic symbols or 90% of the photos.
 
 ## Later
 

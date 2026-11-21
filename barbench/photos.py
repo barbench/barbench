@@ -27,6 +27,7 @@ import zipfile
 import zlib
 
 from . import jpeg, pgm
+from .split import SPLITS, of_group
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LISTINGS = os.path.join(HERE, os.pardir, "photos")
@@ -169,20 +170,63 @@ def _decode_png(data):
 
 def load_list(path=MANIFEST):
     with open(path) as f:
-        return json.load(f)
+        listing = json.load(f)
+    check_split(listing)
+    return listing
 
 
-def load_lists(names=None):
-    """The listings in bench/photos, by name; all of them by default."""
+def check_split(listing):
+    """Refuses a listing without a split, and a test listing whose photos
+    were not dealt by their groups' hash (see split.py): a photo picked for
+    the test split by hand could be picked for what a reader already reads."""
+    name = listing.get("name")
+    if listing.get("split") not in SPLITS:
+        raise ValueError(f"{name}: split is {listing.get('split')!r}, not one of {', '.join(SPLITS)}")
+    by = listing.get("split_by")
+    if by is None:
+        if listing["split"] != "dev":
+            raise ValueError(f"{name}: a test listing is split by group")
+        return
+    if by != "group":
+        raise ValueError(f"{name}: split_by is {by!r}, not 'group'")
+    for entry in listing["images"]:
+        group = entry.get("group")
+        if not isinstance(group, str) or not group:
+            raise ValueError(f"{name}: {entry.get('file')!r} has no group")
+        if of_group(group) != listing["split"]:
+            raise ValueError(f"{name}: group {group!r} falls in {of_group(group)}, not {listing['split']}")
+
+
+def load_lists(names=None, split="dev"):
+    """The listings in bench/photos of the given split, by name; all of
+    them by default."""
+    if split not in SPLITS:
+        raise ValueError(f"split is {split!r}, not one of {', '.join(SPLITS)}")
+    if names is not None and not names:
+        raise ValueError("no photo sets named")
     found = {}
+    sides = {}
     for path in sorted(glob.glob(os.path.join(LISTINGS, "*.json"))):
         listing = load_list(path)
         found[listing["name"]] = listing
+        # A group on both sides would put near-duplicates of a test photo
+        # in the development data.
+        for entry in listing["images"]:
+            group = entry.get("group")
+            if group is not None and sides.setdefault(group, listing["split"]) != listing["split"]:
+                raise ValueError(f"group {group!r} is listed as both dev and test")
     if names is None:
-        return list(found.values())
+        chosen = [listing for listing in found.values() if listing["split"] == split]
+        if not chosen:
+            raise ValueError(f"no {split} photos are listed")
+        return chosen
     missing = [n for n in names if n not in found]
     if missing:
         raise ValueError(f"no photo set named {', '.join(missing)} (have {', '.join(found)})")
+    # Dropping them silently would score fewer photos than were asked for.
+    other = [n for n in names if found[n]["split"] != split]
+    if other:
+        raise ValueError(f"not {split} photos: {', '.join(other)}")
     return [found[n] for n in names]
 
 
@@ -375,6 +419,11 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
     """Writes the photo tier to `out_dir` as PGMs with `manifest.json`,
     downloading into `cache` as needed. Returns the manifest."""
     listings = load_lists() if listings is None else listings
+    for listing in listings:
+        check_split(listing)
+    parts = {listing["split"] for listing in listings}
+    if len(parts) != 1:
+        raise ValueError(f"photos of {len(parts)} splits, not one, in one tier")
     os.makedirs(out_dir, exist_ok=True)
     entries = []
     sources = []
@@ -391,7 +440,15 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
                 raise ValueError(f"{entry['file']}: two photos would be written as {name}")
             names.add(name)
             pgm.write(os.path.join(out_dir, name), image)
-            row = {"file": name, "expected": entry["expected"], "set": listing["name"], "from": entry["file"]}
+            row = {
+                "file": name,
+                "expected": entry["expected"],
+                "split": listing["split"],
+                "set": listing["name"],
+                "from": entry["file"],
+            }
+            if "group" in entry:
+                row["group"] = entry["group"]
             row.update({k: entry[k] for k in PHOTO_CREDIT if k in entry})
             if entry["expected"] is None:
                 row["kind"] = entry["kind"]
@@ -405,6 +462,7 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
     manifest = {
         "tier": "photos",
         "seed": None,
+        "split": parts.pop(),
         "encoders": {},
         "photos": [{k: listing[k] for k in CREDIT if k in listing} for listing in listings],
         "grid": {"source": sources},

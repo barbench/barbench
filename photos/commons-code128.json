@@ -1,5 +1,6 @@
 {
  "name": "commons-code128",
+ "split": "dev",
  "host": "upload.wikimedia.org",
  "source": "https://commons.wikimedia.org/wiki/Category:Code_128",
  "license": "CC-BY-4.0 AND CC0-1.0 AND LicenseRef-Public-Domain",
