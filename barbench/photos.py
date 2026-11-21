@@ -3,9 +3,11 @@ barcodes that are not Code 128 as negatives.
 
 Each set of photos is a listing in `bench/photos/`, with every photo's
 SHA-256: ZXing's blackbox test images (Apache-2.0), downloaded one by one
-from a pinned commit, and the KAIST and ArTe-Lab barcode sets (CC BY 4.0
-and 3.0), whose listed photos are taken from a pinned archive. The
-repository carries none of the photos. Each is checked against its digest,
+from a pinned commit; photos of Code 128 labels from Wikimedia Commons,
+each under its own licence, downloaded one by one from their pinned
+originals; and the KAIST and ArTe-Lab barcode sets (CC BY 4.0 and 3.0),
+whose listed photos are taken from a pinned archive. The repository
+carries none of the photos. Each is checked against its digest,
 decoded here from PNG or baseline JPEG (zlib and numpy, no imaging library;
 see jpeg.py for why) and written as a PGM with the same manifest the
 synthetic tier writes.
@@ -30,7 +32,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 LISTINGS = os.path.join(HERE, os.pardir, "photos")
 MANIFEST = os.path.join(LISTINGS, "zxing-blackbox.json")
 
-#: The most bytes one photo may hold: the largest is under 2 MB.
+#: The most bytes one photo may hold: the largest is about 3.2 MB.
 MAX_BYTES = 4 << 20
 #: The most bytes one archive may hold: the largest is about 225 MB. A
 #: listing also pins each archive's exact size.
@@ -48,6 +50,23 @@ FILE_NAME = re.compile(r"[a-z0-9-]+/[0-9]+\.png")
 MEMBER_NAME = re.compile(r"[A-Za-z0-9_-]+(/[A-Za-z0-9_()-]+)*\.jpg")
 #: What a set may be called; it names its folder in the cache.
 SET_NAME = re.compile(r"[a-z0-9-]+")
+#: The one host a listing of single files may name, Wikimedia Commons'
+#: file store, and what a photo's pinned URL there must look like: an
+#: original (no thumbnail, no query), under its two hash folders.
+COMMONS_HOST = "upload.wikimedia.org"
+COMMONS_URL = re.compile(r"https://upload\.wikimedia\.org/wikipedia/commons/([0-9a-f])/\1[0-9a-f]/[A-Za-z0-9._%-]+")
+#: What such a photo is called in the cache, under the set's folder.
+LOCAL_NAME = re.compile(r"[a-z0-9-]+\.jpg")
+#: The User-Agent sent to Wikimedia, and only there. Its robot policy asks
+#: automated clients for contact details, so it names this project's
+#: public repository; a client without them is answered 429 after a few
+#: downloads, for minutes on end.
+COMMONS_USER_AGENT = "barbench/0.1 (https://github.com/streepjes/streepjes)"
+#: The downloads from Commons are one at a time, this many seconds apart
+#: (the policy allows a client with contact details far more); a 429 or 503
+#: answer is waited out as its Retry-After says, up to MAX_WAIT seconds,
+#: and tried again up to COMMONS_TRIES times.
+COMMONS_PAUSE, COMMONS_TRIES, MAX_WAIT = 1, 4, 120
 
 
 class PngError(ValueError):
@@ -172,6 +191,8 @@ def fetch(listing, cache, opener=urllib.request.urlopen):
     the right digest is already there. Returns the paths, in order."""
     if "archive" in listing:
         return _fetch_archive(listing, cache, opener)
+    if "host" in listing:
+        return _fetch_files(listing, cache, opener)
     base = (
         listing["repository"].replace("github.com", "raw.githubusercontent.com")
         + f"/{listing['commit']}/{listing['path']}/"
@@ -192,6 +213,61 @@ def fetch(listing, cache, opener=urllib.request.urlopen):
                 f.write(data)
         paths.append(path)
     return paths
+
+
+def _fetch_files(listing, cache, opener):
+    """Downloads each listed photo from its own pinned URL on Commons into
+    the set's folder, unless a file with the right digest is there."""
+    if listing["host"] != COMMONS_HOST:
+        raise ValueError(f"{listing['host']!r}: not a host photos are taken from")
+    if not SET_NAME.fullmatch(listing["name"]):
+        raise ValueError(f"{listing['name']!r}: not a set's name")
+    folder = os.path.join(cache, listing["name"])
+    paths, downloaded = [], False
+    for entry in listing["images"]:
+        if not LOCAL_NAME.fullmatch(entry["file"]):
+            raise ValueError(f"{entry['file']!r}: not a listed photo's name")
+        if not COMMONS_URL.fullmatch(entry["url"]):
+            raise ValueError(f"{entry['url']!r}: not a pinned Commons original")
+        path = os.path.join(folder, entry["file"])
+        if not (os.path.exists(path) and _digest(path) == entry["sha256"]):
+            if downloaded:
+                time.sleep(COMMONS_PAUSE)
+            data = _download_patiently(entry["url"], opener)
+            downloaded = True
+            if len(data) > MAX_BYTES:
+                raise ValueError(f"{entry['file']}: larger than {MAX_BYTES} bytes")
+            if hashlib.sha256(data).hexdigest() != entry["sha256"]:
+                raise ValueError(f"{entry['file']}: digest does not match the list")
+            os.makedirs(folder, exist_ok=True)
+            with open(path, "wb") as f:
+                f.write(data)
+        paths.append(path)
+    return paths
+
+
+def _download_patiently(url, opener):
+    """The bytes at `url`, at most one more than MAX_BYTES, tried
+    COMMONS_TRIES times, waiting out a 429 or 503 as its Retry-After says."""
+    request = urllib.request.Request(url, headers={"User-Agent": COMMONS_USER_AGENT})
+    for attempt in range(COMMONS_TRIES):
+        try:
+            with opener(request, timeout=TIMEOUT) as response:
+                return response.read(MAX_BYTES + 1)
+        except (urllib.error.URLError, http.client.HTTPException, TimeoutError, ConnectionError) as e:
+            if attempt + 1 == COMMONS_TRIES:
+                raise
+            wait = 2 << attempt
+            if isinstance(e, urllib.error.HTTPError):
+                e.close()
+                if e.code in (429, 503):
+                    after = (e.headers or {}).get("Retry-After", "").strip()
+                    # ASCII seconds only, at most MAX_WAIT; an HTTP date, or
+                    # nothing, keeps the backoff.
+                    if re.fullmatch(r"[0-9]+", after, re.ASCII):
+                        wait = min(max(int(after), 1), MAX_WAIT)
+            time.sleep(wait)
+    raise AssertionError("unreachable")
 
 
 def _fetch_archive(listing, cache, opener):
@@ -289,7 +365,10 @@ def _digest(path):
 
 #: What the manifest records of each set: where it came from and under
 #: which licence.
-CREDIT = ("name", "repository", "commit", "archive", "archive_sha256", "source", "license", "notice")
+CREDIT = ("name", "repository", "commit", "host", "archive", "archive_sha256", "source", "license", "notice")
+#: What it records of each photo in a set whose photos are each licensed
+#: on their own.
+PHOTO_CREDIT = ("author", "license", "page")
 
 
 def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
@@ -313,6 +392,7 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
             names.add(name)
             pgm.write(os.path.join(out_dir, name), image)
             row = {"file": name, "expected": entry["expected"], "set": listing["name"], "from": entry["file"]}
+            row.update({k: entry[k] for k in PHOTO_CREDIT if k in entry})
             if entry["expected"] is None:
                 row["kind"] = entry["kind"]
                 if "payload" in entry:

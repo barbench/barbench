@@ -234,6 +234,21 @@ class AdapterTest(unittest.TestCase):
         with self.assertRaises(adapters.Unavailable):
             adapters.streepjes(["x.pgm"], binary="/nonexistent/streepjes")
 
+    def test_zxing_cpp_reports_gs1_data_as_the_symbol_holds_it(self):
+        try:
+            import zxingcpp  # noqa: F401
+            from barcode import Gs1_128
+        except ImportError:
+            self.skipTest("zxing-cpp or python-barcode is not installed")
+        # FNC1 first, then (96) 991001: the text is the digits alone.
+        modules = [int(c) for c in Gs1_128("96991001").build()[0]]
+        image = corpus.render(modules, 2.0, 0.0, 0.0, 0.0, np.random.default_rng(0))
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "a.pgm")
+            pgm.write(path, image)
+            results, _, _ = adapters.zxing_cpp([path])
+        self.assertEqual(results, [{"texts": ["96991001"]}])
+
     @unittest.skipUnless(os.environ.get("STREEPJES_BIN"), "STREEPJES_BIN not set")
     def test_streepjes_reads_a_rendered_symbol(self):
         rng = np.random.default_rng(0)

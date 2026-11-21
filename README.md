@@ -51,6 +51,23 @@ all of them), so this tier favours it. Streepjes has not been tuned on
 them; its misses here are to be fixed by better decoding, not by tuning to
 these files.
 
+**Wikimedia Commons** (`bench/photos/commons-code128.json`) adds 13 photos
+and scans of Code 128 labels that neither reader was tuned on: postal
+registration labels, GS1-128 pallet and parcel labels, a price tag, shelf,
+device and street-lamp tags, and thermal receipts. They come from
+Commons' Code 128, GS1-128 and Barcode categories. Each file has its own
+author and licence (CC0, CC BY 4.0 or public domain), which the list
+records with the file's page and pinned original, and so does
+`ATTRIBUTION.md`. Their `expected` text is the line printed under the
+symbol, read by eye, without its grouping spaces and without the
+parentheses around GS1 application identifiers, which is how streepjes
+reports GS1 data, and zxing-cpp in its plain text mode, which barbench
+uses. (The zbar adapter has not been checked on GS1 data.) The list's
+`selection` says what was looked at and why the rest was left out. They
+are downloaded one at a time, a second apart, with a User-Agent that names
+this repository, since Wikimedia's robot policy asks automated clients for
+contact details; a 429 answer is waited out as its Retry-After says.
+
 Two more sets add 869 photos of EAN-13 and UPC-A barcodes, negatives for
 now, listed with their digits (`payload`, for all but three photos that
 the set gives none for) so they can become positives when Streepjes reads
@@ -83,7 +100,7 @@ decoded Code 128 texts per image out.
 
 - **streepjes**: the `streepjes` command (`crates/streepjes-cli`), default
   effort, one process for the batch. Set `STREEPJES_BIN` to the binary.
-- **zxing-cpp**: its Python binding, in process.
+- **zxing-cpp**: its Python binding, in process, in its plain text mode.
 - **zbar**: `zbarimg`, one process per image, if installed.
 
 A reader that is not installed is skipped and reported as such.
@@ -104,7 +121,7 @@ STREEPJES_BIN=../target/release/streepjes \
 
 For the photo tier, `python -m barbench photos DIR` in place of `corpus`
 downloads and converts the photos into `DIR-cache` (the archives are about
-450 MB together; only the 130 MB of listed photos stay). `--sets
+450 MB together; only the 140 MB of listed photos stay). `--sets
 zxing-blackbox` limits it to the ZXing set, which is 20 MB.
 
 `scripts/ci.sh bench` does the same on a smaller corpus and on the
@@ -119,8 +136,8 @@ synthetic symbols or 90% of the photos.
 - Pin every reader and tool in a Docker image, and publish results from CI
   as a static page.
 - More tiers: more real photos of Code 128 (ZXing's set is small and
-  familiar to zxing-cpp), print defects, perspective, and more symbologies
-  as Streepjes reads them.
+  familiar to zxing-cpp, and Commons holds few with a usable licence),
+  print defects, perspective, and more symbologies as Streepjes reads them.
 - Time per image rather than per batch, measured the same way for every
   reader.
 - Only released versions are benchmarked for published results.

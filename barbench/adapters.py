@@ -65,7 +65,12 @@ def zxing_cpp(paths):
     start = time.perf_counter()
     results = []
     for image in images:
-        found = zxingcpp.read_barcodes(image, formats=zxingcpp.BarcodeFormat.Code128)
+        # Plain text, as streepjes reports it: GS1 data without the
+        # parentheses of its application identifiers, which the default
+        # (HRI) adds and which the symbol does not hold.
+        found = zxingcpp.read_barcodes(
+            image, formats=zxingcpp.BarcodeFormat.Code128, text_mode=zxingcpp.TextMode.Plain
+        )
         results.append({"texts": [r.text for r in found if r.valid]})
     seconds = time.perf_counter() - start
     return results, seconds, "zxing-cpp " + importlib.metadata.version("zxing-cpp")
