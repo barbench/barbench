@@ -51,6 +51,31 @@ all of them), so this tier favours it. Streepjes has not been tuned on
 them; its misses here are to be fixed by better decoding, not by tuning to
 these files.
 
+Two more sets add 869 photos of EAN-13 and UPC-A barcodes, negatives for
+now, listed with their digits (`payload`, for all but three photos that
+the set gives none for) so they can become positives when Streepjes reads
+EAN:
+
+- **KAIST** (`bench/photos/kaist-real.json`): 524 cropped phone photos
+  from the dataset of the Quick Browser and Smart Inference papers
+  (Duy-Thao Do, [Zenodo 13586402](https://zenodo.org/records/13586402)),
+  CC BY 4.0. Its `real` folder also holds crops of other sets, which are
+  left out: 1,055 from the WWU Muenster database (non-commercial only) and
+  406 from ArTe-Lab's, of which the 130 from the Medium collection
+  are taken from ArTe-Lab below instead. So are its progressive JPEGs, and
+  one photo that also shows a Code 128 label. The 524 kept are the
+  baseline JPEGs among the photos named by their 13 digits, which match
+  neither of those sets; their licence is the one the dataset states.
+- **ArTe-Lab** (`bench/photos/artelab-medium.json`): the 345 photos of the
+  Medium Barcode 1D Collection (University of Insubria; Zamberletti et
+  al., 2011), with and without autofocus, CC BY 3.0.
+
+Their photos are read from each set's archive, pinned by size and SHA-256,
+which is downloaded only while a listed photo is missing from the cache
+and deleted afterwards. barbench decodes their baseline JPEGs itself
+(`barbench/jpeg.py`): the Python JPEG libraries bundle libjpeg, whose IJG
+licence is not on the allowlist.
+
 ## Readers
 
 Each reader runs through an adapter with the same contract: PGM paths in,
@@ -78,7 +103,9 @@ STREEPJES_BIN=../target/release/streepjes \
 ```
 
 For the photo tier, `python -m barbench photos DIR` in place of `corpus`
-downloads and converts the photos (about 20 MB, kept in `DIR-cache`).
+downloads and converts the photos into `DIR-cache` (the archives are about
+450 MB together; only the 130 MB of listed photos stay). `--sets
+zxing-blackbox` limits it to the ZXing set, which is 20 MB.
 
 `scripts/ci.sh bench` does the same on a smaller corpus and on the
 photos, runs the tests in `bench/tests`, and fails if streepjes misreads,
@@ -91,9 +118,9 @@ synthetic symbols or 90% of the photos.
   invited to check their adapters.
 - Pin every reader and tool in a Docker image, and publish results from CI
   as a static page.
-- More tiers: more real photos (ZXing's set is small and familiar to
-  zxing-cpp), print defects, perspective, and more symbologies as Streepjes
-  reads them.
+- More tiers: more real photos of Code 128 (ZXing's set is small and
+  familiar to zxing-cpp), print defects, perspective, and more symbologies
+  as Streepjes reads them.
 - Time per image rather than per batch, measured the same way for every
   reader.
 - Only released versions are benchmarked for published results.

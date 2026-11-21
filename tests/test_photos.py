@@ -7,6 +7,8 @@ import re
 import struct
 import tempfile
 import unittest
+import urllib.error
+import zipfile
 import zlib
 from unittest import mock
 
@@ -150,18 +152,20 @@ class FetchTest(unittest.TestCase):
 
     def test_downloads_are_checked_and_cached(self):
         with tempfile.TemporaryDirectory() as cache, tempfile.TemporaryDirectory() as out:
-            manifest = photos.generate(out, cache, self.listing, self.opener(self.png))
+            manifest = photos.generate(out, cache, [self.listing], self.opener(self.png))
             self.assertEqual(
                 self.urls[0], "https://raw.githubusercontent.com/example/photos/" + "0" * 40 + "/images/a/1.png"
             )
             self.assertEqual(manifest["grid"], {"source": ["a"]})
             self.assertEqual([e["expected"] for e in manifest["images"]], ["ABC", None])
             self.assertEqual(manifest["images"][1]["kind"], "ean13")
+            self.assertEqual([e["file"] for e in manifest["images"]], ["test-a-1.pgm", "test-b-1.pgm"])
+            self.assertEqual(manifest["photos"][0]["license"], "Apache-2.0")
             image = pgm.read(os.path.join(out, manifest["images"][0]["file"]))
             self.assertEqual(image.shape, (4, 6))
             self.assertTrue((image == 200).all())
             # A second run downloads nothing.
-            photos.generate(out, cache, self.listing, self.opener(b"never read"))
+            photos.generate(out, cache, [self.listing], self.opener(b"never read"))
             self.assertEqual(len(self.urls), 2)
 
     def test_a_wrong_or_oversized_download_is_refused(self):
@@ -196,18 +200,161 @@ class FetchTest(unittest.TestCase):
         self.assertEqual(len(calls), 3)
 
 
+def jpeg_bytes():
+    """A tiny valid baseline JPEG, from the JPEG tests' encoder."""
+    import sys
+
+    # Importable however the tests are run: discovered or by module name.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from test_jpeg import encode, picture
+
+    return encode([picture(8, 8, 1)], [(1, 1)])[0]
+
+
+class ArchiveTest(unittest.TestCase):
+    def setUp(self):
+        self.photo = jpeg_bytes()
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as z:
+            z.writestr("set/img/Foto(1).jpg", self.photo)
+            z.writestr("set/img/2.jpg", self.photo + b"tail")
+            z.writestr("set/big.jpg", b"\0" * (photos.MAX_BYTES + 1))
+            z.writestr("../outside.jpg", self.photo)
+        self.archive = buffer.getvalue()
+        self.listing = {
+            "name": "zipped",
+            "archive": "https://example.org/set.zip",
+            "archive_sha256": hashlib.sha256(self.archive).hexdigest(),
+            "archive_bytes": len(self.archive),
+            "source": "https://example.org/",
+            "license": "CC-BY-3.0",
+            "notice": "test",
+            "images": [
+                {"file": "set/img/Foto(1).jpg", "sha256": hashlib.sha256(self.photo).hexdigest(),
+                 "expected": None, "kind": "ean13", "payload": "4006381333931"},
+            ],
+        }
+        self.urls = []
+
+    def opener(self, data):
+        def open_(request, timeout=None):
+            self.assertEqual(timeout, photos.TIMEOUT)
+            self.urls.append(request.full_url)
+            return FakeResponse(data)
+
+        return open_
+
+    def test_listed_photos_are_taken_from_the_archive_and_cached(self):
+        with tempfile.TemporaryDirectory() as cache, tempfile.TemporaryDirectory() as out:
+            manifest = photos.generate(out, cache, [self.listing], self.opener(self.archive))
+            self.assertEqual(self.urls, ["https://example.org/set.zip"])
+            row = manifest["images"][0]
+            self.assertEqual(row["file"], "zipped-set-img-Foto1.pgm")
+            self.assertEqual((row["expected"], row["payload"], row["set"]), (None, "4006381333931", "zipped"))
+            self.assertEqual(pgm.read(os.path.join(out, row["file"])).shape, (8, 8))
+            self.assertEqual(manifest["photos"][0]["archive_sha256"], self.listing["archive_sha256"])
+            # Only the listed photo is kept; the archive is gone.
+            kept = [os.path.relpath(os.path.join(d, f), cache) for d, _, fs in os.walk(cache) for f in fs]
+            self.assertEqual(kept, [os.path.join("zipped", "set", "img", "Foto(1).jpg")])
+            photos.generate(out, cache, [self.listing], self.opener(b"never read"))
+            self.assertEqual(len(self.urls), 1)
+
+    def test_a_wrong_archive_is_refused(self):
+        cases = {
+            "digest": (ValueError, self.archive[:-1] + bytes([self.archive[-1] ^ 1])),
+            "larger than the listed": (ValueError, self.archive + b"x"),
+            # Cut short: tried again, then given up.
+            "not the listed": (ConnectionError, self.archive[:-1]),
+        }
+        for message, (error, data) in cases.items():
+            self.urls = []
+            with tempfile.TemporaryDirectory() as cache, mock.patch.object(photos.time, "sleep"):
+                with self.assertRaisesRegex(error, message):
+                    photos.fetch(self.listing, cache, self.opener(data))
+                self.assertEqual(os.listdir(os.path.join(cache, "zipped")), [])
+            self.assertEqual(len(self.urls), photos.ARCHIVE_TRIES if error is ConnectionError else 1)
+
+    def test_wrong_members_are_refused(self):
+        cases = {
+            "set/img/2.jpg": "digest",
+            "set/img/3.jpg": "not in the archive",
+            "set/big.jpg": "larger than",
+        }
+        for name, message in cases.items():
+            self.listing["images"][0]["file"] = name
+            with tempfile.TemporaryDirectory() as cache, self.assertRaisesRegex(ValueError, message):
+                photos.fetch(self.listing, cache, self.opener(self.archive))
+
+    def test_names_that_leave_the_cache_are_refused(self):
+        for name in ("../outside.jpg", "/etc/x.jpg", "set/../../x.jpg", "set/x.png", "set/x y.jpg"):
+            self.listing["images"][0]["file"] = name
+            with tempfile.TemporaryDirectory() as cache, self.assertRaisesRegex(ValueError, "name"):
+                photos.fetch(self.listing, cache, self.opener(self.archive))
+        self.listing["images"][0]["file"] = "set/img/Foto(1).jpg"
+        self.listing["name"] = "../up"
+        with tempfile.TemporaryDirectory() as cache, self.assertRaisesRegex(ValueError, "name"):
+            photos.fetch(self.listing, cache, self.opener(self.archive))
+
+    def test_a_failed_download_is_tried_again(self):
+        calls = []
+
+        def flaky(request, timeout=None):
+            calls.append(request.full_url)
+            if len(calls) == 1:
+                return FakeResponse(self.archive[:100])  # cut short
+            return FakeResponse(self.archive)
+
+        with tempfile.TemporaryDirectory() as cache, mock.patch.object(photos.time, "sleep") as sleep:
+            photos.fetch(self.listing, cache, flaky)
+        self.assertEqual(len(calls), 2)
+        sleep.assert_called_once_with(2)
+
+    def test_an_archive_that_keeps_failing_is_given_up(self):
+        calls = []
+
+        def down(request, timeout=None):
+            calls.append(request.full_url)
+            raise urllib.error.URLError("server error")
+
+        with tempfile.TemporaryDirectory() as cache, mock.patch.object(photos.time, "sleep") as sleep:
+            with self.assertRaises(urllib.error.URLError):
+                photos.fetch(self.listing, cache, down)
+            self.assertEqual(os.listdir(os.path.join(cache, "zipped")), [])
+        self.assertEqual(len(calls), photos.ARCHIVE_TRIES)
+        self.assertEqual([c.args[0] for c in sleep.call_args_list], [2, 4, 8, 16])
+
+
 class ListTest(unittest.TestCase):
-    def test_the_committed_list(self):
-        listing = photos.load_list()
-        self.assertRegex(listing["commit"], r"^[0-9a-f]{40}$")
-        self.assertEqual(listing["license"], "Apache-2.0")
-        images = listing["images"]
-        positives = [e for e in images if e["expected"] is not None]
-        self.assertEqual((len(images), len(positives)), (120, 40))
-        self.assertEqual(len({e["sha256"] for e in images}), len(images))
-        self.assertTrue(all(re.fullmatch(r"[0-9a-f]{64}", e["sha256"]) for e in images))
-        self.assertTrue(all(e["expected"].isprintable() for e in positives))
-        self.assertTrue(all(photos.FILE_NAME.fullmatch(e["file"]) for e in images))
+    def test_the_committed_lists(self):
+        listings = {listing["name"]: listing for listing in photos.load_lists()}
+        self.assertEqual(sorted(listings), ["artelab-medium", "kaist-real", "zxing-blackbox"])
+        licences = {"zxing-blackbox": "Apache-2.0", "kaist-real": "CC-BY-4.0", "artelab-medium": "CC-BY-3.0"}
+        counts = {"zxing-blackbox": (120, 40), "kaist-real": (524, 0), "artelab-medium": (345, 0)}
+        digests = set()
+        for name, listing in listings.items():
+            self.assertEqual(listing["license"], licences[name])
+            images = listing["images"]
+            positives = [e for e in images if e["expected"] is not None]
+            self.assertEqual((len(images), len(positives)), counts[name])
+            digests |= {e["sha256"] for e in images}
+            self.assertTrue(all(re.fullmatch(r"[0-9a-f]{64}", e["sha256"]) for e in images))
+            self.assertTrue(all(e["expected"].isprintable() for e in positives))
+            self.assertTrue(all(e["kind"] for e in images if e["expected"] is None))
+            if "archive" in listing:
+                self.assertTrue(listing["archive"].startswith("https://"))
+                self.assertRegex(listing["archive_sha256"], r"^[0-9a-f]{64}$")
+                self.assertLessEqual(listing["archive_bytes"], photos.MAX_ARCHIVE_BYTES)
+                self.assertTrue(all(photos.MEMBER_NAME.fullmatch(e["file"]) for e in images))
+            else:
+                self.assertRegex(listing["commit"], r"^[0-9a-f]{40}$")
+                self.assertTrue(all(photos.FILE_NAME.fullmatch(e["file"]) for e in images))
+        # No photo is listed twice, within or across sets.
+        self.assertEqual(len(digests), sum(len(listing["images"]) for listing in listings.values()))
+
+    def test_unknown_sets_are_refused(self):
+        with self.assertRaisesRegex(ValueError, "no photo set named nope"):
+            photos.load_lists(["nope"])
+        self.assertEqual([listing["name"] for listing in photos.load_lists(["kaist-real"])], ["kaist-real"])
 
 
 if __name__ == "__main__":

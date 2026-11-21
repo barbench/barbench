@@ -1,7 +1,7 @@
 """Command line: build a corpus, run readers on it, report.
 
     python -m barbench corpus DIR [--seed N] [--per-cell N]
-    python -m barbench photos DIR [--cache DIR]
+    python -m barbench photos DIR [--cache DIR] [--sets a,b]
     python -m barbench run DIR [--readers a,b] [--out results.json]
         [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4]
 """
@@ -25,6 +25,7 @@ def main(argv=None):
     shots = sub.add_parser("photos", help="write the photo tier to DIR, downloading as needed")
     shots.add_argument("dir")
     shots.add_argument("--cache", help="where downloads are kept (default: DIR-cache)")
+    shots.add_argument("--sets", help="comma-separated photo sets (default: every list in bench/photos)")
     run = sub.add_parser("run", help="run readers on the corpus in DIR")
     run.add_argument("dir")
     run.add_argument("--readers", default=",".join(adapters.ADAPTERS))
@@ -48,7 +49,12 @@ def main(argv=None):
 
     if args.command == "photos":
         cache = args.cache or args.dir.rstrip("/") + "-cache"
-        manifest = photos.generate(args.dir, cache)
+        sets = [s for s in args.sets.split(",") if s] if args.sets else None
+        try:
+            listings = photos.load_lists(sets)
+        except ValueError as e:
+            parser.error(str(e))
+        manifest = photos.generate(args.dir, cache, listings)
         print(f"wrote {len(manifest['images'])} photos to {args.dir}")
         return 0
 
