@@ -5,7 +5,7 @@ lives here until it moves to a neutral home of its own (see "Later" below).
 
 ## What it measures
 
-One tier so far, **synthetic**: Code 128 symbols whose modules come from
+Two tiers. **Synthetic**: Code 128 symbols whose modules come from
 third-party encoders (zxing-cpp and python-barcode, alternating), drawn and
 degraded with numpy over a fixed grid:
 
@@ -36,6 +36,21 @@ reading the files, and zbar starts a process per image. Each reader also
 runs with its own defaults: streepjes at its fast effort, zxing-cpp with
 its rotation, downscaling and inversion retries on.
 
+### Photos
+
+The **photos** tier is 40 real photographs of Code 128 labels (ten symbols,
+four shots each: angles, blur, glare, fingers in the frame) and, as
+negatives, 80 photos of EAN-13 and UPC-A barcodes, which a Code 128 reader
+should leave alone. They are ZXing's blackbox test images, © 2007-2020
+ZXing authors, Apache-2.0. The repository holds only their list
+(`bench/photos/zxing-blackbox.json`): each is downloaded from a pinned ZXing
+commit, checked against its SHA-256, and converted to PGM.
+
+zxing-cpp's test suite includes some of these images (and ZXing's includes
+all of them), so this tier favours it. Streepjes has not been tuned on
+them; its misses here are to be fixed by better decoding, not by tuning to
+these files.
+
 ## Readers
 
 Each reader runs through an adapter with the same contract: PGM paths in,
@@ -62,9 +77,13 @@ STREEPJES_BIN=../target/release/streepjes \
     ../target/bench-venv/bin/python -m barbench run ../target/bench/corpus --out ../target/bench/results.json
 ```
 
-`scripts/ci.sh bench` does the same on a smaller corpus, runs the tests in
-`bench/tests`, and fails if streepjes misreads, reads a code where there is
-none, fails on a file, or reads under half the symbols.
+For the photo tier, `python -m barbench photos DIR` in place of `corpus`
+downloads and converts the photos (about 20 MB, kept in `DIR-cache`).
+
+`scripts/ci.sh bench` does the same on a smaller corpus and on the
+photos, runs the tests in `bench/tests`, and fails if streepjes misreads,
+reads a code where there is none, fails on a file, or reads under half the
+synthetic symbols or 90% of the photos.
 
 ## Later
 
@@ -72,8 +91,9 @@ none, fails on a file, or reads under half the symbols.
   invited to check their adapters.
 - Pin every reader and tool in a Docker image, and publish results from CI
   as a static page.
-- More tiers: real photos (once an openly licensed set is chosen), print
-  defects, perspective, and more symbologies as Streepjes reads them.
+- More tiers: more real photos (ZXing's set is small and familiar to
+  zxing-cpp), print defects, perspective, and more symbologies as Streepjes
+  reads them.
 - Time per image rather than per batch, measured the same way for every
   reader.
 - Only released versions are benchmarked for published results.

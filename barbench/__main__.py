@@ -1,6 +1,7 @@
 """Command line: build a corpus, run readers on it, report.
 
     python -m barbench corpus DIR [--seed N] [--per-cell N]
+    python -m barbench photos DIR [--cache DIR]
     python -m barbench run DIR [--readers a,b] [--out results.json]
         [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4]
 """
@@ -10,7 +11,7 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, corpus, score
+from . import __version__, adapters, corpus, photos, score
 
 
 def main(argv=None):
@@ -21,6 +22,9 @@ def main(argv=None):
     make.add_argument("--seed", type=int, default=1)
     make.add_argument("--per-cell", type=int, default=2, help="images per grid cell")
     make.add_argument("--negatives", type=int, default=8)
+    shots = sub.add_parser("photos", help="write the photo tier to DIR, downloading as needed")
+    shots.add_argument("dir")
+    shots.add_argument("--cache", help="where downloads are kept (default: DIR-cache)")
     run = sub.add_parser("run", help="run readers on the corpus in DIR")
     run.add_argument("dir")
     run.add_argument("--readers", default=",".join(adapters.ADAPTERS))
@@ -42,6 +46,12 @@ def main(argv=None):
     )
     args = parser.parse_args(argv)
 
+    if args.command == "photos":
+        cache = args.cache or args.dir.rstrip("/") + "-cache"
+        manifest = photos.generate(args.dir, cache)
+        print(f"wrote {len(manifest['images'])} photos to {args.dir}")
+        return 0
+
     if args.command == "corpus":
         manifest = corpus.generate(args.dir, args.seed, args.per_cell, args.negatives)
         print(f"wrote {len(manifest['images'])} images to {args.dir}")
@@ -55,6 +65,7 @@ def main(argv=None):
         "tier": manifest["tier"],
         "seed": manifest["seed"],
         "encoders": manifest["encoders"],
+        "photos": manifest.get("photos"),
         "grid": manifest["grid"],
         "readers": {},
     }
