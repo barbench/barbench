@@ -3,5 +3,5 @@
  "held_out": ["e", "f"],
  "since": "2026-11-22",
  "declared_by": "the Streepjes maintainers",
- "note": "Streepjes was developed against every photo listed before this date, in every slice, so none of those is held out for it."
+ "note": "Streepjes was developed against every photo listed before this date, in every slice, so none of those is held out for it. Its development so far reads Code 128, and QR only up to its finder: the EAN-13 and UPC-A symbols in slices e and f (133 ArTe-Lab and KAIST photos in 77 groups, on 22 November 2026) have been read only as negatives, by the Code 128 reader and the QR finder, never as EAN or UPC. The Streepjes maintainers will leave slices e and f out of their development runs before any EAN or UPC decoding is written, and may then declare them held out for EAN-13 and UPC-A from the start, saying that the 1D stages every symbology shares (finding candidates, sampling lines, the work budget) were developed with these photos among their negatives."
 }
