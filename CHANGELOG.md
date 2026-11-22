@@ -20,5 +20,8 @@ All notable changes to barbench are documented in this file. The format follows
   reports count photos by group and give a pooled interval.
   Three ArTe-Lab photos get the digits printed under their symbols, and near-duplicates share a
   group. Streepjes declares slices `e` and `f` held out for photos added after 22 November 2026.
+- A `vision` reader: Apple Vision's barcode detector at a pinned revision, on macOS, through a
+  Swift helper (`barbench/vision.swift`) that the adapter builds with `swiftc` on first use. Its
+  version names the macOS build and the chip, since Vision comes with the OS.
 - Its own licence files, `AGENTS.md`, `CONTRIBUTING.md`, `ATTRIBUTION.md`, `scripts/ci.sh` and CI
   workflow. The Wikimedia User-Agent names this repository.

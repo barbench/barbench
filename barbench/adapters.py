@@ -6,10 +6,14 @@ the whole batch took. A reader that is not installed raises `Unavailable`,
 and the run skips it.
 """
 
+import contextlib
+import hashlib
+import importlib.resources
 import json
 import os
 import shutil
 import subprocess
+import sys
 import time
 
 from . import pgm
@@ -17,6 +21,29 @@ from . import pgm
 
 class Unavailable(Exception):
     """The reader is not installed here."""
+
+
+def _json_lines(reader, stdout, count):
+    """The results of a reader that prints one JSON line per image, in
+    order: `{"codes": [{"text": ..., "bytes": ...}]}` or `{"error": ...}`."""
+    lines = [json.loads(line) for line in stdout.splitlines()]
+    if len(lines) != count:
+        raise RuntimeError(f"{reader} printed {len(lines)} lines for {count} files")
+    results = []
+    for line in lines:
+        if "error" in line:
+            results.append({"texts": [], "error": line["error"]})
+        else:
+            # Bytes that are not UTF-8 stay in the results as hex, so a
+            # misread of them still counts. A code with neither decoded
+            # nothing, and is left out rather than stopping the run.
+            texts = [
+                c["text"] if c["text"] is not None else "hex:" + c["bytes"]
+                for c in line["codes"]
+                if c["text"] is not None or c["bytes"] is not None
+            ]
+            results.append({"texts": texts})
+    return results
 
 
 def streepjes(paths, binary=None):
@@ -35,20 +62,7 @@ def streepjes(paths, binary=None):
     seconds = time.perf_counter() - start
     if done.returncode not in (0, 1):
         raise RuntimeError(f"streepjes exited {done.returncode}: {done.stderr.strip()}")
-    lines = [json.loads(line) for line in done.stdout.splitlines()]
-    if len(lines) != len(paths):
-        raise RuntimeError(f"streepjes printed {len(lines)} lines for {len(paths)} files")
-    results = []
-    for line in lines:
-        if "error" in line:
-            results.append({"texts": [], "error": line["error"]})
-        else:
-            # Bytes that are not UTF-8 stay in the results as hex, so a
-            # misread of them still counts.
-            texts = [
-                c["text"] if c["text"] is not None else "hex:" + c["bytes"] for c in line["codes"]
-            ]
-            results.append({"texts": texts})
+    results = _json_lines("streepjes", done.stdout, len(paths))
     version = subprocess.run([binary, "--version"], capture_output=True, text=True).stdout
     return results, seconds, version.strip()
 
@@ -101,4 +115,60 @@ def zbar(paths):
     return results, seconds, "zbar " + version.strip()
 
 
-ADAPTERS = {"streepjes": streepjes, "zxing-cpp": zxing_cpp, "zbar": zbar}
+def vision(paths, binary=None):
+    """Apple Vision's barcode detector (VNDetectBarcodesRequest at a pinned
+    revision), through barbench/vision.swift: one process for the batch,
+    Code 128 only. macOS only; the helper is built with `swiftc` the first
+    time and kept (`_vision_binary`)."""
+    binary = binary or _vision_binary()
+    if not os.path.exists(binary):
+        raise Unavailable(f"the Vision helper is missing: {binary}")
+    # The helper refuses, with exit 3, a macOS without the pinned revision.
+    probe = subprocess.run([binary, "--version"], capture_output=True, text=True, check=False)
+    if probe.returncode == 3:
+        raise Unavailable(probe.stderr.strip())
+    if probe.returncode != 0:
+        raise RuntimeError(f"vision --version exited {probe.returncode}: {probe.stderr.strip()}")
+    start = time.perf_counter()
+    done = subprocess.run([binary, *paths], capture_output=True, text=True, check=False)
+    seconds = time.perf_counter() - start
+    if done.returncode != 0:
+        raise RuntimeError(f"vision exited {done.returncode}: {done.stderr.strip()}")
+    return _json_lines("vision", done.stdout, len(paths)), seconds, probe.stdout.strip()
+
+
+def _vision_binary():
+    """The Vision helper, built from barbench/vision.swift unless a build of
+    this very source is kept already. It is kept in BARBENCH_VISION_CACHE,
+    or ~/Library/Caches/barbench, under the source's digest, so a changed
+    source is built anew and an old build is never run in its place."""
+    if sys.platform != "darwin":
+        raise Unavailable("Apple Vision runs only on macOS")
+    source = importlib.resources.files("barbench").joinpath("vision.swift")
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()[:16]
+    cache = os.environ.get("BARBENCH_VISION_CACHE") or os.path.expanduser(
+        "~/Library/Caches/barbench"
+    )
+    binary = os.path.join(cache, f"vision-{digest}")
+    if os.path.exists(binary):
+        return binary
+    swiftc = shutil.which("swiftc")
+    if not swiftc:
+        raise Unavailable("swiftc is not installed (xcode-select --install)")
+    os.makedirs(cache, exist_ok=True)
+    # Built under a name of its own, then moved into place, so that a build
+    # cut short is never taken for a whole one.
+    building = f"{binary}.{os.getpid()}"
+    with importlib.resources.as_file(source) as path:
+        done = subprocess.run(
+            [swiftc, "-O", "-o", building, str(path)], capture_output=True, text=True, check=False
+        )
+    if done.returncode != 0:
+        with contextlib.suppress(FileNotFoundError):
+            os.remove(building)
+        raise Unavailable(f"the Vision helper did not build: {done.stderr.strip()}")
+    os.replace(building, binary)
+    return binary
+
+
+ADAPTERS = {"streepjes": streepjes, "zxing-cpp": zxing_cpp, "zbar": zbar, "vision": vision}

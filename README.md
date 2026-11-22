@@ -33,9 +33,11 @@ wall-clock seconds for the batch, plus read rates by each parameter.
 
 The seconds are **not comparable** between readers yet: streepjes's
 include starting its process and parsing the files, zxing-cpp's exclude
-reading the files, and zbar starts a process per image. Each reader also
-runs with its own defaults: streepjes at its fast effort, zxing-cpp with
-its rotation, downscaling and inversion retries on.
+reading the files, zbar starts a process per image, and vision's include
+starting its process and loading its models. Each reader also runs with its
+own defaults: streepjes at its fast effort, zxing-cpp with its rotation,
+downscaling and inversion retries on, and vision with Apple's, at a pinned
+revision.
 
 ### Curves
 
@@ -254,6 +256,17 @@ decoded Code 128 texts per image out.
   effort, one process for the batch. Set `STREEPJES_BIN` to the binary.
 - **zxing-cpp**: its Python binding, in process, in its plain text mode.
 - **zbar**: `zbarimg`, one process per image, if installed.
+- **vision**: Apple Vision's barcode detector (`VNDetectBarcodesRequest`),
+  on macOS only, one process for the batch. The adapter builds its helper,
+  `barbench/vision.swift`, with `swiftc` (Xcode or its command line tools)
+  the first time, and keeps the build in `~/Library/Caches/barbench`
+  (`BARBENCH_VISION_CACHE` to put it elsewhere). The helper pins the
+  request's revision, 4, so a newer default cannot change the numbers;
+  Vision itself still comes with macOS and may run on the Neural Engine or
+  the GPU, so its version string names the macOS build and the chip, and
+  numbers from another of either may differ. Like streepjes, it reports
+  GS1 data as the digits alone. Its seconds include starting the process
+  and loading Vision's models.
 
 A reader that is not installed is skipped and reported as such.
 

@@ -5,9 +5,11 @@ import contextlib
 import copy
 import hashlib
 import importlib.metadata
+import importlib.resources
 import io
 import json
 import os
+import shutil
 import stat
 import subprocess
 import sys
@@ -666,6 +668,8 @@ class InstalledTest(unittest.TestCase):
         # The photo lists and the readers' declarations ship inside it.
         self.assertEqual(len(photos.load_lists()), 4)
         self.assertIn("streepjes", slices.declarations())
+        # So does the Vision helper's source, which the vision adapter builds.
+        self.assertTrue(importlib.resources.files("barbench").joinpath("vision.swift").is_file())
 
 
 class AdapterTest(unittest.TestCase):
@@ -699,6 +703,105 @@ class AdapterTest(unittest.TestCase):
         self.assertEqual(results[0], {"texts": ["BENCH"]})
         self.assertIn("error", results[1])
         self.assertTrue(version.startswith("streepjes "))
+
+
+def _script(directory, name, body):
+    """An executable shell script, to stand in for a reader or a compiler."""
+    path = os.path.join(directory, name)
+    with open(path, "w") as f:
+        f.write("#!/bin/sh\n" + body)
+    os.chmod(path, os.stat(path).st_mode | stat.S_IXUSR)
+    return path
+
+
+class VisionAdapterTest(unittest.TestCase):
+    def test_vision_is_unavailable_off_macos(self):
+        with mock.patch.object(adapters.sys, "platform", "linux"):
+            with self.assertRaisesRegex(adapters.Unavailable, "only on macOS"):
+                adapters.vision(["x.pgm"])
+
+    def test_the_helper_is_built_once_per_source(self):
+        with tempfile.TemporaryDirectory() as d:
+            calls = os.path.join(d, "calls")
+            # A swiftc that records each call and writes the file after -o.
+            _script(d, "swiftc", f'echo x >> "{calls}"\nwhile [ "$1" != -o ]; do shift; done\n'
+                    'printf "#!/bin/sh\\n" > "$2"\n')
+            cache = os.path.join(d, "cache")
+            env = {"PATH": d, "BARBENCH_VISION_CACHE": cache}
+            with mock.patch.object(adapters.sys, "platform", "darwin"), mock.patch.dict(os.environ, env):
+                first = adapters._vision_binary()
+                second = adapters._vision_binary()
+            self.assertEqual(first, second)
+            self.assertEqual(os.listdir(cache), [os.path.basename(first)])
+            with open(calls) as f:
+                self.assertEqual(f.read(), "x\n")
+            source = importlib.resources.files("barbench").joinpath("vision.swift").read_bytes()
+            self.assertTrue(first.endswith("vision-" + hashlib.sha256(source).hexdigest()[:16]))
+
+    def test_a_failed_build_is_unavailable_and_leaves_nothing(self):
+        with tempfile.TemporaryDirectory() as d:
+            _script(d, "swiftc", 'while [ "$1" != -o ]; do shift; done\necho half > "$2"\n'
+                    'echo "error: no SDK" >&2\nexit 1\n')
+            cache = os.path.join(d, "cache")
+            env = {"PATH": d, "BARBENCH_VISION_CACHE": cache}
+            with mock.patch.object(adapters.sys, "platform", "darwin"), mock.patch.dict(os.environ, env):
+                with self.assertRaisesRegex(adapters.Unavailable, "no SDK"):
+                    adapters._vision_binary()
+            self.assertEqual(os.listdir(cache), [])
+
+    def test_a_macos_without_the_pinned_revision_is_unavailable(self):
+        with tempfile.TemporaryDirectory() as d:
+            helper = _script(d, "vision", 'echo "revision 4 is not supported here" >&2\nexit 3\n')
+            with self.assertRaisesRegex(adapters.Unavailable, "not supported"):
+                adapters.vision(["x.pgm"], binary=helper)
+
+    def test_the_helper_must_print_a_line_per_file(self):
+        with tempfile.TemporaryDirectory() as d:
+            helper = _script(d, "vision", '[ "$1" = --version ] && { echo v; exit 0; }\n'
+                             'echo \'{"codes": []}\'\n')
+            with self.assertRaisesRegex(RuntimeError, "1 lines for 2 files"):
+                adapters.vision(["a.pgm", "b.pgm"], binary=helper)
+
+    def test_text_and_bytes_are_read_from_the_helper(self):
+        with tempfile.TemporaryDirectory() as d:
+            helper = _script(d, "vision", '[ "$1" = --version ] && { echo "Apple Vision"; exit 0; }\n'
+                             'echo \'{"codes": [{"text": "AB", "bytes": "4142"}, {"text": null, "bytes": "ff"},'
+                             ' {"text": null, "bytes": null}]}\'\n'
+                             'echo \'{"error": "b.pgm: truncated"}\'\n')
+            results, _, version = adapters.vision(["a.pgm", "b.pgm"], binary=helper)
+        self.assertEqual(results, [{"texts": ["AB", "hex:ff"]}, {"texts": [], "error": "b.pgm: truncated"}])
+        self.assertEqual(version, "Apple Vision")
+
+    @unittest.skipUnless(sys.platform == "darwin" and shutil.which("swiftc"), "needs macOS and swiftc")
+    def test_vision_reports_gs1_data_as_the_symbol_holds_it(self):
+        from barcode import Gs1_128
+
+        # FNC1 first, then (96) 991001: the text is the digits alone, as
+        # zxing-cpp's plain text mode and streepjes give it.
+        modules = [int(c) for c in Gs1_128("96991001").build()[0]]
+        image = corpus.render(modules, 2.0, 0.0, 0.0, 0.0, np.random.default_rng(0))
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "a.pgm")
+            pgm.write(path, image)
+            with mock.patch.dict(os.environ, {"BARBENCH_VISION_CACHE": os.path.join(d, "cache")}):
+                results, _, _ = adapters.vision([path])
+        self.assertEqual(results, [{"texts": ["96991001"]}])
+
+    @unittest.skipUnless(sys.platform == "darwin" and shutil.which("swiftc"), "needs macOS and swiftc")
+    def test_vision_reads_a_rendered_symbol(self):
+        rng = np.random.default_rng(0)
+        image = corpus.render(corpus.zxing_modules("BENCH"), 2.0, 10.0, 0.0, 0.0, rng)
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "a.pgm")
+            pgm.write(path, image)
+            blank = os.path.join(d, "blank.pgm")
+            pgm.write(blank, np.full((40, 60), 255, dtype=np.uint8))
+            with mock.patch.dict(os.environ, {"BARBENCH_VISION_CACHE": os.path.join(d, "cache")}):
+                results, _, version = adapters.vision([path, blank, os.path.join(d, "missing.pgm")])
+        self.assertEqual(results[0], {"texts": ["BENCH"]})
+        self.assertEqual(results[1], {"texts": []})
+        self.assertIn("error", results[2])
+        self.assertTrue(version.startswith("Apple Vision barcodes revision 4, macOS "), version)
 
 
 if __name__ == "__main__":
