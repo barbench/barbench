@@ -134,27 +134,51 @@ licence is not on the allowlist.
 Each photo in a list carries `symbols`, the symbols known to be in it:
 each a `symbology` (`code128`, `ean13`, `upca`, `itf`, `qr` or `aztec`, or
 `null` when its kind cannot be told) and the `text` a reader should
-report, `null` where nobody has read it, with an optional `note`. The
-list's `truth` says where they come from: the digits ZXing, KAIST and
-ArTe-Lab give, and for the Commons photos a look at each, which found a
-QR code on each lamp tag, an Aztec code on the deposit voucher, an
-Interleaved 2 of 5 symbol on the DHL label and covered bars on FlagTag
-that may be a symbol, besides their Code 128 symbols. A UPC-A symbol is listed as
-`upca` with its 12 digits, never as the EAN-13 with a leading zero that
-has the same bars. zxing-cpp 3.1.1 reports that 13-digit form, even when
-it names the format UPC-A, so per-format scoring must strip the zero. barbench checks every symbology name, and the digit
+report, `null` where nobody has read it, with optional `corners` and
+`note`. The list's `truth` says where they come from: the digits ZXing,
+KAIST and ArTe-Lab give, and a look at each Commons photo and each ZXing
+`code128-2` photo. Besides their Code 128 symbols, that found a QR code on
+each lamp tag, an Aztec code on the deposit voucher, an Interleaved 2 of 5
+symbol on the DHL label and on the label in ZXing's 37 to 40, covered bars
+on FlagTag that may be a symbol, codes cut off at the edge in nine ZXing
+photos, and one mostly hidden by a finger.
+
+A UPC-A symbol is listed as `upca` with its 12 digits, never as the EAN-13
+with a leading zero that has the same bars. zxing-cpp 3.1.1 reports that
+13-digit form, even when it names the format UPC-A, so per-format scoring
+must strip the zero. barbench checks every symbology name, and the digit
 count and check digit of every EAN-13 and UPC-A text.
 
-`symbols` lists what is known to be there, not everything that is: only
-the Commons photos were looked over for other symbols, so a ZXing, KAIST
-or ArTe-Lab photo counting as a Code 128 negative is still an assumption,
-which no reader's reads have contradicted. For now each manifest row
-also has the `expected` text a Code 128 reader must report, taken from
-its Code 128 symbols; barbench refuses a photo with Code 128 symbols of
-different texts, or one of unknown text, which scoring cannot judge yet.
-No list gives where a symbol is in the photo: no source records it (the
-KAIST and ArTe-Lab archives hold only the digits beside each photo), and
-the corners a reader reports would favour that reader.
+`symbols` lists what is known to be there, not everything that is: the
+KAIST, ArTe-Lab and ZXing EAN-13 and UPC-A photos were not looked over for
+other symbols, so their counting as Code 128 negatives is still an
+assumption, which no reader's reads have contradicted. For now each
+manifest row also has the `expected` text a Code 128 reader must report,
+taken from its Code 128 symbols; barbench refuses a photo with Code 128
+symbols of different texts, or one of unknown text, which scoring cannot
+judge yet.
+
+`corners` say where a symbol is: four points `[x, y]` in the photo's
+stored pixels (x right, y down, `(0, 0)` the top-left corner of the
+top-left pixel; a JPEG's orientation tag is ignored, as barbench ignores
+it when it converts the photo), at the corners of the bars alone, without
+quiet zones or text. They run start-top, stop-top, stop-bottom,
+start-bottom, where the start is where reading begins and "top" is the
+upper edge with the start on the left, so with y down they go clockwise,
+and they give the symbol's position, size, rotation and direction. The
+direction was taken from the printed text, which reads the way the symbol
+does, not from the start and stop patterns. barbench checks that corners
+are four points that run clockwise round a convex quadrilateral inside the
+photo, which catches a mirrored order but not one that starts at the wrong
+corner.
+
+All 53 Code 128 symbols have corners, placed by eye on magnified views in
+November 2026. A second look at six of them, made without seeing the
+first, agreed to within about a pixel, and on a blurred photo the listed
+corners are good to two or three; a symbol's note says where a straight
+quadrilateral fits a curved or distorted label poorly. No source gives
+corners, and those a reader reports would favour that reader, so other
+photos have none yet.
 
 ### Development and test data
 

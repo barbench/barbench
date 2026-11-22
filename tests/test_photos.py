@@ -167,6 +167,16 @@ class FetchTest(unittest.TestCase):
             self.assertEqual(manifest["images"][1]["symbols"], [{"symbology": "ean13", "text": None}])
             self.assertEqual([e["file"] for e in manifest["images"]], ["test-a-1.pgm", "test-b-1.pgm"])
             self.assertEqual([manifest["split"]] + [e["split"] for e in manifest["images"]], ["dev"] * 3)
+            # Corners must lie in the photo (6 by 4 pixels), and reach the manifest.
+            corners = [[0, 0], [6, 0], [6, 4], [0, 4]]
+            self.listing["images"][0]["symbols"][0]["corners"] = corners
+            manifest = photos.generate(out, cache, [self.listing], self.opener(self.png))
+            self.assertEqual(manifest["images"][0]["symbols"][0]["corners"], corners)
+            for corner in ([6.5, 4], [6, 4.5]):
+                corners[2] = corner
+                with self.assertRaisesRegex(ValueError, "test: a/1.png: corners outside its 6x4 pixels"):
+                    photos.generate(out, cache, [self.listing], self.opener(self.png))
+            del self.listing["images"][0]["symbols"][0]["corners"]
             self.assertEqual([e.get("group") for e in manifest["images"]], [None, "test/b"])
             self.assertEqual(manifest["photos"][0]["license"], "Apache-2.0")
             image = pgm.read(os.path.join(out, manifest["images"][0]["file"]))
@@ -525,12 +535,26 @@ class ListTest(unittest.TestCase):
             (symbol,) = e["symbols"]
             self.assertEqual(symbol, {"symbology": "upca", "text": digits[1:]} if digits[0] == "0"
                              else {"symbology": "ean13", "text": digits})
-        # ZXing's folders hold one symbology each, every text known.
+        # ZXing's folders are for one symbology each, every text known;
+        # some code128-2 photos show other codes too.
+        others = {}
         for e in listings["zxing-blackbox"]["images"]:
-            (symbol,) = e["symbols"]
+            symbol = e["symbols"][0]
             self.assertEqual(symbol["symbology"], {"code128-2": "code128", "ean13-2": "ean13",
                                                    "upca-2": "upca"}[e["file"].split("/")[0]])
             self.assertIsNotNone(symbol["text"])
+            if e["symbols"][1:]:
+                others[e["file"]] = [s["symbology"] for s in e["symbols"][1:]]
+        self.assertEqual(others, {
+            **{f"code128-2/{n:02d}.png": [None] * k
+               for n, k in ((4, 2), (7, 1), (8, 1), (9, 1), (13, 3), (14, 3), (16, 3), (25, 1), (27, 1), (35, 1))},
+            **{f"code128-2/{n}.png": ["itf"] for n in (37, 38, 39, 40)},
+        })
+        # Every Code 128 symbol has its corners, and only those do.
+        for listing in listings.values():
+            for e in listing["images"]:
+                for s in e["symbols"]:
+                    self.assertEqual("corners" in s, s["symbology"] == "code128", e["file"])
         unknown = [e["file"] for e in listings["artelab-medium"]["images"] if e["symbols"][0]["text"] is None]
         self.assertEqual(len(unknown), 3)
         # The Commons photos that show more than their Code 128 symbol.
@@ -550,6 +574,8 @@ class ListTest(unittest.TestCase):
             return {"name": "s", "images": [{"file": "a.jpg", "symbols": list(symbols)}]}
 
         photos.check_symbols(listing())
+        photos.check_symbols(listing({"symbology": "code128", "text": "A",
+                                      "corners": [[1, 1], [9.5, 2], [9, 4.5], [1.5, 4]]}))
         photos.check_symbols(listing({"symbology": "upca", "text": "890444000335"},
                                      {"symbology": None, "text": None, "note": "covered"}))
         for symbols, message in (
@@ -564,6 +590,19 @@ class ListTest(unittest.TestCase):
             ([{"symbology": "qr", "text": None, "note": 7}], "note 7 is not text"),
             ([{"symbology": "code128"}], "not a symbology, a text"),
             ([{"symbology": "code128", "text": "A", "box": []}], "not a symbology, a text"),
+            # Corners: four points, clockwise from start-top with y down.
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [4, 2]]}], "not four points"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [4, 2], [0, -1]]}], "not four points"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [4, 2], [0, float("nan")]]}],
+             "not four points"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [4, True], [0, 2]]}], "not four points"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [4, float("inf")], [0, 2]]}],
+             "not four points"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [4, 2 ** 1100], [0, 2]]}], "not four points"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [4, 2, 1], [0, 2]]}], "not four points"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [0, 2], [4, 2], [4, 0]]}], "clockwise"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 2], [4, 0], [0, 2]]}], "clockwise"),
+            ([{"symbology": "qr", "text": None, "corners": [[0, 0], [4, 0], [8, 0], [0, 2]]}], "clockwise"),
             ([{"symbology": "code128", "text": None}], "Code 128 symbol of unknown text"),
             ([{"symbology": "code128", "text": "A"}, {"symbology": "code128", "text": "B"}], "different texts"),
         ):

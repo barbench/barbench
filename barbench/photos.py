@@ -182,6 +182,9 @@ def load_list(path=MANIFEST):
 #: has one spelling (a reader that reports the EAN-13 form, as zxing-cpp
 #: 3.1.1 does, is to be scored as reading the UPC-A).
 SYMBOLOGIES = ("code128", "ean13", "upca", "itf", "qr", "aztec")
+#: The largest a corner's coordinate may be: far past any photo
+#: MAX_BYTES allows.
+MAX_COORDINATE = 1 << 24
 #: The digits an EAN-13 and a UPC-A symbol hold, check digit included.
 GTIN_DIGITS = {"ean13": 13, "upca": 12}
 
@@ -202,9 +205,12 @@ def check_symbols(listing):
             if not isinstance(symbol, dict) or {"symbology", "text"} - set(symbol) or set(symbol) - {
                 "symbology",
                 "text",
+                "corners",
                 "note",
             }:
-                raise ValueError(f"{where}: {symbol!r} is not a symbology, a text and maybe a note")
+                raise ValueError(f"{where}: {symbol!r} is not a symbology, a text and maybe corners and a note")
+            if "corners" in symbol:
+                check_corners(symbol["corners"], where)
             kind, text = symbol["symbology"], symbol["text"]
             if not isinstance(symbol.get("note", ""), str):
                 raise ValueError(f"{where}: note {symbol['note']!r} is not text")
@@ -218,6 +224,34 @@ def check_symbols(listing):
                 if kind == "ean13" and text.startswith("0"):
                     raise ValueError(f"{where}: {text!r} is a UPC-A; list it as upca without the 0")
         expected(entry, where)
+
+
+def check_corners(corners, where):
+    """Refuses corners that are not four points in pixels (x right, y
+    down, (0, 0) the top-left corner of the top-left pixel; `generate`
+    checks that they lie in the photo), in the order start-top, stop-top,
+    stop-bottom, start-bottom: with y down, a convex quadrilateral that
+    runs clockwise. The order is what tells a symbol's direction apart
+    from its mirror image; it cannot tell a wrong start corner."""
+    if not (
+        isinstance(corners, list)
+        and len(corners) == 4
+        and all(
+            isinstance(p, list)
+            and len(p) == 2
+            # The bounds also refuse NaN and infinity, and an integer too
+            # large for a float before any arithmetic overflows.
+            and all(isinstance(v, (int, float)) and not isinstance(v, bool) and 0 <= v < MAX_COORDINATE for v in p)
+            for p in corners
+        )
+    ):
+        raise ValueError(f"{where}: corners {corners!r} are not four points [x, y] of 0 or more")
+    turns = []
+    for i in range(4):
+        (ax, ay), (bx, by), (cx, cy) = corners[i], corners[(i + 1) % 4], corners[(i + 2) % 4]
+        turns.append((bx - ax) * (cy - by) - (by - ay) * (cx - bx))
+    if not all(t > 0 for t in turns):
+        raise ValueError(f"{where}: corners {corners!r} do not run clockwise round a convex quadrilateral")
 
 
 def gtin_checks(digits):
@@ -501,6 +535,10 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
             with open(path, "rb") as f:
                 data = f.read()
             image = jpeg.decode_jpeg(data) if entry["file"].endswith(".jpg") else decode_png(data)
+            height, width = image.shape
+            for symbol in entry["symbols"]:
+                if any(x > width or y > height for x, y in symbol.get("corners", ())):
+                    raise ValueError(f"{listing['name']}: {entry['file']}: corners outside its {width}x{height} pixels")
             stem = os.path.splitext(entry["file"])[0].replace("/", "-")
             name = listing["name"] + "-" + re.sub(r"[^A-Za-z0-9_-]", "", stem) + ".pgm"
             if name in names:
