@@ -1,0 +1,7 @@
+{
+ "reader": "streepjes",
+ "held_out": ["e", "f"],
+ "since": "2026-11-22",
+ "declared_by": "the Streepjes maintainers",
+ "note": "Streepjes was developed against every photo listed before this date, in every slice, so none of those is held out for it."
+}

@@ -15,7 +15,7 @@ from unittest import mock
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from test_photos import encode  # noqa: E402
+from test_photos import encode, facts  # noqa: E402
 
 from barbench import __main__ as cli  # noqa: E402
 from barbench import annotate, photos  # noqa: E402
@@ -155,21 +155,19 @@ class CommandTest(unittest.TestCase):
         self.png = encode(np.stack([gradient()] * 3, axis=2), 2)
         listing = {
             "name": "set",
-            "split": "dev",
             "repository": "https://github.com/example/photos",
             "images": [
-                {"file": "a/1.png", "sha256": hashlib.sha256(self.png).hexdigest(),
+                {"file": "a/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), **facts("set/A"),
                  "symbols": [{"symbology": "code128", "text": "A", "corners": [[20, 20], [180, 25], [175, 80], [25, 75]]}],
                  "source": "a"},
-                {"file": "a/2.png", "sha256": hashlib.sha256(self.png).hexdigest(),
+                {"file": "a/2.png", "sha256": hashlib.sha256(self.png).hexdigest(), **facts("set/a-2"),
                  "symbols": [{"symbology": "ean13", "text": None}]},
             ],
         }
         with open(os.path.join(self.lists, "set.json"), "w") as f:
             json.dump(listing, f)
-        # A test set, which views show as any other: they score nothing.
-        test = dict(listing, name="held", split="test", split_by="group",
-                    images=[dict(listing["images"][0], group="own/2026-12-02-depot")])
+        # A second set, in another slice.
+        test = dict(listing, name="held", images=[dict(listing["images"][0], **facts("held/A"))])
         with open(os.path.join(self.lists, "held.json"), "w") as f:
             json.dump(test, f)
         os.makedirs(os.path.join(self.cache, "a"))

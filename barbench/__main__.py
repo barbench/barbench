@@ -1,15 +1,15 @@
 """Command line: build a corpus, run readers on it, report.
 
-    python -m barbench corpus DIR [--seed N] [--per-cell N] [--split test]
-    python -m barbench sweep DIR [--seed N] [--per-point N] [--split test]
-    python -m barbench photos DIR [--cache DIR] [--sets a,b] [--split test]
+    python -m barbench corpus DIR [--seed N] [--per-cell N]
+    python -m barbench sweep DIR [--seed N] [--per-point N]
+    python -m barbench photos DIR [--cache DIR] [--sets a,b]
+        [--slices e,f] [--added-after YYYY-MM-DD] [--held-out-for a,b] [--dev-for a]
     python -m barbench run DIR [--readers a,b] [--out results.json]
-        [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4] [--split test]
+        [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4]
     python -m barbench plot REPORT --out curves.svg
     python -m barbench annotate VIEW ... --cache DIR   (views for placing corners; see annotate.py)
 
-Every command that makes or runs a corpus works on development data
-unless given --split test; see split.py.
+Which photos a reader holds out is its own declaration; see slices.py.
 """
 
 import argparse
@@ -17,10 +17,7 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, annotate, corpus, photos, plot, score, source, split
-
-
-SEED_HELP = f"development or test images; test seeds are {split.TEST_SEEDS} and up"
+from . import __version__, adapters, annotate, corpus, photos, plot, score, slices, source
 
 
 def main(argv=None):
@@ -31,20 +28,24 @@ def main(argv=None):
     make.add_argument("--seed", type=int, default=1)
     make.add_argument("--per-cell", type=int, default=2, help="images per grid cell")
     make.add_argument("--negatives", type=int, default=8)
-    make.add_argument("--split", choices=split.SPLITS, default="dev", help=SEED_HELP)
     sweep = sub.add_parser("sweep", help="write the sweep tier, for curves, to DIR")
     sweep.add_argument("dir")
     sweep.add_argument("--seed", type=int, default=1)
     sweep.add_argument("--per-point", type=int, default=20, help="images per point of a sweep")
-    sweep.add_argument("--split", choices=split.SPLITS, default="dev", help=SEED_HELP)
     draw = sub.add_parser("plot", help="draw a sweep run's curves as SVG")
     draw.add_argument("report", help="the JSON report of `run` on a sweep tier")
     draw.add_argument("--out", required=True, help="where to write the SVG")
     shots = sub.add_parser("photos", help="write the photo tier to DIR, downloading as needed")
     shots.add_argument("dir")
     shots.add_argument("--cache", help="where downloads are kept (default: DIR-cache)")
-    shots.add_argument("--sets", help="comma-separated photo sets (default: every list of the split)")
-    shots.add_argument("--split", choices=split.SPLITS, default="dev", help="development or test photos")
+    shots.add_argument("--sets", help="comma-separated photo sets (default: every list)")
+    shots.add_argument("--slices", default="all", help="the slices to write: hex digits and ranges, e.g. 0-d or e,f")
+    shots.add_argument("--added-after", help="only photos added after this date, YYYY-MM-DD")
+    shots.add_argument(
+        "--held-out-for",
+        help="comma-separated readers: the photos held out for all of them, as published comparisons use",
+    )
+    shots.add_argument("--dev-for", help="a reader: every photo it does not hold out, for its own development runs")
     views = sub.add_parser("annotate", help="draw views for placing a symbol's corners by eye")
     kinds = views.add_subparsers(dest="view", required=True)
     for name, extra, about in (
@@ -84,12 +85,6 @@ def main(argv=None):
         default="",
         help="comma-separated readers that must be available (else exit 1)",
     )
-    run.add_argument(
-        "--split",
-        choices=split.SPLITS,
-        default="dev",
-        help="the split the corpus must hold; test only when a release is tagged",
-    )
     args = parser.parse_args(argv)
 
     if args.command == "annotate":
@@ -114,22 +109,34 @@ def main(argv=None):
         print(f"{args.photo}: {img.shape[1]}x{img.shape[0]}, wrote {args.out}")
         return 0
 
-    if args.command in ("corpus", "sweep"):
-        try:
-            part = split.of_seed(args.seed)
-        except ValueError as e:
-            parser.error(str(e))
-        if part != args.split:
-            parser.error(f"seed {args.seed} makes {part} images, not {args.split} (test seeds are {split.TEST_SEEDS} and up)")
+    if args.command in ("corpus", "sweep") and args.seed < 0:
+        parser.error(f"seeds are 0 or more, not {args.seed}")
 
     if args.command == "photos":
         cache = args.cache or args.dir.rstrip("/") + "-cache"
         sets = [s for s in args.sets.split(",") if s] if args.sets else None
+        if (args.held_out_for or args.dev_for) and (args.slices != "all" or args.added_after or
+                                                    (args.held_out_for and args.dev_for)):
+            parser.error("--held-out-for and --dev-for each set the slices and the date themselves")
         try:
-            listings = photos.load_lists(sets, args.split)
+            listings = photos.load_lists(sets)
+            leave_out = None
+            if args.held_out_for:
+                chosen, after = slices.held_out_for([r for r in args.held_out_for.split(",") if r])
+            else:
+                chosen, after = slices.parse(args.slices), args.added_after
+                if args.added_after is not None:
+                    slices.date(args.added_after, "--added-after")
+                if args.dev_for:
+                    leave_out = slices.held_out_by(args.dev_for)
         except ValueError as e:
             parser.error(str(e))
-        manifest = photos.generate(args.dir, cache, listings)
+        # Only an empty choice is a usage error: a download that fails or a
+        # file that is not the listed one is the data's fault, and shows so.
+        try:
+            manifest = photos.generate(args.dir, cache, listings, chosen=chosen, added_after=after, leave_out=leave_out)
+        except photos.NothingChosen as e:
+            parser.error(str(e))
         print(f"wrote {len(manifest['images'])} photos to {args.dir}")
         return 0
 
@@ -162,22 +169,15 @@ def main(argv=None):
 
     with open(os.path.join(args.dir, "manifest.json")) as f:
         manifest = json.load(f)
-    # Every look at test results tunes a reader to them a little, so a run
-    # scores test data only when asked to by name. A corpus that does not
-    # say its split, at the top and on every entry, is refused by any run.
-    marked = [manifest.get("split")] + [e.get("split") for e in manifest["images"]]
-    if None in marked:
-        parser.error(f"{args.dir} has entries without a split (written by an older barbench?); write it again")
-    if any(m != args.split for m in marked):
-        found = sorted(set(marked) - {args.split})
-        parser.error(f"{args.dir} holds {', '.join(found)} entries, not only {args.split} (see --split)")
     paths = [os.path.join(args.dir, e["file"]) for e in manifest["images"]]
     report = {
         "barbench": __version__,
         "barbench_commit": source.commit(),
         "tier": manifest["tier"],
         "seed": manifest["seed"],
-        "split": args.split,
+        "slices": manifest.get("slices"),
+        "added_after": manifest.get("added_after"),
+        "left_out": manifest.get("left_out"),
         "encoders": manifest["encoders"],
         "photos": manifest.get("photos"),
         "grid": manifest["grid"],

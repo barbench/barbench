@@ -67,12 +67,21 @@ def score(manifest, results):
                 "high": high,
             })
         curves[axis] = points
+    def groups(pairs):
+        # Photos of one label are not independent trials: the number of
+        # groups, not photos, is what an interval's width really rests on.
+        named = {e["group"] for e, _ in pairs if "group" in e}
+        return len(named) if named else None
+
     return {
         "positives": len(positives),
+        "positive_groups": groups(positives),
         "read": read,
         "read_rate": read / len(positives) if positives else 0.0,
+        "read_interval": list(wilson(read, len(positives))),
         "misread": misread,
         "negatives": len(negatives),
+        "negative_groups": groups(negatives),
         "false_positive": false_positive,
         "errors": errors,
         "by": by,

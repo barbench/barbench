@@ -11,11 +11,11 @@ Run the same checks as CI:
 scripts/ci.sh
 ```
 
-It needs Python 3.12 or newer and the network. It builds barbench into a wheel, installs it into
-a virtual environment under `target/`, and runs the tests and a small synthetic run against that
-wheel, then downloads the development photos (about 450 MB of archives the first time; the photos
-are cached) and runs zxing-cpp on them. Pass job names to run a subset: `scripts/ci.sh test
-synthetic`. Set `STREEPJES_BIN` to a `streepjes` binary to run and test that reader too.
+It needs Python 3.12 or newer and the network. It builds barbench into a wheel, installs it into a
+virtual environment under `target/`, and runs the tests and a small synthetic run against that
+wheel, then downloads the photos (about 450 MB of archives the first time; the photos are cached)
+and runs zxing-cpp on them. Pass job names to run a subset: `scripts/ci.sh test synthetic`. Set
+`STREEPJES_BIN` to a `streepjes` binary to run and test that reader too.
 
 Add a line under `[Unreleased]` in `CHANGELOG.md` for user-visible changes.
 
@@ -25,8 +25,19 @@ A new set is a list in `barbench/lists/`: the README's "What each photo shows" s
 photo records. Every photo needs a licence from the allowlist in AGENTS.md, a SHA-256, and its
 symbols with their texts; say in the list where they come from, and record the set in
 `ATTRIBUTION.md`. Place corners with `python -m barbench annotate` (see the README), never from a
-reader's output. Photos for the test split need a `group` each, and the list must say
-`"split_by": "group"`; barbench refuses a group whose hash does not fall in the list's split.
+reader's output. Give each photo a `group` named by the rule in the README (its set, `/`, and the
+label's text or a name for the scene), decided before you look at where it lands; its `slice` is
+then the first hex digit of the group's SHA-256, which barbench checks; and the date it was
+`added`.
+
+## Declaring what a reader holds out
+
+A reader's maintainers say which slices they hold out, and since when, in
+`barbench/readers/NAME.json` (`reader`, `held_out`, `since`, `declared_by`, and a `note`). Declare
+honestly: from the day you start holding out if you have looked at the photos already listed,
+earlier only if you never have. Published comparisons use the shared slices `e` and `f`, so a
+reader that wants to be compared holds those out. Its own CI then runs on `photos --dev-for NAME`,
+which leaves out its held-out photos.
 
 ## Adding a reader
 

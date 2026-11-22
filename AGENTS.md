@@ -37,9 +37,11 @@ changes this repository, people and agents alike. Read the [README](README.md) a
    source or from the line printed with it, read by eye, and its corners are placed by eye
    (`barbench annotate`). Every adapter asks its reader for the same thing; a change that helps
    one reader more than another says so.
-2. **Development and test data stay apart.** Tune and gate on development data only. Test photos
-   are dealt by the fixed hash rule in `barbench/split.py`, never picked, and test results are
-   run only for a release. Never change that rule; a new rule is a new round of photos.
+2. **The library records facts, readers declare what they hold out.** Every photo has a frozen
+   `group`, the `slice` its hash gives (`barbench/slices.py`, a rule never to change) and the date
+   it was `added`; no photo is marked development or test for everyone. A reader's held-out
+   photos follow from its own declaration in `barbench/readers/`. Published comparisons hold out
+   the shared slices, only for photos added after every compared reader declared.
 3. **Deterministic corpora.** Synthetic images come from a seed, and every dependency is pinned
    exactly in `pyproject.toml`, so a corpus and its numbers do not change under you.
 4. **Photos stay out of the repository.** A set is a list in `barbench/lists/` with every file's

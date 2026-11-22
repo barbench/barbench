@@ -23,7 +23,12 @@ venv="$target/venv"
 cache="${BARBENCH_PHOTO_CACHE:-$target/photo-cache}"
 case "$cache" in /*) ;; *) cache="$root/$cache" ;; esac
 readers=zxing-cpp
-[ -n "${STREEPJES_BIN:-}" ] && readers="zxing-cpp,streepjes"
+photo_choice=()
+if [ -n "${STREEPJES_BIN:-}" ]; then
+    readers="zxing-cpp,streepjes"
+    # streepjes runs on no photo it declares held out.
+    photo_choice=(--dev-for streepjes)
+fi
 # Gates on zxing-cpp that check barbench, not zxing-cpp: a corpus, a
 # decoder or scoring that broke would make it misread or read far less.
 # Its pinned version reads about 51% of the small synthetic corpus and 49
@@ -63,9 +68,9 @@ job_synthetic() {
 }
 
 job_photos() {
-    step "development photos (downloaded once, checked against their digests), read by $readers"
+    step "photos (downloaded once, checked against their digests), read by $readers"
     rm -rf "$target/photos"
-    (cd "$target" && "$venv/bin/python" -m barbench photos photos --cache "$cache")
+    (cd "$target" && "$venv/bin/python" -m barbench photos photos --cache "$cache" ${photo_choice[@]+"${photo_choice[@]}"})
     (cd "$target" && "$venv/bin/python" -m barbench run photos --readers "$readers" --require "$readers" \
         "${gates[@]}" --min-read zxing-cpp=0.85 --out photo-results.json)
 }

@@ -67,7 +67,7 @@ def load_photo(name, cache):
 def find(name):
     """The listing and entry of a photo named `SET/FILE`."""
     set_name, _, file = name.partition("/")
-    (listing,) = photos.load_lists([set_name], split=None)
+    (listing,) = photos.load_lists([set_name])
     for entry in listing["images"]:
         if entry["file"] == file:
             return listing, entry
@@ -215,7 +215,7 @@ def sheet_rows(set_name, cache):
 
     side = 200
     rows = []
-    for listing in photos.load_lists([set_name], split=None):
+    for listing in photos.load_lists([set_name]):
         for entry in listing["images"]:
             for symbol in entry["symbols"]:
                 if "corners" not in symbol:

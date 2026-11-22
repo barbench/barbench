@@ -27,7 +27,7 @@ import zipfile
 import zlib
 
 from . import jpeg, pgm
-from .split import SPLITS, of_group
+from . import slices
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LISTINGS = os.path.join(HERE, "lists")
@@ -171,7 +171,7 @@ def _decode_png(data):
 def load_list(path=MANIFEST):
     with open(path) as f:
         listing = json.load(f)
-    check_split(listing)
+    check_rows(listing)
     check_symbols(listing)
     return listing
 
@@ -275,59 +275,36 @@ def expected(entry, where=None):
     return texts.pop() if texts else None
 
 
-def check_split(listing):
-    """Refuses a listing without a split, and a test listing whose photos
-    were not dealt by their groups' hash (see split.py): a photo picked for
-    the test split by hand could be picked for what a reader already reads."""
+def check_rows(listing):
+    """Refuses a photo without the facts a reader's held-out data is worked
+    out from (see slices.py): a group named for its set, the slice that
+    group's hash gives, and the date the photo was added. The slice is
+    stored so it can be read without hashing, and checked so it never
+    drifts from the rule."""
     name = listing.get("name")
-    if listing.get("split") not in SPLITS:
-        raise ValueError(f"{name}: split is {listing.get('split')!r}, not one of {', '.join(SPLITS)}")
-    by = listing.get("split_by")
-    if by is None:
-        if listing["split"] != "dev":
-            raise ValueError(f"{name}: a test listing is split by group")
-        return
-    if by != "group":
-        raise ValueError(f"{name}: split_by is {by!r}, not 'group'")
     for entry in listing["images"]:
+        where = f"{name}: {entry.get('file')!r}"
         group = entry.get("group")
-        if not isinstance(group, str) or not group:
-            raise ValueError(f"{name}: {entry.get('file')!r} has no group")
-        if of_group(group) != listing["split"]:
-            raise ValueError(f"{name}: group {group!r} falls in {of_group(group)}, not {listing['split']}")
+        if not (isinstance(group, str) and slices.GROUP_NAME.fullmatch(group) and group.startswith(f"{name}/")):
+            raise ValueError(f"{where}: group {group!r} is not {name}/ and a label or scene")
+        if entry.get("slice") != slices.of_group(group):
+            raise ValueError(f"{where}: slice {entry.get('slice')!r}, but group {group!r} is in {slices.of_group(group)}")
+        slices.date(entry.get("added"), f"{where}: added")
 
 
-def load_lists(names=None, split="dev"):
-    """The listings in `lists/` of the given split (of every split when
-    `split` is None, which only tools that score nothing ask for), by
-    name; all of them by default."""
-    if split is not None and split not in SPLITS:
-        raise ValueError(f"split is {split!r}, not one of {', '.join(SPLITS)}")
+def load_lists(names=None):
+    """The listings in `lists/`, by name; all of them by default."""
     if names is not None and not names:
         raise ValueError("no photo sets named")
     found = {}
-    sides = {}
     for path in sorted(glob.glob(os.path.join(LISTINGS, "*.json"))):
         listing = load_list(path)
         found[listing["name"]] = listing
-        # A group on both sides would put near-duplicates of a test photo
-        # in the development data.
-        for entry in listing["images"]:
-            group = entry.get("group")
-            if group is not None and sides.setdefault(group, listing["split"]) != listing["split"]:
-                raise ValueError(f"group {group!r} is listed as both dev and test")
     if names is None:
-        chosen = [listing for listing in found.values() if split in (None, listing["split"])]
-        if not chosen:
-            raise ValueError(f"no {split} photos are listed")
-        return chosen
+        return list(found.values())
     missing = [n for n in names if n not in found]
     if missing:
         raise ValueError(f"no photo set named {', '.join(missing)} (have {', '.join(found)})")
-    # Dropping them silently would score fewer photos than were asked for.
-    other = [n for n in names if split not in (None, found[n]["split"])]
-    if other:
-        raise ValueError(f"not {split} photos: {', '.join(other)}")
     return [found[n] for n in names]
 
 
@@ -525,16 +502,39 @@ CREDIT = ("name", "repository", "commit", "host", "archive", "archive_sha256", "
 PHOTO_CREDIT = ("author", "license", "page")
 
 
-def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
+class NothingChosen(ValueError):
+    """No listed photo is in the slices and dates asked for."""
+
+
+def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen, chosen=slices.SLICES, added_after=None,
+             leave_out=None):
     """Writes the photo tier to `out_dir` as PGMs with `manifest.json`,
-    downloading into `cache` as needed. Returns the manifest."""
+    downloading into `cache` as needed: the photos in the `chosen` slices,
+    added after `added_after` (a date) when that is given, less those that
+    `leave_out` (slices and a date, as slices.held_out_by gives) names.
+    Returns the manifest."""
     listings = load_lists() if listings is None else listings
     for listing in listings:
-        check_split(listing)
+        check_rows(listing)
         check_symbols(listing)
-    parts = {listing["split"] for listing in listings}
-    if len(parts) != 1:
-        raise ValueError(f"photos of {len(parts)} splits, not one, in one tier")
+    if added_after is not None:
+        slices.date(added_after, "added after")
+
+    def wanted(e):
+        if e["slice"] not in chosen or (added_after is not None and e["added"] <= added_after):
+            return False
+        return leave_out is None or not (e["slice"] in leave_out[0] and e["added"] > leave_out[1])
+
+    # Only the chosen photos are fetched: an archive is still downloaded
+    # whole, but a set of single files fetches no more than it needs.
+    listings = [
+        dict(listing, images=[e for e in listing["images"] if wanted(e)])
+        for listing in listings
+    ]
+    listings = [listing for listing in listings if listing["images"]]
+    if not listings:
+        raise NothingChosen(f"no listed photo is in slices {','.join(chosen)}"
+                            + (f" and added after {added_after}" if added_after else ""))
     os.makedirs(out_dir, exist_ok=True)
     entries = []
     sources = []
@@ -560,12 +560,12 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
                 "file": name,
                 "expected": text,
                 "symbols": entry["symbols"],
-                "split": listing["split"],
                 "set": listing["name"],
                 "from": entry["file"],
+                "group": entry["group"],
+                "slice": entry["slice"],
+                "added": entry["added"],
             }
-            if "group" in entry:
-                row["group"] = entry["group"]
             row.update({k: entry[k] for k in PHOTO_CREDIT if k in entry})
             if text is not None:
                 row["source"] = entry["source"]
@@ -575,7 +575,9 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
     manifest = {
         "tier": "photos",
         "seed": None,
-        "split": parts.pop(),
+        "slices": "".join(chosen),
+        "added_after": added_after,
+        "left_out": list(leave_out) if leave_out else None,
         "encoders": {},
         "photos": [{k: listing[k] for k in CREDIT if k in listing} for listing in listings],
         "grid": {"source": sources},

@@ -17,7 +17,13 @@ from unittest import mock
 
 import numpy as np
 
-from barbench import pgm, photos
+from barbench import pgm, photos, slices
+
+
+def facts(group, added="2026-11-21"):
+    """The facts every listed photo carries: its group, that group's slice,
+    and when it was added."""
+    return {"group": group, "slice": slices.of_group(group), "added": added}
 
 
 def chunk(kind, body):
@@ -133,17 +139,16 @@ class FetchTest(unittest.TestCase):
         self.png = encode(np.full((4, 6, 3), 200, np.uint8), 2)
         self.listing = {
             "name": "test",
-            "split": "dev",
             "repository": "https://github.com/example/photos",
             "commit": "0" * 40,
             "path": "images",
             "license": "Apache-2.0",
             "notice": "test",
             "images": [
-                {"file": "a/1.png", "sha256": hashlib.sha256(self.png).hexdigest(),
+                {"file": "a/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), **facts("test/a"),
                  "symbols": [{"symbology": "code128", "text": "ABC"}], "source": "a"},
-                {"file": "b/1.png", "sha256": hashlib.sha256(self.png).hexdigest(),
-                 "symbols": [{"symbology": "ean13", "text": None}], "group": "test/b"},
+                {"file": "b/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), **facts("test/b", "2026-12-01"),
+                 "symbols": [{"symbology": "ean13", "text": None}]},
             ],
         }
         self.urls = []
@@ -166,7 +171,10 @@ class FetchTest(unittest.TestCase):
             self.assertEqual([e["expected"] for e in manifest["images"]], ["ABC", None])
             self.assertEqual(manifest["images"][1]["symbols"], [{"symbology": "ean13", "text": None}])
             self.assertEqual([e["file"] for e in manifest["images"]], ["test-a-1.pgm", "test-b-1.pgm"])
-            self.assertEqual([manifest["split"]] + [e["split"] for e in manifest["images"]], ["dev"] * 3)
+            self.assertEqual((manifest["slices"], manifest["added_after"]), (slices.SLICES, None))
+            self.assertEqual([(e["group"], e["slice"], e["added"]) for e in manifest["images"]],
+                             [(f"test/{g}", slices.of_group(f"test/{g}"), d) for g, d in (("a", "2026-11-21"),
+                                                                                         ("b", "2026-12-01"))])
             # Corners must lie in the photo (6 by 4 pixels), and reach the manifest.
             corners = [[0, 0], [6, 0], [6, 4], [0, 4]]
             self.listing["images"][0]["symbols"][0]["corners"] = corners
@@ -177,7 +185,6 @@ class FetchTest(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "test: a/1.png: corners outside its 6x4 pixels"):
                     photos.generate(out, cache, [self.listing], self.opener(self.png))
             del self.listing["images"][0]["symbols"][0]["corners"]
-            self.assertEqual([e.get("group") for e in manifest["images"]], [None, "test/b"])
             self.assertEqual(manifest["photos"][0]["license"], "Apache-2.0")
             image = pgm.read(os.path.join(out, manifest["images"][0]["file"]))
             self.assertEqual(image.shape, (4, 6))
@@ -241,7 +248,6 @@ class ArchiveTest(unittest.TestCase):
         self.archive = buffer.getvalue()
         self.listing = {
             "name": "zipped",
-            "split": "dev",
             "archive": "https://example.org/set.zip",
             "archive_sha256": hashlib.sha256(self.archive).hexdigest(),
             "archive_bytes": len(self.archive),
@@ -250,6 +256,7 @@ class ArchiveTest(unittest.TestCase):
             "notice": "test",
             "images": [
                 {"file": "set/img/Foto(1).jpg", "sha256": hashlib.sha256(self.photo).hexdigest(),
+                 **facts("zipped/4006381333931"),
                  "symbols": [{"symbology": "ean13", "text": "4006381333931"}]},
             ],
         }
@@ -359,17 +366,18 @@ class CommonsTest(unittest.TestCase):
         digest = hashlib.sha256(self.photo).hexdigest()
         self.listing = {
             "name": "commons-test",
-            "split": "dev",
             "host": "upload.wikimedia.org",
             "source": "https://commons.wikimedia.org/wiki/Category:Code_128",
             "license": "CC0-1.0 AND CC-BY-4.0",
             "notice": "test",
             "images": [
                 {"file": "label-1.jpg", "url": self.URL.format("a", "ab", 1), "sha256": digest,
+                 **facts("commons-test/label-1"),
                  "symbols": [{"symbology": "code128", "text": "ABC"}], "source": "commons",
                  "author": "A. Author", "license": "CC0-1.0",
                  "page": "https://commons.wikimedia.org/wiki/File:Label_1.jpg"},
                 {"file": "label-2.jpg", "url": self.URL.format("0", "0f", "%28two%29"), "sha256": digest,
+                 **facts("commons-test/label-2"),
                  "symbols": [{"symbology": "code128", "text": "DEF"}, {"symbology": "qr", "text": None}],
                  "source": "commons", "author": "B. Author", "license": "CC-BY-4.0",
                  "page": "https://commons.wikimedia.org/wiki/File:Label_(two).jpg"},
@@ -555,8 +563,13 @@ class ListTest(unittest.TestCase):
             for e in listing["images"]:
                 for s in e["symbols"]:
                     self.assertEqual("corners" in s, s["symbology"] == "code128", e["file"])
-        unknown = [e["file"] for e in listings["artelab-medium"]["images"] if e["symbols"][0]["text"] is None]
-        self.assertEqual(len(unknown), 3)
+        # Every ArTe-Lab photo's digits are known; for three, read by eye
+        # from the line printed under the bars.
+        texts = {e["file"]: e["symbols"][0]["text"] for e in listings["artelab-medium"]["images"]}
+        self.assertNotIn(None, texts.values())
+        self.assertEqual([texts[f"BarcodeDatasets/{f}.jpg"] for f in ("Dataset1/05102009199", "Dataset2/Foto(844)",
+                                                                       "Dataset2/Foto(849)")],
+                         ["8002330112752", "7321925005431", "7321925005431"])
         # The Commons photos that show more than their Code 128 symbol.
         extra = {e["file"]: [s["symbology"] for s in e["symbols"][1:]]
                  for e in listings["commons-code128"]["images"] if len(e["symbols"]) > 1}
@@ -611,8 +624,7 @@ class ListTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "lists no symbols"):
             photos.check_symbols({"name": "s", "images": [{"file": "a.jpg"}]})
         # A list file and a listing handed to generate are both checked.
-        bad = {"name": "s", "split": "dev",
-               "images": [{"file": "a.jpg", "symbols": [{"symbology": "x", "text": None}]}]}
+        bad = {"name": "s", "images": [{"file": "a.jpg", **facts("s/a"), "symbols": [{"symbology": "x", "text": None}]}]}
         with tempfile.TemporaryDirectory() as d:
             path = os.path.join(d, "s.json")
             with open(path, "w") as f:
@@ -631,89 +643,103 @@ class ListTest(unittest.TestCase):
             photos.load_lists(["nope"])
         self.assertEqual([listing["name"] for listing in photos.load_lists(["kaist-real"])], ["kaist-real"])
 
-    def test_every_committed_photo_is_development_data(self):
-        # Each was run and tuned against before the split, so none may be
-        # a test photo, and none claims to have been dealt by the hash.
-        for listing in photos.load_lists():
-            self.assertEqual(listing["split"], "dev", listing["name"])
-            self.assertNotIn("split_by", listing, listing["name"])
-        with self.assertRaisesRegex(ValueError, "no test photos are listed"):
-            photos.load_lists(split="test")
-        with self.assertRaisesRegex(ValueError, "not test photos: kaist-real"):
-            photos.load_lists(["kaist-real"], "test")
-        with self.assertRaisesRegex(ValueError, "not one of"):
-            photos.load_lists(split="tuning")
+    def test_the_committed_rows(self):
+        listings = {listing["name"]: listing for listing in photos.load_lists()}
+        groups = {}
+        for name, listing in listings.items():
+            for e in listing["images"]:
+                self.assertTrue(e["group"].startswith(f"{name}/"), e["file"])
+                self.assertEqual(e["slice"], slices.of_group(e["group"]), e["file"])
+                # Every photo so far came with the first lists; a photo added
+                # later carries its own date, and this pin moves with it.
+                self.assertEqual(e["added"], "2026-11-21", e["file"])
+                groups.setdefault(e["group"], []).append(e["file"])
+        # Near-duplicates travel together: the three Zlin lamp tags, and the
+        # ArTe-Lab photos with no digits from the set, which show the same
+        # products as their neighbours.
+        self.assertEqual(len(groups["commons-code128/zlin-lamp-tags"]), 3)
+        self.assertIn("BarcodeDatasets/Dataset1/05102009199.jpg", groups["artelab-medium/8002330112752"])
+        self.assertIn("BarcodeDatasets/Dataset2/Foto(844).jpg", groups["artelab-medium/7321925005431"])
+        # ZXing's four shots of each Code 128 label are one group.
+        self.assertEqual(groups["zxing-blackbox/code128-2/005-3379497200006"],
+                         [f"code128-2/{n:02d}.png" for n in range(1, 5)])
+        # 600 groups by text, less the three photos and two lamp tags merged.
+        self.assertEqual(len(groups), 595)
 
 
-class SplitTest(unittest.TestCase):
-    """A listing says its split, and test photos are dealt by their group's
-    hash, never picked."""
+class RowsTest(unittest.TestCase):
+    """Every photo carries the facts held-out data is worked out from."""
 
-    def listing(self, split, groups, by="group"):
-        listing = {"name": "s", "split": split,
-                   "images": [{"file": f"{i}.jpg", "group": g, "symbols": []} for i, g in enumerate(groups)]}
-        if by is not None:
-            listing["split_by"] = by
-        return listing
+    def listing(self, *rows):
+        return {"name": "s", "images": [{"file": f"{i}.jpg", **row, "symbols": []} for i, row in enumerate(rows)]}
 
-    def test_groups_must_fall_in_their_listing_split(self):
-        photos.check_split(self.listing("test", ["own/2026-12-02-depot", "b"]))
-        photos.check_split(self.listing("dev", ["own/2026-12-01-market", "a"]))
-        with self.assertRaisesRegex(ValueError, "group 'a' falls in dev, not test"):
-            photos.check_split(self.listing("test", ["b", "a"]))
-        with self.assertRaisesRegex(ValueError, "group 'b' falls in test, not dev"):
-            photos.check_split(self.listing("dev", ["a", "b"]))
-        with self.assertRaisesRegex(ValueError, "has no group"):
-            photos.check_split(self.listing("test", ["b", ""]))
-        with self.assertRaisesRegex(ValueError, "split_by is 'hand'"):
-            photos.check_split(self.listing("test", ["b"], by="hand"))
+    def test_groups_slices_and_dates_are_checked(self):
+        photos.check_rows(self.listing(facts("s/a"), facts("s/2026-12-01-depot")))
+        for row, message in (
+            ({"slice": "0", "added": "2026-11-21"}, "group None"),
+            (facts("other/a"), "is not s/"),
+            (facts("s/"), "is not s/"),
+            (facts("s/a b"), "is not s/"),
+            ({**facts("s/a"), "slice": "x"}, "slice 'x', but group 's/a' is in"),
+            ({**facts("s/a"), "slice": None}, "slice None"),
+            ({**facts("s/a"), "added": "2026-13-01"}, "not a date"),
+            ({**facts("s/a"), "added": "21-11-2026"}, "not a date written"),
+            ({key: value for key, value in facts("s/a").items() if key != "added"}, "not a date written"),
+        ):
+            with self.assertRaisesRegex(ValueError, message):
+                photos.check_rows(self.listing(row))
 
-    def test_only_development_listings_may_skip_the_hash(self):
-        photos.check_split(self.listing("dev", ["b"], by=None))
-        with self.assertRaisesRegex(ValueError, "a test listing is split by group"):
-            photos.check_split(self.listing("test", ["b"], by=None))
-        for split in (None, "held-out"):
-            listing = self.listing("dev", ["a"], by=None)
-            listing["split"] = split
-            with self.assertRaisesRegex(ValueError, "not one of dev, test"):
-                photos.check_split(listing)
-        del listing["split"]
-        with self.assertRaisesRegex(ValueError, "not one of dev, test"):
-            photos.check_split(listing)
+    def test_a_tier_takes_the_chosen_slices_and_dates(self):
+        png = encode(np.full((4, 6, 3), 200, np.uint8), 2)
+        first, second = "s/a", next(f"s/{i}" for i in range(100) if slices.of_group(f"s/{i}") != slices.of_group("s/a"))
+        listing = {"name": "s", "repository": "https://github.com/example/photos", "commit": "0" * 40,
+                   "path": "images", "license": "Apache-2.0", "notice": "test", "images": [
+                       {"file": "a/1.png", "sha256": hashlib.sha256(png).hexdigest(), **facts(first),
+                        "symbols": [{"symbology": "code128", "text": "A"}], "source": "a"},
+                       {"file": "a/2.png", "sha256": hashlib.sha256(png).hexdigest(), **facts(second, "2026-12-01"),
+                        "symbols": [{"symbology": "code128", "text": "A"}], "source": "a"}]}
+        urls = []
+
+        def opener(request, timeout=None):
+            urls.append(request.full_url)
+            return FakeResponse(png)
+
+        with tempfile.TemporaryDirectory() as cache, tempfile.TemporaryDirectory() as out:
+            manifest = photos.generate(out, cache, [listing], opener, chosen=slices.of_group(first))
+            self.assertEqual([e["from"] for e in manifest["images"]], ["a/1.png"])
+            self.assertEqual(manifest["slices"], slices.of_group(first))
+            # Only the chosen photo was downloaded.
+            self.assertEqual([u.rsplit("/", 1)[1] for u in urls], ["1.png"])
+            manifest = photos.generate(out, cache, [listing], opener, added_after="2026-11-21")
+            self.assertEqual(([e["from"] for e in manifest["images"]], manifest["added_after"]),
+                             (["a/2.png"], "2026-11-21"))
+            # Left out: the second photo's slice after a date before it was
+            # added, as a reader's own runs leave out what it holds out.
+            manifest = photos.generate(out, cache, [listing], opener, leave_out=(slices.of_group(second), "2026-11-30"))
+            self.assertEqual(([e["from"] for e in manifest["images"]], manifest["left_out"]),
+                             (["a/1.png"], [slices.of_group(second), "2026-11-30"]))
+            manifest = photos.generate(out, cache, [listing], opener, leave_out=(slices.of_group(second), "2026-12-01"))
+            self.assertEqual([e["from"] for e in manifest["images"]], ["a/1.png", "a/2.png"])
+            for chosen, after, message in ((slices.of_group(first), "2026-11-21", "no listed photo is in slices"),
+                                           (slices.SLICES, "2026-12-01", "added after 2026-12-01"),
+                                           (slices.SLICES, "today", "not a date")):
+                with self.assertRaisesRegex(ValueError, message):
+                    photos.generate(out, cache, [listing], opener, chosen=chosen, added_after=after)
 
     def test_lists_are_checked_as_they_load(self):
         with tempfile.TemporaryDirectory() as d:
-            def write(name, listing):
-                with open(os.path.join(d, name + ".json"), "w") as f:
-                    json.dump(listing, f)
-
-            write("own", self.listing("test", ["own/session-6", "own/session-9"]))
-            unsaid = self.listing("dev", ["own/x"], by=None)
-            del unsaid["split"]
-            write("unsaid", unsaid)
-            with self.assertRaisesRegex(ValueError, "split is None"):
-                photos.load_list(os.path.join(d, "unsaid.json"))
+            bad = self.listing({**facts("s/a"), "slice": "x"})
+            with open(os.path.join(d, "s.json"), "w") as f:
+                json.dump(bad, f)
+            with self.assertRaisesRegex(ValueError, "slice 'x'"):
+                photos.load_list(os.path.join(d, "s.json"))
             with mock.patch.object(photos, "LISTINGS", d):
-                with self.assertRaisesRegex(ValueError, "split is None"):
+                with self.assertRaisesRegex(ValueError, "slice 'x'"):
                     photos.load_lists()
-                os.remove(os.path.join(d, "unsaid.json"))
-                self.assertEqual([listing["name"] for listing in photos.load_lists(split="test")], ["s"])
                 with self.assertRaisesRegex(ValueError, "no photo sets named"):
                     photos.load_lists([])
-                # Moving a group to development keeps its name; leaving it
-                # in the test list too would put it on both sides.
-                write("moved", {**self.listing("dev", ["own/session-9"], by=None), "name": "moved"})
-                with self.assertRaisesRegex(ValueError, "'own/session-9' is listed as both dev and test"):
-                    photos.load_lists()
-
-    def test_one_tier_holds_one_split(self):
-        dev = self.listing("dev", ["a"], by=None)
-        test = self.listing("test", ["b"])
-        with tempfile.TemporaryDirectory() as d:
-            with self.assertRaisesRegex(ValueError, "photos of 2 splits"):
-                photos.generate(d, d, [dev, test], opener=None)
-            with self.assertRaisesRegex(ValueError, "a test listing is split by group"):
-                photos.generate(d, d, [self.listing("test", ["b"], by=None)], opener=None)
+            with self.assertRaisesRegex(ValueError, "slice 'x'"):
+                photos.generate(d, d, [bad], opener=None)
 
 
 if __name__ == "__main__":

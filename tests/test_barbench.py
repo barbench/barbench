@@ -1,5 +1,6 @@
 """Tests for barbench. Run from the repository root: python -m unittest discover -s tests"""
 
+import collections
 import contextlib
 import copy
 import hashlib
@@ -18,7 +19,7 @@ import numpy as np
 
 from barbench import __main__ as cli
 import barbench
-from barbench import adapters, corpus, pgm, photos, plot, score, source, split
+from barbench import adapters, corpus, pgm, photos, plot, score, slices, source
 
 
 class PgmTest(unittest.TestCase):
@@ -123,9 +124,6 @@ class CorpusTest(unittest.TestCase):
             self.assertEqual(len(first["images"]), cells + 2)
             self.assertTrue(all(corpus.round_trips(corpus.ENCODERS[e["encoder"]](e["expected"]), e["expected"])
                                 for e in first["images"] if e["expected"] is not None))
-            self.assertEqual({first["split"]} | {e["split"] for e in first["images"]}, {"dev"})
-            test = corpus.generate(b, seed=1000, per_cell=1, negatives=2)
-            self.assertEqual({test["split"]} | {e["split"] for e in test["images"]}, {"test"})
 
 
 class ScoreTest(unittest.TestCase):
@@ -138,6 +136,16 @@ class ScoreTest(unittest.TestCase):
             {"file": "n", "expected": None},
         ],
     }
+
+    def test_photos_are_counted_by_group_too(self):
+        images = [{"file": "a", "expected": "A", "group": "s/A"}, {"file": "b", "expected": "A", "group": "s/A"},
+                  {"file": "c", "expected": "C", "group": "s/C"}, {"file": "n", "expected": None, "group": "s/N"}]
+        results = [{"texts": ["A"]}, {"texts": []}, {"texts": ["C"]}, {"texts": []}]
+        s = score.score({"grid": {}, "images": images}, results)
+        self.assertEqual((s["positives"], s["positive_groups"], s["negatives"], s["negative_groups"]), (3, 2, 1, 1))
+        self.assertEqual(s["read_interval"], list(score.wilson(2, 3)))
+        # The synthetic tiers have no groups.
+        self.assertIsNone(score.score(self.MANIFEST, [{"texts": []}] * 4)["positive_groups"])
 
     def test_reads_misreads_and_false_positives(self):
         results = [
@@ -248,7 +256,7 @@ class SweepTest(unittest.TestCase):
                     cli.main(["run", corpus_dir, "--readers", "fake", "--out", out])
             with open(out) as f:
                 report = json.load(f)
-            self.assertEqual(report["split"], "dev")
+            self.assertEqual((report["slices"], report["added_after"]), (None, None))
             self.assertEqual(report["sweeps"], self.SMALL)
             self.assertEqual(report["baseline"]["module_px"], corpus.BASELINE["module_px"])
             self.assertEqual(
@@ -360,59 +368,117 @@ class SweepTest(unittest.TestCase):
                         cli.main(["plot", report, "--out", os.path.join(d, "c.svg")])
 
 
-class SplitTest(unittest.TestCase):
-    """The rule that deals data into development and test is fixed: a
-    change would re-deal photos that have already been looked at."""
+class SliceTest(unittest.TestCase):
+    """The rule that deals photos into slices is fixed: a change would move
+    photos that readers have declared held out or not."""
 
-    def test_groups_are_dealt_by_their_hash(self):
-        # SHA-256 of "a" starts ca97 (51863), of "b" 3e23 (15907); test is
-        # below 19661 of 65536, and the two edge groups start just either
-        # side of it (19660 and 19661).
-        known = {
-            "a": "dev",
-            "b": "test",
-            "edge-1574": "test",
-            "edge-59861": "dev",
-            "commons-code128/zlin-lamp": "test",
-            "own/2026-12-01-market": "dev",
-            "own/2026-12-02-depot": "test",
-        }
-        self.assertEqual({g: split.of_group(g) for g in known}, known)
-        share = sum(split.of_group(f"g{i}") == "test" for i in range(20000)) / 20000
-        self.assertAlmostEqual(share, 0.3, delta=0.01)
+    def test_a_group_is_in_the_slice_of_its_hashs_first_digit(self):
+        # SHA-256 of "a" starts ca97, of "b" 3e23.
+        known = {"a": "c", "b": "3", "zxing-blackbox/code128-2/005-3379497200006": "0"}
+        self.assertEqual({g: slices.of_group(g) for g in known}, known)
+        counts = collections.Counter(slices.of_group(f"g{i}") for i in range(16000))
+        self.assertEqual(sorted(counts), list(slices.SLICES))
+        self.assertTrue(all(900 < n < 1100 for n in counts.values()), counts)
 
-    def test_seeds_from_1000_make_test_images(self):
-        self.assertEqual([split.of_seed(s) for s in (0, 1, 999, 1000, 5000)], ["dev"] * 3 + ["test"] * 2)
-        with self.assertRaises(ValueError):
-            split.of_seed(-1)
+    def test_slices_are_named_by_digits_and_ranges(self):
+        for spec, want in (("all", slices.SLICES), ("e,f", "ef"), ("0-d", "0123456789abcd"),
+                           ("f,0-2,1", "012f"), ("7", "7")):
+            self.assertEqual(slices.parse(spec), want, spec)
+        for spec in ("", "g", "ef", "e,", "d-a", "0-", "-3", "0-ff", "E"):
+            with self.assertRaises(ValueError, msg=spec):
+                slices.parse(spec)
 
-    def test_the_cli_keeps_seeds_to_their_split(self):
+    def test_declarations_are_checked(self):
+        good = {"reader": "r", "held_out": ["e", "f"], "since": "2026-11-22", "declared_by": "its maintainers"}
+        with tempfile.TemporaryDirectory() as d:
+            def declare(name, declared):
+                with open(os.path.join(d, name + ".json"), "w") as f:
+                    json.dump(declared, f)
+
+            declare("r", good)
+            self.assertEqual(slices.declarations(d), {"r": good})
+            for bad, message in (({**good, "reader": "q"}, "declares reader 'q'"),
+                                 ({**good, "held_out": []}, "not a list of slices"),
+                                 ({**good, "held_out": ["e", "e"]}, "not a list of slices"),
+                                 ({**good, "held_out": "ef"}, "not a list of slices"),
+                                 ({**good, "held_out": ["ef"]}, "not a list of slices"),
+                                 ({**good, "held_out": [""]}, "not a list of slices"),
+                                 ({**good, "held_out": [14]}, "not a list of slices"),
+                                 (["e", "f"], "not a declaration"),
+                                 ({**good, "since": "2026-02-30"}, "not a date"),
+                                 ({**good, "declared_by": ""}, "who declared it")):
+                declare("r", bad)
+                with self.assertRaisesRegex(ValueError, message):
+                    slices.declarations(d)
+
+    def test_a_comparison_holds_out_the_shared_slices_for_every_reader(self):
+        with tempfile.TemporaryDirectory() as d:
+            for reader, held, since in (("p", ["e", "f"], "2026-11-22"), ("q", ["0", "e", "f"], "2026-12-05"),
+                                        ("r", ["a", "b"], "2026-11-01")):
+                with open(os.path.join(d, reader + ".json"), "w") as f:
+                    json.dump({"reader": reader, "held_out": held, "since": since, "declared_by": "x"}, f)
+            self.assertEqual(slices.held_out_for(["p"], d), ("ef", "2026-11-22"))
+            # The latest declaration decides, so every photo is held out for all.
+            self.assertEqual(slices.held_out_for(["p", "q"], d), ("ef", "2026-12-05"))
+            with self.assertRaisesRegex(ValueError, "no declaration from zbar"):
+                slices.held_out_for(["p", "zbar"], d)
+            with self.assertRaisesRegex(ValueError, "r do not hold out the shared slices"):
+                slices.held_out_for(["p", "r"], d)
+            with self.assertRaisesRegex(ValueError, "no readers named"):
+                slices.held_out_for([], d)
+            # What a reader's own runs leave out: its slices, after its date.
+            self.assertEqual(slices.held_out_by("q", d), ("0ef", "2026-12-05"))
+            with self.assertRaisesRegex(ValueError, "no declaration from zbar"):
+                slices.held_out_by("zbar", d)
+
+    def test_the_committed_declarations(self):
+        # Streepjes's is the one declaration so far; a reader that declares
+        # adds itself here, and must have an adapter.
+        declared = slices.declarations()
+        self.assertEqual(sorted(declared), ["streepjes"])
+        self.assertEqual(slices.held_out_for(["streepjes"]), ("ef", "2026-11-22"))
+        self.assertTrue(set(declared) <= set(adapters.ADAPTERS))
+
+    def test_seeds_are_0_or_more(self):
         with tempfile.TemporaryDirectory() as d:
             for command in ("corpus", "sweep"):
-                for args in (["--seed", "1000"], ["--seed", "1", "--split", "test"], ["--seed", "-1"]):
-                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as e:
-                        cli.main([command, os.path.join(d, command), *args])
-                    self.assertEqual(e.exception.code, 2, (command, args))
-                    self.assertFalse(os.path.exists(os.path.join(d, command)), (command, args))
-            with mock.patch.dict(corpus.SWEEPS, {"blur": [0.2]}, clear=True):
-                with contextlib.redirect_stdout(io.StringIO()):
-                    self.assertEqual(cli.main(["sweep", os.path.join(d, "t"), "--seed", "1000", "--split", "test",
-                                               "--per-point", "1"]), 0)
-            with open(os.path.join(d, "t", "manifest.json")) as f:
-                manifest = json.load(f)
-            self.assertEqual([manifest["split"]] + [e["split"] for e in manifest["images"]], ["test"] * 2)
+                with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as e:
+                    cli.main([command, os.path.join(d, command), "--seed", "-1"])
+                self.assertEqual(e.exception.code, 2)
+                self.assertFalse(os.path.exists(os.path.join(d, command)))
 
-    def test_the_cli_writes_only_the_photos_of_its_split(self):
+    def test_the_cli_writes_the_photos_it_is_asked_for(self):
         with tempfile.TemporaryDirectory() as d:
             out = os.path.join(d, "photos")
             # Stubbed, so a broken check fails here rather than downloading.
             with mock.patch("barbench.photos.generate") as generate:
-                for args in (["--split", "test"], ["--sets", "kaist-real", "--split", "test"], ["--sets", ","]):
+                generate.return_value = {"images": []}
+                with contextlib.redirect_stdout(io.StringIO()):
+                    for args, chosen, after, leave_out in (
+                        ([], slices.SLICES, None, None),
+                        (["--slices", "e,f"], "ef", None, None),
+                        (["--added-after", "2026-11-21"], slices.SLICES, "2026-11-21", None),
+                        (["--held-out-for", "streepjes"], "ef", "2026-11-22", None),
+                        (["--dev-for", "streepjes"], slices.SLICES, None, ("ef", "2026-11-22")),
+                    ):
+                        self.assertEqual(cli.main(["photos", out, *args]), 0, args)
+                        given = generate.call_args.kwargs
+                        self.assertEqual((given["chosen"], given["added_after"], given["leave_out"]),
+                                         (chosen, after, leave_out), args)
+                generate.reset_mock()
+                for args in (["--slices", "g"], ["--held-out-for", "zbar"], ["--held-out-for", "streepjes", "--slices", "e"],
+                             ["--held-out-for", "streepjes", "--added-after", "2026-11-21"], ["--sets", ","],
+                             ["--held-out-for", ","], ["--dev-for", "zbar"], ["--dev-for", "streepjes", "--slices", "e"],
+                             ["--dev-for", "streepjes", "--held-out-for", "streepjes"], ["--added-after", "soon"]):
                     with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as e:
                         cli.main(["photos", out, *args])
                     self.assertEqual(e.exception.code, 2, args)
             generate.assert_not_called()
             self.assertEqual(os.listdir(d), [])
+            # A failure in the data is not a usage error: it shows as itself.
+            with mock.patch("barbench.photos.generate", side_effect=ValueError("digest does not match the list")):
+                with self.assertRaisesRegex(ValueError, "digest"):
+                    cli.main(["photos", out])
 
 
 class GateTest(unittest.TestCase):
@@ -425,10 +491,9 @@ class GateTest(unittest.TestCase):
         self.manifest = {
             "tier": "synthetic",
             "seed": 0,
-            "split": "dev",
             "encoders": {},
             "grid": {"blur": [0.0]},
-            "images": [{"file": "a.pgm", "expected": "A", "split": "dev", "blur": 0.0}],
+            "images": [{"file": "a.pgm", "expected": "A", "blur": 0.0}],
         }
         self.write_manifest()
 
@@ -491,30 +556,6 @@ class GateTest(unittest.TestCase):
             with self.assertRaises(SystemExit) as e:
                 self.run_cli(*gate, line=line)
             self.assertEqual(e.exception.code, 2, gate)
-
-    def test_test_data_is_scored_only_when_asked_for(self):
-        line = {"file": "a.pgm", "codes": [{"text": "A", "bytes": "41"}]}
-        self.assertEqual(self.run_cli(line=line), 0)
-        # A development run refuses a test entry, the manifest's split, or
-        # a split left unsaid; a test run refuses development data.
-        base = copy.deepcopy(self.manifest)
-        for where, value in (("image", "test"), ("image", None), ("manifest", "test"), ("manifest", None)):
-            for args in ((), ("--split", "test")):
-                self.manifest = copy.deepcopy(base)
-                target = self.manifest["images"][0] if where == "image" else self.manifest
-                if value is None:
-                    del target["split"]
-                else:
-                    target["split"] = value
-                self.write_manifest()
-                with self.assertRaises(SystemExit) as e:
-                    self.run_cli(*args, line=line)
-                self.assertEqual(e.exception.code, 2, (where, value, args))
-        self.manifest = copy.deepcopy(base)
-        self.manifest["split"] = self.manifest["images"][0]["split"] = "test"
-        self.write_manifest()
-        self.assertEqual(self.run_cli("--split", "test", line=line), 0)
-
 
 class FakeDist:
     """What importlib.metadata says of an installed barbench: its
@@ -603,8 +644,8 @@ class SourceTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             pgm.write(os.path.join(d, "a.pgm"), np.full((8, 8), 255, np.uint8))
             with open(os.path.join(d, "manifest.json"), "w") as f:
-                json.dump({"tier": "synthetic", "seed": 0, "split": "dev", "encoders": {}, "grid": {},
-                           "images": [{"file": "a.pgm", "expected": None, "split": "dev", "kind": "noise"}]}, f)
+                json.dump({"tier": "synthetic", "seed": 0, "encoders": {}, "grid": {},
+                           "images": [{"file": "a.pgm", "expected": None, "kind": "noise"}]}, f)
             out = os.path.join(d, "r.json")
             fake = {"fake": lambda paths: ([{"texts": []}], 0.1, "1")}
             with mock.patch.dict(adapters.ADAPTERS, fake), mock.patch.object(source, "commit", return_value="cd" * 20):
@@ -622,8 +663,9 @@ class InstalledTest(unittest.TestCase):
     def test_the_installed_wheel_is_what_runs(self):
         self.assertTrue(barbench.__file__.startswith(sys.prefix), barbench.__file__)
         self.assertEqual(barbench.__version__, importlib.metadata.version("barbench"))
-        # The photo lists ship inside it.
+        # The photo lists and the readers' declarations ship inside it.
         self.assertEqual(len(photos.load_lists()), 4)
+        self.assertIn("streepjes", slices.declarations())
 
 
 class AdapterTest(unittest.TestCase):

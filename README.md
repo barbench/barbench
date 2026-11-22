@@ -107,8 +107,8 @@ this repository, since Wikimedia's robot policy asks automated clients for
 contact details; a 429 answer is waited out as its Retry-After says.
 
 Two more sets add 869 photos of EAN-13 and UPC-A barcodes, negatives for
-now, listed with their digits (for all but three photos that the set gives
-none for) so they can become positives for readers of EAN:
+now, listed with their digits so they can become positives for readers of
+EAN:
 
 - **KAIST** (`barbench/lists/kaist-real.json`): 524 cropped phone
   photos from the dataset of the Quick Browser and Smart Inference papers
@@ -194,32 +194,56 @@ views refuse corners that break the rules a list's corners must keep.
 corners in the list's order, to check a list by eye; a second person
 placing a few without seeing the first is the better check.
 
-### Development and test data
+### Slices, and what each reader holds out
 
-Every list says which split its photos are in, and every manifest row
-says it again. **Development** data is what readers are run and tuned
-against: CI gates every commit on it, and its numbers catch regressions.
-**Test** data is what published numbers will come from, to be run only
-when a release is tagged. Every photo and seed above had been run on, and
-changes judged against them, before the split, so all of them are
-development data, and no test photos are listed yet.
+The library records facts about each photo, never which reader may look at
+it. Every photo has a `group` (the physical label or scene it shows, named
+as its set, `/`, and the label's text or a name for the scene, with a
+folder between where a set's folders differ, so photos of one label always
+travel together), a `slice` and the date it was `added`. Its slice is the
+first hex digit of the SHA-256 of its group name:
 
-Test photos are never picked by hand. A list of them says `"split_by":
-"group"`, and gives each photo a `group`: its set plus its capture session
-or scene, so near-duplicates stay on one side. A group is test when the
-first two bytes of the SHA-256 of its name, read big-endian, are below
-19661 of 65536 (30%), and barbench refuses a list whose groups do not
-fall in its split (`barbench/split.py`), or a group listed on both sides.
-A group is named for what it is before anyone looks at where its hash
-falls; names tried until one lands on the wanted side would pick by hand
-again. Synthetic images from seeds 1000
-and up are test images, from seeds below that development images.
+```bash
+printf '%s' 'zxing-blackbox/code128-2/005-3379497200006' | sha256sum | cut -c1
+```
 
-Every command that makes or runs a corpus works on development data
-unless given `--split test`:
-`photos` writes only the lists of its split, `corpus` and `sweep` refuse a
-seed of the other split, and `run` refuses a corpus with any entry of
-another split or none, so a test result is never seen by accident.
+The rule is fixed (`barbench/slices.py`): changing the hash, the digit or
+a group's name would move photos that readers have declared held out or
+not, so barbench checks every stored slice against it, and a group is
+named for what it shows before anyone looks at where it lands. Photos of
+one label are not independent: reports count positives and negatives by
+group as well as by photo (`positive_groups`, `negative_groups`), since an
+interval's real width rests on the number of groups, and give the pooled
+`read_interval` (Wilson, which treats photos as independent and so is too
+narrow where groups hold several).
+
+Whether a photo can measure a reader fairly depends on that reader:
+whether its developers have looked at it. Each reader that takes part
+declares, in `barbench/readers/NAME.json`, the slices it holds out and the
+date from which it has; its held-out photos are those in its slices added
+strictly after that date, so not one added the same day. A reader whose
+developers have looked at every photo listed so far declares from the day
+it starts holding out; one that never looked can declare from any earlier
+date. barbench records declarations and cannot check them. Streepjes,
+developed against every photo listed on 21 November 2026, holds out slices
+`e` and `f` for photos added after 22 November 2026, so it has no held-out
+photos yet.
+
+Published comparisons all hold out the same slices, `e` and `f`, so no
+reader picks easy ones, and use only photos added after every compared
+reader's declaration, so each photo is held out for all of them. `photos
+--held-out-for a,b` writes exactly those, and `photos --dev-for a`
+everything reader `a` does not hold out, which is what its own CI should
+run on; `--slices` (digits and ranges, such as `0-d`) and `--added-after`
+choose others, and each report says which slices and date it covers and
+what it left out. Every current set is public, so a reader may have met
+its photos outside barbench (ZXing's are ZXing's own test images); such
+facts belong in a reader's declaration. With 53 Code 128 photos in 21
+groups, no choice of slices measures much yet: honest numbers need several
+hundred, in many groups, added after the readers declare.
+
+The synthetic tiers need no slices: anyone can draw a fresh corpus from a
+new seed.
 
 ## Readers
 
@@ -263,10 +287,10 @@ downloads and converts the photos into `DIR-cache` (the archives are about
 450 MB together; only the 140 MB of listed photos stay). `--sets
 zxing-blackbox` limits it to the ZXing set, which is 20 MB.
 
-`scripts/ci.sh` does the same on a smaller synthetic corpus and on the
-development photos, against the installed wheel, and runs the tests in
-`tests/`; CONTRIBUTING.md says more. It reads with zxing-cpp, and with
-streepjes too when `STREEPJES_BIN` is set.
+`scripts/ci.sh` does the same on a smaller synthetic corpus and on every
+photo, against the installed wheel, and runs the tests in `tests/`;
+CONTRIBUTING.md says more. It reads with zxing-cpp, and with streepjes too
+when `STREEPJES_BIN` is set.
 
 ## Later
 
