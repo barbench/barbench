@@ -95,8 +95,8 @@ tag, shelf, device and street-lamp tags, and thermal receipts. They come
 from Commons' Code 128, GS1-128 and Barcode categories. Each file has its
 own author and licence (CC0, CC BY 4.0 or public domain), which the list
 records with the file's page and pinned original, and so does
-`ATTRIBUTION.md`. Their `expected` text is the line printed under the
-symbol, read by eye, without its grouping spaces and without the
+`ATTRIBUTION.md`. The text of each Code 128 symbol is the line printed
+under it, read by eye, without its grouping spaces and without the
 parentheses around GS1 application identifiers, which is how streepjes
 reports GS1 data, and zxing-cpp in its plain text mode, which barbench
 uses. (The zbar adapter has not been checked on GS1 data.) The list's
@@ -106,9 +106,8 @@ this repository, since Wikimedia's robot policy asks automated clients for
 contact details; a 429 answer is waited out as its Retry-After says.
 
 Two more sets add 869 photos of EAN-13 and UPC-A barcodes, negatives for
-now, listed with their digits (`payload`, for all but three photos that
-the set gives none for) so they can become positives when Streepjes reads
-EAN:
+now, listed with their digits (for all but three photos that the set gives
+none for) so they can become positives when Streepjes reads EAN:
 
 - **KAIST** (`bench/barbench/lists/kaist-real.json`): 524 cropped phone
   photos from the dataset of the Quick Browser and Smart Inference papers
@@ -129,6 +128,33 @@ which is downloaded only while a listed photo is missing from the cache
 and deleted afterwards. barbench decodes their baseline JPEGs itself
 (`barbench/jpeg.py`): the Python JPEG libraries bundle libjpeg, whose IJG
 licence is not on the allowlist.
+
+### What each photo shows
+
+Each photo in a list carries `symbols`, the symbols known to be in it:
+each a `symbology` (`code128`, `ean13`, `upca`, `itf`, `qr` or `aztec`, or
+`null` when its kind cannot be told) and the `text` a reader should
+report, `null` where nobody has read it, with an optional `note`. The
+list's `truth` says where they come from: the digits ZXing, KAIST and
+ArTe-Lab give, and for the Commons photos a look at each, which found a
+QR code on each lamp tag, an Aztec code on the deposit voucher, an
+Interleaved 2 of 5 symbol on the DHL label and covered bars on FlagTag
+that may be a symbol, besides their Code 128 symbols. A UPC-A symbol is listed as
+`upca` with its 12 digits, never as the EAN-13 with a leading zero that
+has the same bars. zxing-cpp 3.1.1 reports that 13-digit form, even when
+it names the format UPC-A, so per-format scoring must strip the zero. barbench checks every symbology name, and the digit
+count and check digit of every EAN-13 and UPC-A text.
+
+`symbols` lists what is known to be there, not everything that is: only
+the Commons photos were looked over for other symbols, so a ZXing, KAIST
+or ArTe-Lab photo counting as a Code 128 negative is still an assumption,
+which no reader's reads have contradicted. For now each manifest row
+also has the `expected` text a Code 128 reader must report, taken from
+its Code 128 symbols; barbench refuses a photo with Code 128 symbols of
+different texts, or one of unknown text, which scoring cannot judge yet.
+No list gives where a symbol is in the photo: no source records it (the
+KAIST and ArTe-Lab archives hold only the digits beside each photo), and
+the corners a reader reports would favour that reader.
 
 ### Development and test data
 

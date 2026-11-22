@@ -172,7 +172,73 @@ def load_list(path=MANIFEST):
     with open(path) as f:
         listing = json.load(f)
     check_split(listing)
+    check_symbols(listing)
     return listing
+
+
+#: The symbologies a listed symbol may name; `null` names a symbol whose
+#: kind cannot be told. A UPC-A symbol is `upca` with its 12 digits, never
+#: the EAN-13 with a leading zero that has the same bars, so each symbol
+#: has one spelling (a reader that reports the EAN-13 form, as zxing-cpp
+#: 3.1.1 does, is to be scored as reading the UPC-A).
+SYMBOLOGIES = ("code128", "ean13", "upca", "itf", "qr", "aztec")
+#: The digits an EAN-13 and a UPC-A symbol hold, check digit included.
+GTIN_DIGITS = {"ean13": 13, "upca": 12}
+
+
+def check_symbols(listing):
+    """Refuses a listing whose photos do not each list the symbols they
+    show: a list, maybe empty, of symbologies from SYMBOLOGIES and texts,
+    `null` where unknown. EAN-13 and UPC-A texts must have their digits
+    and check digit, which also catches a text copied from the wrong
+    place."""
+    name = listing.get("name")
+    for entry in listing["images"]:
+        where = f"{name}: {entry.get('file')!r}"
+        symbols = entry.get("symbols")
+        if not isinstance(symbols, list):
+            raise ValueError(f"{where} lists no symbols")
+        for symbol in symbols:
+            if not isinstance(symbol, dict) or {"symbology", "text"} - set(symbol) or set(symbol) - {
+                "symbology",
+                "text",
+                "note",
+            }:
+                raise ValueError(f"{where}: {symbol!r} is not a symbology, a text and maybe a note")
+            kind, text = symbol["symbology"], symbol["text"]
+            if not isinstance(symbol.get("note", ""), str):
+                raise ValueError(f"{where}: note {symbol['note']!r} is not text")
+            if kind is not None and kind not in SYMBOLOGIES:
+                raise ValueError(f"{where}: unknown symbology {kind!r}")
+            if text is not None and (not isinstance(text, str) or not text or kind is None):
+                raise ValueError(f"{where}: text {text!r} of symbology {kind!r}")
+            if kind in GTIN_DIGITS and text is not None:
+                if not (len(text) == GTIN_DIGITS[kind] and text.isascii() and text.isdigit() and gtin_checks(text)):
+                    raise ValueError(f"{where}: {text!r} is not the digits of a valid {kind}")
+                if kind == "ean13" and text.startswith("0"):
+                    raise ValueError(f"{where}: {text!r} is a UPC-A; list it as upca without the 0")
+        expected(entry, where)
+
+
+def gtin_checks(digits):
+    """Whether the last of `digits` is the EAN/UPC check digit of the rest."""
+    body = [int(d) for d in digits[:-1]]
+    total = sum(d * (3 if i % 2 == 0 else 1) for i, d in enumerate(reversed(body)))
+    return (10 - total % 10) % 10 == int(digits[-1])
+
+
+def expected(entry, where=None):
+    """The text a Code 128 reader must report on a photo: that of its Code
+    128 symbols, or None when it shows none. Refuses what scoring cannot
+    yet judge: Code 128 symbols of different texts, or one of unknown
+    text."""
+    texts = {s["text"] for s in entry["symbols"] if s["symbology"] == "code128"}
+    where = where or repr(entry.get("file"))
+    if None in texts:
+        raise ValueError(f"{where}: a Code 128 symbol of unknown text cannot be scored")
+    if len(texts) > 1:
+        raise ValueError(f"{where}: Code 128 symbols of different texts cannot be scored yet")
+    return texts.pop() if texts else None
 
 
 def check_split(listing):
@@ -421,6 +487,7 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
     listings = load_lists() if listings is None else listings
     for listing in listings:
         check_split(listing)
+        check_symbols(listing)
     parts = {listing["split"] for listing in listings}
     if len(parts) != 1:
         raise ValueError(f"photos of {len(parts)} splits, not one, in one tier")
@@ -440,9 +507,11 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
                 raise ValueError(f"{entry['file']}: two photos would be written as {name}")
             names.add(name)
             pgm.write(os.path.join(out_dir, name), image)
+            text = expected(entry)
             row = {
                 "file": name,
-                "expected": entry["expected"],
+                "expected": text,
+                "symbols": entry["symbols"],
                 "split": listing["split"],
                 "set": listing["name"],
                 "from": entry["file"],
@@ -450,11 +519,7 @@ def generate(out_dir, cache, listings=None, opener=urllib.request.urlopen):
             if "group" in entry:
                 row["group"] = entry["group"]
             row.update({k: entry[k] for k in PHOTO_CREDIT if k in entry})
-            if entry["expected"] is None:
-                row["kind"] = entry["kind"]
-                if "payload" in entry:
-                    row["payload"] = entry["payload"]
-            else:
+            if text is not None:
                 row["source"] = entry["source"]
                 if entry["source"] not in sources:
                     sources.append(entry["source"])

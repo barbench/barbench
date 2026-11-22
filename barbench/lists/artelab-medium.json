@@ -8,2421 +8,1732 @@
  "license": "CC-BY-3.0",
  "notice": "Medium Barcode 1D Collection, ArTe-Lab, University of Insubria; A. Zamberletti, I. Gallo, M. Carullo and E. Binaghi, Neural Image Restoration for Decoding 1-D Barcodes Using Common Camera Phones (2011). Licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/).",
  "selection": "Every photo in both datasets.",
+ "truth": "Each photo lists its EAN-13 or UPC-A symbol, with the digits the set gives (none for three photos); UPC-A as its 12 digits. No photo was checked for other symbols.",
  "images": [
   {
    "file": "BarcodeDatasets/Dataset1/05102009081.jpg",
    "sha256": "81f684621238b826e3c6e360c667362cd8906e8d4243d89c4b7c557decd5a07b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009082.jpg",
    "sha256": "1076d9968ff953a9cac94faf0f002c92d742531d676724fc283cca32b9e637d6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009083.jpg",
    "sha256": "2b93d1896167b15e4875bf02c4c02990299c36f65c8e99e7abb3d65e536ac74e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009101.jpg",
    "sha256": "5111fca95a056375e63b2dc798b315787d880db234ea9a0a92a5a177b78be948",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009102.jpg",
    "sha256": "a1148ac351fbfc3b6a6fa451200a4d5fbf34962a57f7b8cae7dc67cf2b09f3b6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009103.jpg",
    "sha256": "0e662df274e4881790f74c2acd3242bb22c8822cd985b5251020d2418c89a9d7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009104.jpg",
    "sha256": "281173f2926464a75780c10e85afb65cd5a9e9b97a39f022dd1ca5dc74d5417d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009105.jpg",
    "sha256": "51edf73f2a6b414700031689a8a2bc3fe355fbca2a00ebc25a5328472aa5e231",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009106.jpg",
    "sha256": "b11c80514914f4e29ccdc4caaf378010dc127bb2d67f1a15249179028094a32a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902580453022"
+   "symbols": [{"symbology": "ean13", "text": "4902580453022"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009108.jpg",
    "sha256": "311185f9b10e77160ddb8365466ba909734f7ec8f9b3f42ccae9bc297ca514ec",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902580453022"
+   "symbols": [{"symbology": "ean13", "text": "4902580453022"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009110.jpg",
    "sha256": "1120236a24b36203118ecb187333d7f7a8fd6133ba0d2e9af586788186f3b649",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902580453022"
+   "symbols": [{"symbology": "ean13", "text": "4902580453022"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009111.jpg",
    "sha256": "c7e75e76962cd1a7b4e92cade29515536d82b21356a6690a1c29cbbbec7c7e5f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902580453022"
+   "symbols": [{"symbology": "ean13", "text": "4902580453022"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009114.jpg",
    "sha256": "5a9bbc2cc65d6a750c78a6249bbd377d3f79fa702d7d491b8df920feee0deecb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009115.jpg",
    "sha256": "7352f578a81f2ea8c005cbbeff56aa94b8309baa04a5f99f53694beee1e8f227",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009117.jpg",
    "sha256": "f7bbfb077cbef46fdf8fc26801c216c35fe056d005d7f89a41d51b9844579099",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009118.jpg",
    "sha256": "705a7b66fb3d0deab214871bea4fdf071628740df8076ea1e7b2a879d4b836bd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009119.jpg",
    "sha256": "c4face47f09f31cb34221de1a37d6a16de68970ab046633535ea8ffd7b4bd69d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009120.jpg",
    "sha256": "514351832bb8b8bcaeda07ff2ff05c8c2fe1ba8c3f27b7ad8a86cc4b552f2318",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009121.jpg",
    "sha256": "46171ac95a884aac13c7bec7dcf1582d0f594d798bf7dca2ada5a282a5ee9b53",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009122.jpg",
    "sha256": "4cfcee7b67e90c4ae88fd37b1d0e53d935fb41ee09076b89298cf26630f3001c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009123.jpg",
    "sha256": "16f594523d5158e1618eb925af3d88228e055ef938e8ec60f530001f6274ee97",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009124.jpg",
    "sha256": "3ffd5ad8f73e105fce1c3ade9bd8763724d7403b2ad9723b626a2c794f2b66a1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009125.jpg",
    "sha256": "84486772620da9318981a06ef1caf25b7f67aabc241235798b0990489b8fb788",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009126.jpg",
    "sha256": "d20be88dc63b98d04a7c681808b1b0ffa70880104a2e53b0badf1533806340d7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009127.jpg",
    "sha256": "5310b4bdb65f11701721062b2a76b44f238843caf469fff84303dc25fd515e7e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009129.jpg",
    "sha256": "dc34d30bbf3b0622c3ab80daded566442dbc7e09e2765dc774e766aa37ad8fe4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009131.jpg",
    "sha256": "ff6619b3f70ae30f885d01da9f82956b5523f5216e2c1b7eb68b7db2c2889bb2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001960123411"
+   "symbols": [{"symbology": "ean13", "text": "8001960123411"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009132.jpg",
    "sha256": "0633db38804eafa646336063e7f49a45472df30fe891616f7142962a82172361",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001960123411"
+   "symbols": [{"symbology": "ean13", "text": "8001960123411"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009133.jpg",
    "sha256": "8a5691635521ae1083c8f21eec3e6ef553ec5619768cb5b37e83e62a30a3152e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001960123411"
+   "symbols": [{"symbology": "ean13", "text": "8001960123411"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009134.jpg",
    "sha256": "061cc9b2168726b6c6dae0529599bec741739e4a04073d2c2ba0a6559afb5a3b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001960123411"
+   "symbols": [{"symbology": "ean13", "text": "8001960123411"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009135.jpg",
    "sha256": "4434fa20975107c9cfe081b8a864447eb3794b6fd5378c2663dcb193f80406ac",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001960123411"
+   "symbols": [{"symbology": "ean13", "text": "8001960123411"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009137.jpg",
    "sha256": "1554f64ab50a29cc5912a53418aeb3e0b1a841791b57c6842fc436019f2c212f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3434730707835"
+   "symbols": [{"symbology": "ean13", "text": "3434730707835"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009138.jpg",
    "sha256": "f9f745ec086f5d0017f9a76556e80d61d694d9465f5b7937716e81f7db8a7e60",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3434730707835"
+   "symbols": [{"symbology": "ean13", "text": "3434730707835"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009139.jpg",
    "sha256": "88e88072d2f723d7106db86b8565e6f55a6d55af59b271991b119718249dd7ab",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3434730707835"
+   "symbols": [{"symbology": "ean13", "text": "3434730707835"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009140.jpg",
    "sha256": "7edf851f7706fb948b4f993031ed29613ae633757000a07b8a56ba23e277bd1f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3434730707835"
+   "symbols": [{"symbology": "ean13", "text": "3434730707835"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009141.jpg",
    "sha256": "aa912e805717c0a67a4aabc6492024d1d97c8a696f2504519aeb1cfc5fb74379",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3434730707835"
+   "symbols": [{"symbology": "ean13", "text": "3434730707835"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009142.jpg",
    "sha256": "48e1dedf7e91391e108bc88768e42c9767c2014c090b78eec0ce343a359a278c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3434730707835"
+   "symbols": [{"symbology": "ean13", "text": "3434730707835"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009143.jpg",
    "sha256": "5d9548bd81cce80cd24eb9fd3cdc8ce9b353e9dd3b1713cf7e33e26a613664b2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020587048"
+   "symbols": [{"symbology": "ean13", "text": "8004020587048"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009144.jpg",
    "sha256": "961088d4ef06f708a84a33ae78b0137a157970528e66d57661d5d03378793473",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020587048"
+   "symbols": [{"symbology": "ean13", "text": "8004020587048"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009145.jpg",
    "sha256": "598223545043d07e8237d5da4f6a7945693d18dc0c1912253084f39c7f1d9ba8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020587048"
+   "symbols": [{"symbology": "ean13", "text": "8004020587048"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009146.jpg",
    "sha256": "a65cda51bee1dc3fba1eb5cf3d5a2135a46368636a94b6ec4132d1284214feb6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020587048"
+   "symbols": [{"symbology": "ean13", "text": "8004020587048"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009148.jpg",
    "sha256": "ccbba3e4b3ed7b7f5e5ae4c03a667966a6c54fa1b860a44435223ddd48a03087",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0734646964449"
+   "symbols": [{"symbology": "upca", "text": "734646964449"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009149.jpg",
    "sha256": "5084d5087081593368809e7a8b4bf0f9a36b53c940b892685aefee89bfa2a3a4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0734646964449"
+   "symbols": [{"symbology": "upca", "text": "734646964449"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009150.jpg",
    "sha256": "f4a2fa62fddddf23798595049b8f2b4a86cedf10bdac55a70728c6a681b9739d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0734646964449"
+   "symbols": [{"symbology": "upca", "text": "734646964449"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009151.jpg",
    "sha256": "83d53a4830f44fb2724b13535a918c1cbdfcd9314e5f401fd7586458997520a4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0734646964449"
+   "symbols": [{"symbology": "upca", "text": "734646964449"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009152.jpg",
    "sha256": "0e60fc4f9c823e2b46a2aa8054f6e5681fcda3a05dd5983707f621bc3f46d2b4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0734646964449"
+   "symbols": [{"symbology": "upca", "text": "734646964449"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009153.jpg",
    "sha256": "1d6bd291b9dacba745df24cbedf302dddf4fe9f4237c9193247597ea47f90148",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020931773"
+   "symbols": [{"symbology": "ean13", "text": "8004020931773"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009154.jpg",
    "sha256": "8b1415e8870c8a438b1cd2d35d5cb8519abede8aec44bd19d84143d897e2e550",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020931773"
+   "symbols": [{"symbology": "ean13", "text": "8004020931773"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009155.jpg",
    "sha256": "40e1e086b27c8f1f9e90276d25d0b42e43f7e02ea084d3d5cc8c89ebe5f10b26",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020931773"
+   "symbols": [{"symbology": "ean13", "text": "8004020931773"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009156.jpg",
    "sha256": "ceaf605a4abe59c89e246d3b8e6da5fb947512ac2f20b9fa9e21ec621bc8acf3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020931773"
+   "symbols": [{"symbology": "ean13", "text": "8004020931773"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009157.jpg",
    "sha256": "57feaf11f571163618c5b4b4f49a233e114c5e4b55eaa066cf81a496f7985bd7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004020931773"
+   "symbols": [{"symbology": "ean13", "text": "8004020931773"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009158.jpg",
    "sha256": "645149c62820f80859b9db8d9912400f6c9d40542d1272c52925c856e127532a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4005808801046"
+   "symbols": [{"symbology": "ean13", "text": "4005808801046"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009159.jpg",
    "sha256": "b04fbd7b291e5191ab1672d7ac48e1533d24116d0a5cab2495e54d24d7cc53c2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4005808801046"
+   "symbols": [{"symbology": "ean13", "text": "4005808801046"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009160.jpg",
    "sha256": "c6b2d91d42265b5b1344aac020fc43c86b14127e9e5dfaff80bd367493c0dd1a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4005808801046"
+   "symbols": [{"symbology": "ean13", "text": "4005808801046"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009161.jpg",
    "sha256": "3ebd5e12328e106b923d751d0b12c417d792ce153723770c392fd8c4708bf1b2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3574660133899"
+   "symbols": [{"symbology": "ean13", "text": "3574660133899"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009162.jpg",
    "sha256": "0b0b507153560fa75b4dfe8871bff3c24a17ee8c6e78c4af0040315706f57879",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3574660133899"
+   "symbols": [{"symbology": "ean13", "text": "3574660133899"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009163.jpg",
    "sha256": "54893561774f7970b630232284000d277484dcbeaf4fa0d655a03a0444401a32",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3574660133899"
+   "symbols": [{"symbology": "ean13", "text": "3574660133899"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009164.jpg",
    "sha256": "364ff6238b9ce21df23e839ef8387936a7fb0b0b58fdddb7761413f4a2321658",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002030140680"
+   "symbols": [{"symbology": "ean13", "text": "8002030140680"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009165.jpg",
    "sha256": "b42b6d38138b4844a5e0f42e962bfb537fe1de7809001466dfaf1986e66e8371",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002030140680"
+   "symbols": [{"symbology": "ean13", "text": "8002030140680"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009166.jpg",
    "sha256": "47370878dc935d356450a0a0ad032115a881645c36c23b0d1a7aa761aecb9d5b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002030140680"
+   "symbols": [{"symbology": "ean13", "text": "8002030140680"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009168.jpg",
    "sha256": "837805baca1457b6d0a29f2acd37bb7212e8ed6a9b0d021da24e34de2f5d1296",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002030140680"
+   "symbols": [{"symbology": "ean13", "text": "8002030140680"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009169.jpg",
    "sha256": "a317359413bf519e94c2a8a9b20d06759984f435a0594860f1c8d12d8f972582",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005283002354"
+   "symbols": [{"symbology": "ean13", "text": "8005283002354"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009170.jpg",
    "sha256": "74d349aa9c59f7a69fc56232f4947272fd4a618f586ea9bba7524bed439f2480",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005283002354"
+   "symbols": [{"symbology": "ean13", "text": "8005283002354"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009171.jpg",
    "sha256": "aa1bff8f878c6c7d6bf77c41f4d606eadaa202b6709e11d33df988703e4d3b59",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005283002354"
+   "symbols": [{"symbology": "ean13", "text": "8005283002354"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009172.jpg",
    "sha256": "1ff1a3fbbf029e36c0715dbb2ca70a6e5f0a91c3def004ba9b5d5ad164a6e3d6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005283002354"
+   "symbols": [{"symbology": "ean13", "text": "8005283002354"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009173.jpg",
    "sha256": "ce75796aebce75b33cb652670e91077f61df1ab2b346b50ee01f566d4e46a10b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005283002354"
+   "symbols": [{"symbology": "ean13", "text": "8005283002354"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009175.jpg",
    "sha256": "70536b86367d7bc0830587548bf64ba8a200505745b8c3ec6d399427efd8dcdc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009176.jpg",
    "sha256": "ee492578ba6976bd3e3b3466461241ed7d208b354f5946ad5b204e5f8a9b3593",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009177.jpg",
    "sha256": "7c954da6d950564f9dbc097efe4a18b69c61050bc793b422073a2b16e5fd92a2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009178.jpg",
    "sha256": "8abf5dfe6b1b86c9271e08381e216b823f96ecb6b27067c567baca9b78157b70",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009179.jpg",
    "sha256": "1058201b1d3d230989a72499bb562d32f1b4bf4794a7c1a8886b83949f741fa1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009180.jpg",
    "sha256": "519eafc730663c439f12f19d75346c1134833d812daaedc461319333c5cfe174",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009183.jpg",
    "sha256": "fb7779cb104a7029e763451ea16f8feed4b643340e7d46073a6c0523b2c547b3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009184.jpg",
    "sha256": "ba35652318a6b79c34b09363db7cc7276f0476ac39f7d4043776ad452d60c3e9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009185.jpg",
    "sha256": "cd2c3078d878d0d29d76386da8ffa7e118a5efb4564d41a9726024695caf18e0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009186.jpg",
    "sha256": "41031971f4aac228e14d15c57fe7c24d8ab28538893ab250a3a0416fbdb5a78e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009187.jpg",
    "sha256": "9ce01156ee59797f939071b466db1dd393393918bddb33e6a4f4170524cea283",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009189.jpg",
    "sha256": "4854077e90162abce4ad1302c7f87269d86a5781ba34efc374515ad173d979fd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009190.jpg",
    "sha256": "44a513547cd28f7594870ac37c1fd41909a54101f9c9b188edf9cac389d3a870",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009191.jpg",
    "sha256": "738e03f2e0fd4b72861feeb4cdc081486a81b51b6588e38667abd9c93fa48e84",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009192.jpg",
    "sha256": "7f4cc8329d5408166e78f1c232f89d5f7a17af1a97d58ab335c5ddf9b9b0b204",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009193.jpg",
    "sha256": "ea020c72f08273a3b0498ae1e8387bb6d5dfa689ddd6bd27d0db0a2f0c912f23",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009194.jpg",
    "sha256": "9e64afefedcc5c7f2c9444ca6a559e5fefb6a252c1b2f42a4ce25a3819748235",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009195.jpg",
    "sha256": "395aa1b0fa00b01d645547283851a5e50c5fb90e333d3169039595d40d06e64d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009196.jpg",
    "sha256": "5a6de3dd1e7943986f92a30da0a606395bba8f57991a20cb7a3ee384572daed7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009197.jpg",
    "sha256": "8493875356da2019b5b22068c6c20cf60da33f3a63f71a58e4a38d7ebceab69e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009198.jpg",
    "sha256": "421e4f055a5dcf43c9212f3ac94991012a37246c9b8dd095c7e667aa94d7ada0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009199.jpg",
    "sha256": "991c8332d6d5ddc32e90baa4206f35ef1e5496e1dd5487103bad2ce63324f713",
-   "expected": null,
-   "kind": "ean13",
-   "payload": null
+   "symbols": [{"symbology": "ean13", "text": null}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009200.jpg",
    "sha256": "c35ae3bf02db931f0ab1d97f768be1b3f32a5a1ffe1e70de1709169e1d6489d8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330112752"
+   "symbols": [{"symbology": "ean13", "text": "8002330112752"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009201.jpg",
    "sha256": "2020b890f70049106ed67143709cbbb7943bb6fdb985820ee9d4d340fad2b47e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009202.jpg",
    "sha256": "8b2e1d0356ea2ab2551e45570233f7757237ac085a94aa3ee3fe7f5766c9b55c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009203.jpg",
    "sha256": "3054b256d3ad85addd4b571d04eb21419f70fa6f4f6d4e8c25a1e6f11a70de9e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009205.jpg",
    "sha256": "706a865e1fe43c42e2b65c6568eb27e4afb8071972e348eab12ad48dbd612784",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009206.jpg",
    "sha256": "f86dffd2fc5dd626397213e6167e764885dbdc66a04e1181bf9babb5755ed6e0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009207.jpg",
    "sha256": "0e8c9c279c299a291910b25798321d6a2d8dcb0799d3c449e2abac54b3e5acbb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009208.jpg",
    "sha256": "13a3feac6bfe2e856b6f85f78cf39ec7541fc78a6eda4b53a358de1f5ad6b3d3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009209.jpg",
    "sha256": "2a9ba3453e4ac730fbd1da35526ea360bd90c3c6fc77bc7d9db461fdabadf62f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009210.jpg",
    "sha256": "cca0c935b0ef8b80ee7d082fc4343c762b60d4c028a5497fcbf738268723e547",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009211.jpg",
    "sha256": "82b5b46aa83cdc5b82a54e1a8fde1d7b0d15af04a5bb72dcf12615021a077530",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009212.jpg",
    "sha256": "bfd4c112067a299fa5eb7c0a01bbade519889e7f2854cf7009120c08322a2a8a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009213.jpg",
    "sha256": "6743ad95ac4803d39c03e053f967160d51df04653d19626d0ff262b364bbfb74",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009214.jpg",
    "sha256": "4411eb52baca007680d1d6543347b14740dd564efbfbd4cf0216f7dc74994974",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009215.jpg",
    "sha256": "c4d9d953ca3ff20e757abb0fe26f0f50796252e89d6b4b24a91d119d661d08d0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009216.jpg",
    "sha256": "a73bf811d3cc0fa1d027db78fad2b9180e76db7e8d3323eeccd9d7ef8358e0b0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009218.jpg",
    "sha256": "a0637145ad74b43afbf4970cb927ffdf6ec133abc606a6e10bbef91ed9b75345",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009219.jpg",
    "sha256": "bc63f2bfa78f806b6abeaf5415c9a74596e656b3ec3df70642efcda07f78d7c1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009220.jpg",
    "sha256": "0f4999166040e2bb7479c40f5fbb2e1ab475a18c059dade7f3c710fcd4b0f5ed",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009222.jpg",
    "sha256": "9529e3f71bb7b443f7ab715abe4b858f2d4799fe0f82a9d7680f3149c2581b3f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009223.jpg",
    "sha256": "19fecdcc0feaf89cc47eb3c5287134523f34cc7f9e83c228fb3f7540aff2e7a8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009224.jpg",
    "sha256": "8cef8c27a0274874b684b4355cba9d9ab17a810612ed02b03172e087a0c3d545",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009225.jpg",
    "sha256": "eea4249217fbdc309941a5606938f27eb280d1202947adb756c98f4b2b8793f1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009226.jpg",
    "sha256": "d527e891bb1464cbfae75b031be2ad11785c7e36c39374692dab88157411df2d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009227.jpg",
    "sha256": "1301ac1ca242a4cf208b4ddffd828808badf3fac9c4f08824cb0d59a8e3a13dd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009228.jpg",
    "sha256": "78a41ed9ef8fde5114dc16af7885bc4d43c867a617a539ec8e928086a1b5c6b3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/05102009229.jpg",
    "sha256": "a5f39f18cd0a5cc00c80874a217c543b5be43fe179eff3ed78f4141860978b00",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009240.jpg",
    "sha256": "2f6e786d0715a2f1dea41b5cb5d230c741767071e15a0fbb18f55ff520b1c970",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009241.jpg",
    "sha256": "53e15c1cdea424b090b342e89d8e6f287cedc824b75a2b8fc226d39e1ca9649b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009242.jpg",
    "sha256": "329e99f082d2d8d7bdc260e155cd16eddf239d1a9f18c4186b59ded6424c9067",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009243.jpg",
    "sha256": "8135b98f032a127a16535a81807f99b3e14c796f80af976a9d3382baea2b12c3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009244.jpg",
    "sha256": "c8ddf9d70771563dc0a7ea955247e742346813ccee40f2f91caae2b607091d2a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009245.jpg",
    "sha256": "a581871ed3281cfe5ccf405d2fe4a1a65d169bc4aa7b299d44e343bef8175b44",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009246.jpg",
    "sha256": "5cc7e34d8cf5b6a3de2502d80bb1dda2ba7b1d2890321a97b5a8e59a723af889",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009247.jpg",
    "sha256": "eb5f9a8163ffb3c3af0b01377b3f84e3db55a36734052e4c4cb2f94028589c89",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009248.jpg",
    "sha256": "300fda87ab0942371fbcaf1a26ef8071a153f2fc8865845367953ab5a470b81c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009249.jpg",
    "sha256": "2a7f9f4e77453b5bfa52144f60ee92e3a18a7c0c069a9300547c70d5935a1c0d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009250.jpg",
    "sha256": "8aa24b01b41c54ff3a8de0fd2f4ae8d33f165edec6f2dfd83bae55e1ddf31e35",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009251.jpg",
    "sha256": "46dca1f4642d0f69b7dcd8699cef0c10d1c3a8e54d9f469278031ceddd0fe2b9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009252.jpg",
    "sha256": "648c43cadfc3d5711b485d2ccebeb36e37bfddbcdd9d75f590cbee48bcdf094f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009253.jpg",
    "sha256": "2d1d749e90f533bfcd28ac6e9949a317d32bfabb5851a4a04f3ec7cdae32b815",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset1/06102009255.jpg",
    "sha256": "f45efb657e46ade87b6dc213e1eb04c477c751ae4c58c4db4e0cc82724738614",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5055038601724"
+   "symbols": [{"symbology": "ean13", "text": "5055038601724"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(312).jpg",
    "sha256": "10fbb06fb14a26b355ecc40efb165ccf94fe7d84c4e78bedb2e008e92d4ac82b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(406).jpg",
    "sha256": "22386dab64b0141237608cf092591a442125d68ec8a9cc73260b8373c6e3141c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(427).jpg",
    "sha256": "cf79b091878b3d9de38c5b3842dad01a6dfd07e18310bf9c93bc5cf61f5a6ebc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330002534"
+   "symbols": [{"symbology": "ean13", "text": "8002330002534"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(477).jpg",
    "sha256": "71108d359977611266b0a8872daaa803b8515a2472971762f4ed6b6a492a3452",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(479).jpg",
    "sha256": "287e2b82fb264c3a75030bc3308ec2d0160fef08a8fc51afc46acfb4acc089a3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(480).jpg",
    "sha256": "cee9542a114b5970dedf6479af7535ebd597632a0cfbb01b2e84cf63b946c4b9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(481).jpg",
    "sha256": "cdaf7998d383d9ac1215129e0ff5f4341c001666f2ad472d5472053e2ab979d6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(482).jpg",
    "sha256": "0aaf98a8f4e74a8883aa66fe7ff18d95a4e314a03ca25797802a5f6f2f142280",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(483).jpg",
    "sha256": "afb556cb9bd71b9dedfe0ad6c1254c937a052cb5ab24a3b665462f81e7f9c5db",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(484).jpg",
    "sha256": "343494adcc4decd7e73416bfb0d4075763434edda6f8228c47c96ff53e8796b3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(487).jpg",
    "sha256": "005ca0b9fadc6bcc0bf0cf1a91ee658606188940ae9f1504ba79259f362d34a1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(489).jpg",
    "sha256": "e47c64351a0cdc68cbcd9e5068c1cdfc59ad2f35eb43ca972b761ffd3f75d088",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(495).jpg",
    "sha256": "4906a3a5c0eb3889b94a45286c993d767adc79c6c6826ddee67daaca64488695",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(496).jpg",
    "sha256": "59878380367aa09cdbe66ac2214484108f3df8a09d1c15648584bde3507b0dc7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(501).jpg",
    "sha256": "0da5e2be12d1338c20e7ba4d8036a7e26401d4aa06c05e195e125bea40058f9f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330097875"
+   "symbols": [{"symbology": "ean13", "text": "8002330097875"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(502).jpg",
    "sha256": "66b06d5b25c89da90dbf302f4d18135499cbebdf83a6b5a02a97ea3e597c9b59",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330097875"
+   "symbols": [{"symbology": "ean13", "text": "8002330097875"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(503).jpg",
    "sha256": "6c15768cd035c671815e3532ca0101e7da29218c199620bfb63c86e5983aea38",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330097875"
+   "symbols": [{"symbology": "ean13", "text": "8002330097875"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(504).jpg",
    "sha256": "edadafa48e2ff2814d064c84456ca74207b9d2e7fc337d74c1c0255e9cfa61eb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330097875"
+   "symbols": [{"symbology": "ean13", "text": "8002330097875"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(505).jpg",
    "sha256": "3f0ea636fdda21dde5d7dc7192d4be815ecaa54e3483d87d9c57e1ac2f047fbc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330097875"
+   "symbols": [{"symbology": "ean13", "text": "8002330097875"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(506).jpg",
    "sha256": "876f66f305f3dd0ec01515fcc7fcc7f9617bf5d66d0f5374257ef58ef644aafc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330097875"
+   "symbols": [{"symbology": "ean13", "text": "8002330097875"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(507).jpg",
    "sha256": "5f0689823630ef48440f9cb34fb947017b46311d7b0695d2c24b6a55d06e89ad",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(508).jpg",
    "sha256": "42b0feb97e55ae3233328f5febf1e7446b041b2216f07de0dab360d7c8679952",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(510).jpg",
    "sha256": "c7c62c1325cf1db9878bbc592fbb2826c5e33346746974c5b3c66b9a7a85a222",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(512).jpg",
    "sha256": "cce7569d6ae569a4bd7fab30e2670f34d9b2bd2265d2ce1b70f0b51d0f8675b0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(515).jpg",
    "sha256": "bde720c3132e6a84302c7b3e034e70fb93512400fdb1b1d4ba5d399339512063",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5030930017491"
+   "symbols": [{"symbology": "ean13", "text": "5030930017491"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(516).jpg",
    "sha256": "48feb52cce5ca027a05822bca1d2777307c19218904289a21d0ee6b0c7d35b63",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5030930017491"
+   "symbols": [{"symbology": "ean13", "text": "5030930017491"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(518).jpg",
    "sha256": "048b8e1d67fb3a02ef9c9141a6e8ef43e86a553cd5129db66f8b3bd8c078e72b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5030930017491"
+   "symbols": [{"symbology": "ean13", "text": "5030930017491"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(519).jpg",
    "sha256": "25919d4c2792426605735860c250f9db992561b6b02926d5689fbe34476430eb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5030930017491"
+   "symbols": [{"symbology": "ean13", "text": "5030930017491"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(533).jpg",
    "sha256": "4d9ba9d63d1ae17a185e3ba6914f96fae6ea9e2f3e326d0e0640929bd52b9d28",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8000990120193"
+   "symbols": [{"symbology": "ean13", "text": "8000990120193"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(534).jpg",
    "sha256": "add466b83bcfec3630f9d263b672351d03a90055e5f39b0c9694d5dee795d486",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3228881002631"
+   "symbols": [{"symbology": "ean13", "text": "3228881002631"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(535).jpg",
    "sha256": "a4ed441de24c9f723c0c4f0ac6261268124d26d35802855a9b15bba92ba581c9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3228881002631"
+   "symbols": [{"symbology": "ean13", "text": "3228881002631"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(536).jpg",
    "sha256": "526e03ff83dc5183a5f2cb5f04b4ef065f185b9a12a9574733707384fb6486e9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3228881002631"
+   "symbols": [{"symbology": "ean13", "text": "3228881002631"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(537).jpg",
    "sha256": "a1b8b00bc8e173e4cd314beab08e7f61f89c6f6a81bb140b9b7b2ac5bc7e7544",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3228881002631"
+   "symbols": [{"symbology": "ean13", "text": "3228881002631"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(539).jpg",
    "sha256": "460f66841499ffac8e19951437b70e5b922d0087c422a010297f68616453b857",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8004150100070"
+   "symbols": [{"symbology": "ean13", "text": "8004150100070"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(542).jpg",
    "sha256": "322f9f039602a33f660d49e155eba00a262fc7e2189f79d71c35d99641142f95",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(543).jpg",
    "sha256": "1d2b12d72bd57b2dced21ceeeb12248c7ac69e603a1d7e228ce318bdc6bf2c87",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002205319804"
+   "symbols": [{"symbology": "ean13", "text": "8002205319804"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(546).jpg",
    "sha256": "b5586db79afc7e3e44ae8694e802fe1f2b794d2f2461521f1ca7881030d78aa8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(549).jpg",
    "sha256": "b9253e1722dd05b158074a751d12e5e7f135120b025b06f2f48e5bc89b3234f0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330098063"
+   "symbols": [{"symbology": "ean13", "text": "8002330098063"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(550).jpg",
    "sha256": "297c507f5900a24ed93aa768acfa8fe985e68eded0981d835c9ac0da277ddbc1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330098063"
+   "symbols": [{"symbology": "ean13", "text": "8002330098063"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(551).jpg",
    "sha256": "e0eadc810ce6d7481e7a679794b03b3bb5a5e44962858cf8473f31d35442ff8f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330098063"
+   "symbols": [{"symbology": "ean13", "text": "8002330098063"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(552).jpg",
    "sha256": "54ac83c7839cfe4826a6db418e69263b15a893b9cfb03dd330dccc03d9f80f97",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330098063"
+   "symbols": [{"symbology": "ean13", "text": "8002330098063"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(553).jpg",
    "sha256": "e2546ce0a7f134c1d32b87fad910ecb82afd034d66ed43c043fd1eefc38fe2b3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330098063"
+   "symbols": [{"symbology": "ean13", "text": "8002330098063"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(555).jpg",
    "sha256": "fdc8fa3068a8bba958eb28ad2938b31bd672b1bc17ee19795e663d23a0927d44",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5050083170188"
+   "symbols": [{"symbology": "ean13", "text": "5050083170188"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(556).jpg",
    "sha256": "d5594735b1e645c5af221bbd7e01de37c12ed04768a990ff1e2c6d32f3222def",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5050083170188"
+   "symbols": [{"symbology": "ean13", "text": "5050083170188"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(558).jpg",
    "sha256": "3a08c2840c16613abaf6da1689632adf4886a40577f4baf825e44fdc028a31f8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005200010325"
+   "symbols": [{"symbology": "ean13", "text": "8005200010325"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(563).jpg",
    "sha256": "0d83d8a6feffc99d70a4c46ff7e02e2747eb35488bfd2e7e326d2e47781b01d4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5012254112595"
+   "symbols": [{"symbology": "ean13", "text": "5012254112595"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(567).jpg",
    "sha256": "8b3d4735929b780cdeafaafaeaa3dc2b5b71ded3e2a9f52716332cdd4e2abdbb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3600540477323"
+   "symbols": [{"symbology": "ean13", "text": "3600540477323"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(568).jpg",
    "sha256": "a66b3705f954d0e6894956748dfc41f92a4364ac07007068790f1e26ecd7d1a9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3600540477323"
+   "symbols": [{"symbology": "ean13", "text": "3600540477323"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(573).jpg",
    "sha256": "7ffc029a1649b9d78a8327999d34489e9a3796af39ddce1c93bca2e27c6d561a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030132293"
+   "symbols": [{"symbology": "ean13", "text": "4902030132293"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(574).jpg",
    "sha256": "860ffa9dc8302bbb4039f35b0fed1b48fa047313a9b99512027ead056c349949",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030132293"
+   "symbols": [{"symbology": "ean13", "text": "4902030132293"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(675).jpg",
    "sha256": "fdf702188121f054dd2f3aa1ed4134ec0eac7539defe0c6a90b3b439cf21d012",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(676).jpg",
    "sha256": "2fd74c709611eae49e67295f6dbc47da4df2591cc6c5778d42694ba381e00746",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(677).jpg",
    "sha256": "f5811564aef6d7405aa45024b2a15624263451ebfc5026b55d267a344211457a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(678).jpg",
    "sha256": "509f8f9b99f9e6e291a8de97dc1c67d01b05a690b680e72b0fca9c8802aa1790",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(679).jpg",
    "sha256": "71f1d82146e87dda9efbc1d490ae4ed69890471ae892b266615ceb865cfbeb6a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(680).jpg",
    "sha256": "5372842186cc5bbd2790ee125a712888e01cbabc219685a59c1d6dc602798dc4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(681).jpg",
    "sha256": "4d35e4b0db5c0cb4f272b9648755da2114262693934952b890fed11fca54afdd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(682).jpg",
    "sha256": "6d208cf704b2d7f775619d120836b40d611a42c4022d2ff009f4c6c62a26459c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(683).jpg",
    "sha256": "e2cf8f5fa890494434be2e3e3a77372d97e3712350af2f83bdc966d248b2a5f9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(684).jpg",
    "sha256": "853b860f195dea70c43e325bb8bb649b128dc0b9ca77bc4a4e0dfe89f88641f8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(685).jpg",
    "sha256": "c3d4995e5afd87278b1ff4599b70202a9df30e9f78217994bc9843c6920b8b9f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(686).jpg",
    "sha256": "b0e0f4fe1532b2edd72da6d4c64d6dd53ab88e48115dedf5b69928560b19483d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(687).jpg",
    "sha256": "54784ae07101f7a0731a678caae413b3c331bd550d4ad0c2bbd309806a5b6d20",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(688).jpg",
    "sha256": "f65968d0ad3a8ace67692f637ac91958b2ac547c2840400dc1a7cdcdb8e56898",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115962"
+   "symbols": [{"symbology": "ean13", "text": "8011642115962"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(689).jpg",
    "sha256": "b8f5ea13c058bff5a29aa53efa3458767f2ed4ff745557bdebd41085e66adc83",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(690).jpg",
    "sha256": "528cf9ca1231ee83880da49d67d713860f8759ffe7683b2c7bbd67d851302056",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(691).jpg",
    "sha256": "f6d46432ec3798303dbdd35cda8e94c2bb8d75dc4e20251d375a87e0a63a9a54",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(692).jpg",
    "sha256": "082f635d29d4bc86159c793b42748ed6842b0e92c27d5dc44296beebbe7e2b79",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(693).jpg",
    "sha256": "bff88492dc0fac002f88dc47dc94e57181b8b5658269d3f91fd89efd0f3085f5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(694).jpg",
    "sha256": "8886efd40e6853e75e3fae250bedf7e3b99dc802b5c4e6e944307200e14ec125",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(695).jpg",
    "sha256": "a9527a0900836e1d8b61ad130d2053421fb6d273b69aac78281ef04ed43fc42d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030195397"
+   "symbols": [{"symbology": "ean13", "text": "4902030195397"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(696).jpg",
    "sha256": "3a69031db529bae999ac846cf45d5d302ab8c6b0e3f45f29a2aa1b9f42d7177e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030195397"
+   "symbols": [{"symbology": "ean13", "text": "4902030195397"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(697).jpg",
    "sha256": "8a641cbed8497911fdfd2e7daa9094098a1315f00c0207e016ebcc5b45ad478d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030195397"
+   "symbols": [{"symbology": "ean13", "text": "4902030195397"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(698).jpg",
    "sha256": "82712f7d53b121ea2e7339d64776d0a93bda8139577116ce992d6f7c2bde0e49",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030195397"
+   "symbols": [{"symbology": "ean13", "text": "4902030195397"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(700).jpg",
    "sha256": "7e7ea20ec243ac65297ecc4ad283707521d746836b5cb43c6ef317b5ff63ffec",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(701).jpg",
    "sha256": "5f6c2aa1b36af1b72742ceea880eeb5c94bf81df48a185d21cbb635f384a59d1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(702).jpg",
    "sha256": "298d11407bda9d51be292f9f83146c610b01fc210aec1d46772ddfd43c197433",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(703).jpg",
    "sha256": "3f95699f3543d417be5f4708d5e7ca929e84666fedbfe7a9af9ad7e25fffa6c3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(704).jpg",
    "sha256": "bb101dac9b318291de6a3da29d45f1b9868794a3c6bba99325c79fc87ffabfa9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(705).jpg",
    "sha256": "7cd0a97dc4145af8a59efcc5f6803c0761369323ab8aee0d1d26cf5d49456ec4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(706).jpg",
    "sha256": "c2ee3c0cc21d7d4ef47a2e3ffc09c6c89b59de2896ee6afb6eaf82cb799bd659",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(707).jpg",
    "sha256": "8452cdf5bdfe11843006defcade4ed1ed00afea27bd57e92e4370d116c222100",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330024451"
+   "symbols": [{"symbology": "ean13", "text": "8002330024451"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(708).jpg",
    "sha256": "24110bd0d2a52d425417dab586b3afde3e3e81d1d000e7072bbbc69d3a855897",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330024451"
+   "symbols": [{"symbology": "ean13", "text": "8002330024451"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(709).jpg",
    "sha256": "4862252c945a268ae769f4ce4852e0236e8023627900b6d658db040f7f7e83c6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330024451"
+   "symbols": [{"symbology": "ean13", "text": "8002330024451"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(710).jpg",
    "sha256": "2601778fdc88872b2c13b410009afd333226bdcdc5a05141e632e4cbe9e9d7c1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330024451"
+   "symbols": [{"symbology": "ean13", "text": "8002330024451"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(711).jpg",
    "sha256": "a152f43cda5381e700f9438f65285e85121c5f129d20be791c5421819515ba8e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330024451"
+   "symbols": [{"symbology": "ean13", "text": "8002330024451"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(712).jpg",
    "sha256": "e2060c9fbbfbc077ec6698f24ccbf4bab828e94167c2f6acfc1eebee3c9dade2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330024451"
+   "symbols": [{"symbology": "ean13", "text": "8002330024451"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(713).jpg",
    "sha256": "cdb0805162eb7a8f96bcba319d72b0bd9725c1e927adf0737ed83ddb4e42f9bc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330024451"
+   "symbols": [{"symbology": "ean13", "text": "8002330024451"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(714).jpg",
    "sha256": "6845560de968c0317ae4dc07501e1febda29607827e318b7dbe0f338a52fa70c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8001410088710"
+   "symbols": [{"symbology": "ean13", "text": "8001410088710"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(715).jpg",
    "sha256": "f3b88b3b1f2e1e350a7c8abc2434d7402634c005ad64d705ca9b785ea0002712",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(716).jpg",
    "sha256": "e8cd58c8a3387fcad49f136ae13ddcf9912472e3c164c90884d73e611e6c5e25",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(717).jpg",
    "sha256": "48448196ca3fb5e2b2a25eae1555352772576139b894f3ab14671dbf2e1deb34",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(718).jpg",
    "sha256": "dafbf84f4a5c36118f5a41b464f5e5cb2e927f053bd27c9e98e9239289be1970",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(719).jpg",
    "sha256": "528647f224f3b62814f70cd5f1e1f245b1d9b4c5f023a8f52bd2642213a7592b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(720).jpg",
    "sha256": "7a9c6229f275ce25bb918a97a6180621f6855366078ec4ae8346a5ba8f733e06",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8002330051617"
+   "symbols": [{"symbology": "ean13", "text": "8002330051617"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(721).jpg",
    "sha256": "a8945f328e4416702bb71e55f88d0dee859c31ce87e2780154f0d380018def8c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(722).jpg",
    "sha256": "3c0b163ef09d9a1a44ffeaea29e20c1f686cea4858c4f5f5c9538f5ccab1c288",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(723).jpg",
    "sha256": "1050866ba06271b69a1603ff33f3d24c5afabfb104272f17a48c9a7aacae201f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(724).jpg",
    "sha256": "afcd1a1737ff593dc0a7519fb211ec97fc459cf972e17b8e679ffef8e70d35d2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902030187590"
+   "symbols": [{"symbology": "ean13", "text": "4902030187590"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(725).jpg",
    "sha256": "0acd2b36b9142ef4b34678b8e9376c20a60d2da696275861d817e0e91ee8f0c4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(726).jpg",
    "sha256": "f3b14376c6b19c22f80f51e654d2fa0519a0130b8a7d09396fbdd7178a4eb932",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(727).jpg",
    "sha256": "45cc92f45bc2acac64aa0649ea1076ebf5c264e3b75b9a999d04eff017bd6da3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(728).jpg",
    "sha256": "d7928d2d6bd3cc45d8074ea812b8410cc44b0d7f9b43063e160c9757d969f269",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(729).jpg",
    "sha256": "ebecffb3bbd759bcc6ec3eb8cb79b784fac5165ecca3ab9abcfec0a974df730c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(730).jpg",
    "sha256": "0c8cabc0ea92807dfa4b6a0559c808689f3e49c02e2647d24689971ea1e47fb9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(731).jpg",
    "sha256": "0061ace08748cb7feb7b5e29e65d63ac23c92a28630eea5c41d8a522c4f1a50c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8023222032262"
+   "symbols": [{"symbology": "ean13", "text": "8023222032262"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(732).jpg",
    "sha256": "fe9b6cbcc35cd1505b2669944f7786bc8796970d7e9dc88655b8cec561008278",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(733).jpg",
    "sha256": "8727354df8796f8e2c75e17462520c9f4dad8582d1cee426907009cb20845138",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(734).jpg",
    "sha256": "2a65865099c4f7b63b69feb35520c4765de516211624d362db4be263eab703bf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(735).jpg",
    "sha256": "ce5dd38d6cfe61925d537f5222350169432afe186359b85918402aad748fa184",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(736).jpg",
    "sha256": "238653765a9d4772ff571865610f4eb24e7c58318cc29f505e54991723a912ea",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(737).jpg",
    "sha256": "18039dc66c9af60d75d0ea717eaebc1dfab4892752612cdda8a9be3f921f9cf4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(738).jpg",
    "sha256": "8aed2804748249cf668e381681cbdbabbe2f8f91fc447492772cbed95609016b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(739).jpg",
    "sha256": "99c20d873ec54d390a8aa79d1766a3a8ddb4a7f2d9f2d49d8aaba0c627c08c0b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(740).jpg",
    "sha256": "bbdd871b18bd79a04c34cb9b551e605fdc0278e8642373a51444dd4e3726d511",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(741).jpg",
    "sha256": "d2c5f76efc566d0229300fe137b17cc06767f126a25cce1fcb3d368a1ee9f2e5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(742).jpg",
    "sha256": "6739d8dc9794f2927b2984a60c14832afcb138960dc44f9938e5f308c636fb23",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(743).jpg",
    "sha256": "9538d957317240f46242d91d9597571ccb642a623a6c1be55364661567192bfd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(744).jpg",
    "sha256": "958875fff0be46a409bd40aac5727faec59c855652fc191fdbc6b761277f4225",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(745).jpg",
    "sha256": "7421f031a602ed0fe8f92943cf80f8451052ed351a7ae15909b473cc92d0a8b5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(746).jpg",
    "sha256": "d727f284284050b7d797d81b45e9c578397f3b8b83465bf324a9a635785bb710",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(747).jpg",
    "sha256": "5693515b98e52c4afff328a2c956c59a5365f81140d2c5ecc2e0226fc63583fd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642115887"
+   "symbols": [{"symbology": "ean13", "text": "8011642115887"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(749).jpg",
    "sha256": "ea175b8ec1e86745abb65140141e3b74dab955c8ab1235592e821415aa3291cf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(750).jpg",
    "sha256": "006cac0445366aafa84e8cf0cbf3282f349c6f33be492a87fcc99d5c513babb7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(751).jpg",
    "sha256": "adcdec0384cfd58d28a53d1d8add870238838f784c200a227596572e7dd9d7b4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(752).jpg",
    "sha256": "1d03bc30db08b951742fd5cf4c14b07a07db8883f433a89d43e868ad1baf6eb0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(753).jpg",
    "sha256": "16abec9edabf706de5707b76aba70a88bf549d56b1325e5328b627c5bf49a6eb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(754).jpg",
    "sha256": "e1559f2dd7787a37d28f254c975dd436cff96db1779d8a599c4a6c63d7723ba0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(755).jpg",
    "sha256": "9c5eb7c17e481090f98b9bbeb5811b7d208b06c06602d5bd5eec6fcc1e9dfc0a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(756).jpg",
    "sha256": "02249255d7659be542232f0e1d21e275ccae37ce8772f41319e5be9bbbeec278",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(757).jpg",
    "sha256": "79487377bb3fd53887a8a51fdad0407480035353380ede35a39730996a340934",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(758).jpg",
    "sha256": "b249d0b78cc74b2e52cb9a1d222567e982b06c779efea98b8719b0c8230fbc05",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(759).jpg",
    "sha256": "53cc400c379ac6d9773b00188a99ffa19357ea076504ae7af3d7c53b02b0c32d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4902520242204"
+   "symbols": [{"symbology": "ean13", "text": "4902520242204"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(760).jpg",
    "sha256": "ce9039de27187b5e4cce79073876ef6d8748771c4121a8975cc7176bd3fdb63d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(761).jpg",
    "sha256": "968f41491df62a5018a59dd6d10cb4ec1b19e64b260b97da245c9f45d1f444fe",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(762).jpg",
    "sha256": "e3a69ad747c2e6de7f6a1535e83351bf632f20c50f75c9c444ae4cb10247a3b3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(763).jpg",
    "sha256": "5ec436590364339e19dfa420082617d4535aa3654e9594204957a9b4205dd825",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(764).jpg",
    "sha256": "b82e3f3212d492a7d7515cdd6ff80118815894d0b3b8856cf3da89132cfa7265",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(765).jpg",
    "sha256": "f4f864bb78a9be535610108c27d7ebf902df27ffbc276ed871cb649b28d0232e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(766).jpg",
    "sha256": "6abc7c1cc331d4054ada9dc1ebd927667d08742a27f3cf2d2fc571b02670be47",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(767).jpg",
    "sha256": "33605433aaf9b5820dc46e54502a5d172dd6fa40d74f4f61ebd3bc19ee1de178",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(768).jpg",
    "sha256": "8d957a2993e8b6c82d9b8985ebb49c643adffbb741425e2f09bda0a2b18f7682",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(769).jpg",
    "sha256": "6febf91d1c981951bd603cbb49bece7d53ce1db0cbed20f7c10bfa74fed9e2c4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(770).jpg",
    "sha256": "00b96fbd1c66f679ee20080f369a90303651886bdbc8409f72f05b6c97386c41",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(771).jpg",
    "sha256": "bc3dfe768e48261a1f2ae85729fd42b32dbf776ca0ba5b40a371139b8fd95571",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(772).jpg",
    "sha256": "5ebcb2a95e90fb00a45b6a0987e88867b9a99b7726553ed0ae332c2dd1909ae3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(773).jpg",
    "sha256": "e2c48b933cf4439dfa742c647203c5d491bb58441336eb16cb81dfde2296ff97",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(774).jpg",
    "sha256": "3cc41c3e2f27925ffa3ad2f1d4a38482e137fd07a32a2db667571a9a305da4c8",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(775).jpg",
    "sha256": "10ac2bfda019d998963295d8780685f445893647d98f5fc06d339f04c16bc9f3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(776).jpg",
    "sha256": "da3671ffbb8431d6e70a0d98d759fc130678753adf1906fb84c1804832b1bc08",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(777).jpg",
    "sha256": "b235ff88aedc0327f27f1017595e121eaa181e64795456cb3ad8f2d58a3cc77e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(778).jpg",
    "sha256": "7b08f1d23953bdeaf1f80ae7bd7a6bb678eb6f4a612fdf84a00ebb5a26f4d762",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(779).jpg",
    "sha256": "530984b1a201b1804b5877a780e50485352746877eeedc3a3cede8dd766687a4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051122414831"
+   "symbols": [{"symbology": "upca", "text": "051122414831"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(780).jpg",
    "sha256": "1e12c0c9d0068edf15cf22eb996bf9ac2c1f6fa8673e43b897dfdd27c6211283",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(781).jpg",
    "sha256": "760b5003eeeba7bd0e59caedaa8d511075279122307f236e0600147dbaea8418",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(782).jpg",
    "sha256": "a8674fc9e18c9e5fd19c8823bf150c20fd3ffbee65aa7f9ca750db4d99c64847",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(783).jpg",
    "sha256": "daecab41cbe09d62a53311821222ef4a2011134720a93e46df99bc54a34ce0c4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(784).jpg",
    "sha256": "efc96f6da2abcadc797f24399936b013d4839b683ea185fbfb8f56d946857198",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(785).jpg",
    "sha256": "74e508eb27b7dfaa3a4cd83695765f52585879fd779c59eb6fc8c3fc8e7b03ba",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(786).jpg",
    "sha256": "ce3bd966da7847504dbed991dd234b2a5b51d3d1bc27ece92380f250cd8f504f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(787).jpg",
    "sha256": "3a6aed01ea59835593b046933eae1e0dde6bd6b7c8e5f6908e80aebb1c9bb137",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(788).jpg",
    "sha256": "ff01ad13f4f1c6bb5a2eeeca1514eb8225ebdf1e3ffe528bed49058c724d5b22",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(789).jpg",
    "sha256": "b4a3973e2e672ac0b84a9280a2d105a577b093b4c02553176fd47b2dd2475c21",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(790).jpg",
    "sha256": "d72a24171a1fb00c2e798226176215ae435aefcc3369004f6ea06db892c1cbcc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(791).jpg",
    "sha256": "4651491e2b44e6606b6828df2f870803799303fd34bb54e191a7986f849c7441",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(792).jpg",
    "sha256": "f1031022910c01593507bf0323f967ece70eed0ede663832cd5f8d4ce8a990ef",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(793).jpg",
    "sha256": "18d6493eac7de82ba0b1e95e92e678d81666b3573b69814a4caf12df84ad88cd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(794).jpg",
    "sha256": "d58ddf84bcb9b42d81b8d541a0e74f0f4edf334878d6c717e9b26707fe2c4ebb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(795).jpg",
    "sha256": "93ae04e65c2baf6683371608309a8f7728e8dd040bd30a98e5b057f91e59d6b9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(796).jpg",
    "sha256": "666063e333f5a6001ddc99916c01029d3a7adb29683c5196ca74fb0b01bf18c1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8005235212442"
+   "symbols": [{"symbology": "ean13", "text": "8005235212442"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(798).jpg",
    "sha256": "a3900477f5d3d4bc6732fcb5fcce9bc0bdd92a6063f02d4c9e417f6fad24a07b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(799).jpg",
    "sha256": "3d1af1ac8b518d19885645336f6945400645ab5e67d9ce441d7e5a90fe4c4e85",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(800).jpg",
    "sha256": "28b5c92efac07503f1632b30d270b95bed1442bb23dc145cb4efa7cac3863ccc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(801).jpg",
    "sha256": "f0fcfebd5ad32a443b802fad994856bc51185255800207983c02705ee6e05326",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(802).jpg",
    "sha256": "9d1f712dcee0f0663de2c82b61fdebe7d38e4aff2ee0c68cb354a9a0cacd3b60",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(803).jpg",
    "sha256": "de99ff82e67c248238e17259fdbdd79905842ba5cbe2b4e691d4b10f08db336d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(804).jpg",
    "sha256": "0b273708c8800e1eb3ed117fd995a9d3e6a0050394c0b4eb93d0ab8b52aa7bf5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(806).jpg",
    "sha256": "8e292550180b22c749d344ab354e1657b10f24bc7226c3ce608514e289e07d6c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(811).jpg",
    "sha256": "850f00c1412009ee3ace9c985a13f55b1037d5c45a093b6795866a859a63c160",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(812).jpg",
    "sha256": "ff78dbb2fd2ba9fbf5ad0c08bc056aa0f32e58b2cf699fd06b87f4f4500d579b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(814).jpg",
    "sha256": "6a9a16bbc262fc77a9c882df7da4c714ff370e3a20031b78423cf9109e0f70d8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(815).jpg",
    "sha256": "daa64bf1dbd8f1d7e7b442f6e6cdb5d405b7477d43cc2b1838bd1b0b10872447",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(816).jpg",
    "sha256": "9a2c538bdd87ba0ce8c168520a77b7cde7bbb0c895f66f9db686793c87e6b6df",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(817).jpg",
    "sha256": "b59b35caaae4b0c931e018f0bbfec16ef99b5210d1895d8d689c3e6d35c0ad4e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(818).jpg",
    "sha256": "077c578430c54f2a577de7a7cb04460b160421483b3b070d8b4fd48558d73980",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(819).jpg",
    "sha256": "dcbd157c38822a7191d5382bff510cafb1b8e8ad9f00ac7a8104b972fc454a0e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(820).jpg",
    "sha256": "631d963e057577acaa89e2e573e90083ad51b530ed30f717b223ffec5b5acbf1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(822).jpg",
    "sha256": "246a7d67051e3b9c3cad797613681fafb0de25dbbc3d9286ae7783e8dd54c4be",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(823).jpg",
    "sha256": "b607bfb08b5d52e3ba60f887a1b22e4646d878b8c75ddc4f742bf6396cc42d83",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(824).jpg",
    "sha256": "4e499bb63935270f63a0b089555c847c28a921211c9c2cea3b687f7bb7528074",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(825).jpg",
    "sha256": "2a049a38c0ad89bb62b436a507303554e53a0bc582ab7674b1c4cf666e4b9eca",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(827).jpg",
    "sha256": "60ee818015f72e924b4f6a99bd987e032b5c354d964e374d42d2bb5882ee9ff6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(828).jpg",
    "sha256": "358c3f256b1112387aab50a3e01c6ad6fd70c964030bfec68102e190e8dfdb00",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(829).jpg",
    "sha256": "65880a6f3e856931ceb25647372f225a2ef0adea8e24a3dfccdb09113e965f96",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(830).jpg",
    "sha256": "e3110f1fb227a8a382150a4331f46ce72250f4ac5282081076161abb7dc68f8d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(831).jpg",
    "sha256": "7e557c8aec357e7085c696336e78df3cd260ef1be29d6aac18c8a018348bc642",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8011642111896"
+   "symbols": [{"symbology": "ean13", "text": "8011642111896"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(835).jpg",
    "sha256": "973cd1994127d4a1d6a32ddc32ba12b8cd7cd301d219adf3aad9a8b77c851d5c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(836).jpg",
    "sha256": "8d4b698301cd1cc5e278345c1619a769dd1cfe9a256bcf3b576aeecad46c0d39",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(837).jpg",
    "sha256": "c81c7f50b4ed8f940af6c2e7066b9a4e6c6d463ceccb4c3d5b2636948ad95de5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(839).jpg",
    "sha256": "2675fce660dd9c34f8037ab3aa04d3fd4a821ebe863089f94ce68de6aa6f79b6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5322825005431"
+   "symbols": [{"symbology": "ean13", "text": "5322825005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(840).jpg",
    "sha256": "c964f51ae7aba417acd927cc8a12e0689fe05d868b12e8388c6ad7546cf1d5fd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(842).jpg",
    "sha256": "fdb9eb05941abd4d2503b141cf4d56288a4b7e7661a38043b5b3fa23d099b52f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(843).jpg",
    "sha256": "d863f42e31ad30c10b904217d1e2c8e8a5b5cfbaf1bd02ae1477bd1ac0954724",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(844).jpg",
    "sha256": "f6d24c22d9fa6a9e724d6d9c0fd62063efa449f77c8f256b9d8656735554412e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": null
+   "symbols": [{"symbology": "ean13", "text": null}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(845).jpg",
    "sha256": "1362cb835821aaf3b09c091532d34e4405afe4df53eb79797b623d72ea3e2550",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(846).jpg",
    "sha256": "eedf21431f763ccbbef51f54aa617968d635c123bf23fff7f2d44f2bd300fd65",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(847).jpg",
    "sha256": "ecf588cc54d784ef8695307b4c81a0e76e13afba94fc33205697d229e700c412",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(848).jpg",
    "sha256": "d4afb2d7d179a010f56462191c05f4b22dfec21edae13a6391cdc0a436ebf49f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(849).jpg",
    "sha256": "bde45d098086d9bf71cf6bd38b7a16c43ecb67d0acb755be026a40a5be6b080f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": null
+   "symbols": [{"symbology": "ean13", "text": null}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(850).jpg",
    "sha256": "3eabebc3657bd800f55f31b53a620867ee7e264f11a93c216a29f7721209e0e4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(851).jpg",
    "sha256": "39a3b9f8fb738f1c4f6fdd514ca45f3f29f53c229997d031a9941d88a575221c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(852).jpg",
    "sha256": "f8b84a10368b36d6ddf1a91954d32cbea24fde8fd44f37d4c63406ea4ae1c97b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(853).jpg",
    "sha256": "4bb34e8c6de95b02026046fbd8b0b2166900b3d58c62beb874bd1560aa1f7e64",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(854).jpg",
    "sha256": "8c60e0a92e3589b53aabf7ebc8342e3e7e6e4914e46aff6daec683c6cc3da653",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   },
   {
    "file": "BarcodeDatasets/Dataset2/Foto(858).jpg",
    "sha256": "5770ac6223b138eefc2d853f736712198945ae967d85e76d16814e19cf4beb39",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7321925005431"
+   "symbols": [{"symbology": "ean13", "text": "7321925005431"}]
   }
  ]
 }

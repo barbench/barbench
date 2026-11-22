@@ -140,9 +140,10 @@ class FetchTest(unittest.TestCase):
             "license": "Apache-2.0",
             "notice": "test",
             "images": [
-                {"file": "a/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), "expected": "ABC", "source": "a"},
-                {"file": "b/1.png", "sha256": hashlib.sha256(self.png).hexdigest(), "expected": None, "kind": "ean13",
-                 "group": "test/b"},
+                {"file": "a/1.png", "sha256": hashlib.sha256(self.png).hexdigest(),
+                 "symbols": [{"symbology": "code128", "text": "ABC"}], "source": "a"},
+                {"file": "b/1.png", "sha256": hashlib.sha256(self.png).hexdigest(),
+                 "symbols": [{"symbology": "ean13", "text": None}], "group": "test/b"},
             ],
         }
         self.urls = []
@@ -163,7 +164,7 @@ class FetchTest(unittest.TestCase):
             )
             self.assertEqual(manifest["grid"], {"source": ["a"]})
             self.assertEqual([e["expected"] for e in manifest["images"]], ["ABC", None])
-            self.assertEqual(manifest["images"][1]["kind"], "ean13")
+            self.assertEqual(manifest["images"][1]["symbols"], [{"symbology": "ean13", "text": None}])
             self.assertEqual([e["file"] for e in manifest["images"]], ["test-a-1.pgm", "test-b-1.pgm"])
             self.assertEqual([manifest["split"]] + [e["split"] for e in manifest["images"]], ["dev"] * 3)
             self.assertEqual([e.get("group") for e in manifest["images"]], [None, "test/b"])
@@ -239,7 +240,7 @@ class ArchiveTest(unittest.TestCase):
             "notice": "test",
             "images": [
                 {"file": "set/img/Foto(1).jpg", "sha256": hashlib.sha256(self.photo).hexdigest(),
-                 "expected": None, "kind": "ean13", "payload": "4006381333931"},
+                 "symbols": [{"symbology": "ean13", "text": "4006381333931"}]},
             ],
         }
         self.urls = []
@@ -258,7 +259,8 @@ class ArchiveTest(unittest.TestCase):
             self.assertEqual(self.urls, ["https://example.org/set.zip"])
             row = manifest["images"][0]
             self.assertEqual(row["file"], "zipped-set-img-Foto1.pgm")
-            self.assertEqual((row["expected"], row["payload"], row["set"]), (None, "4006381333931", "zipped"))
+            self.assertEqual((row["expected"], row["symbols"][0]["text"], row["set"]),
+                             (None, "4006381333931", "zipped"))
             self.assertEqual(pgm.read(os.path.join(out, row["file"])).shape, (8, 8))
             self.assertEqual(manifest["photos"][0]["archive_sha256"], self.listing["archive_sha256"])
             # Only the listed photo is kept; the archive is gone.
@@ -354,10 +356,12 @@ class CommonsTest(unittest.TestCase):
             "notice": "test",
             "images": [
                 {"file": "label-1.jpg", "url": self.URL.format("a", "ab", 1), "sha256": digest,
-                 "expected": "ABC", "source": "commons", "author": "A. Author", "license": "CC0-1.0",
+                 "symbols": [{"symbology": "code128", "text": "ABC"}], "source": "commons",
+                 "author": "A. Author", "license": "CC0-1.0",
                  "page": "https://commons.wikimedia.org/wiki/File:Label_1.jpg"},
                 {"file": "label-2.jpg", "url": self.URL.format("0", "0f", "%28two%29"), "sha256": digest,
-                 "expected": "DEF", "source": "commons", "author": "B. Author", "license": "CC-BY-4.0",
+                 "symbols": [{"symbology": "code128", "text": "DEF"}, {"symbology": "qr", "text": None}],
+                 "source": "commons", "author": "B. Author", "license": "CC-BY-4.0",
                  "page": "https://commons.wikimedia.org/wiki/File:Label_(two).jpg"},
             ],
         }
@@ -481,12 +485,14 @@ class ListTest(unittest.TestCase):
         for name, listing in listings.items():
             self.assertEqual(listing["license"], licences[name])
             images = listing["images"]
-            positives = [e for e in images if e["expected"] is not None]
+            self.assertTrue(listing["truth"])
+            positives = [e for e in images if photos.expected(e) is not None]
             self.assertEqual((len(images), len(positives)), counts[name])
             digests |= {e["sha256"] for e in images}
             self.assertTrue(all(re.fullmatch(r"[0-9a-f]{64}", e["sha256"]) for e in images))
-            self.assertTrue(all(e["expected"].isprintable() for e in positives))
-            self.assertTrue(all(e["kind"] for e in images if e["expected"] is None))
+            self.assertTrue(all(photos.expected(e).isprintable() for e in positives))
+            # Every photo shows at least the symbol it was listed for.
+            self.assertTrue(all(e["symbols"] for e in images))
             if "archive" in listing:
                 self.assertTrue(listing["archive"].startswith("https://"))
                 self.assertRegex(listing["archive_sha256"], r"^[0-9a-f]{64}$")
@@ -510,6 +516,76 @@ class ListTest(unittest.TestCase):
                 self.assertTrue(all(photos.FILE_NAME.fullmatch(e["file"]) for e in images))
         # No photo is listed twice, within or across sets.
         self.assertEqual(len(digests), sum(len(listing["images"]) for listing in listings.values()))
+
+    def test_the_committed_symbols(self):
+        listings = {listing["name"]: listing for listing in photos.load_lists()}
+        # KAIST names each crop by its symbol's 13 digits; UPC-A drops the 0.
+        for e in listings["kaist-real"]["images"]:
+            digits = e["file"].removeprefix("real/img/").removesuffix(".jpg")
+            (symbol,) = e["symbols"]
+            self.assertEqual(symbol, {"symbology": "upca", "text": digits[1:]} if digits[0] == "0"
+                             else {"symbology": "ean13", "text": digits})
+        # ZXing's folders hold one symbology each, every text known.
+        for e in listings["zxing-blackbox"]["images"]:
+            (symbol,) = e["symbols"]
+            self.assertEqual(symbol["symbology"], {"code128-2": "code128", "ean13-2": "ean13",
+                                                   "upca-2": "upca"}[e["file"].split("/")[0]])
+            self.assertIsNotNone(symbol["text"])
+        unknown = [e["file"] for e in listings["artelab-medium"]["images"] if e["symbols"][0]["text"] is None]
+        self.assertEqual(len(unknown), 3)
+        # The Commons photos that show more than their Code 128 symbol.
+        extra = {e["file"]: [s["symbology"] for s in e["symbols"][1:]]
+                 for e in listings["commons-code128"]["images"] if len(e["symbols"]) > 1}
+        self.assertEqual(extra, {
+            "flagtag-sscc.jpg": [None],
+            "dhl-parcel-label-2015.jpg": ["itf"],
+            "deposit-voucher.jpg": ["aztec"],
+            "zlin-lamp-0360202.jpg": ["qr"],
+            "zlin-lamp-0360207.jpg": ["qr"],
+            "zlin-lamp-0360220.jpg": ["qr"],
+        })
+
+    def test_symbols_are_checked(self):
+        def listing(*symbols):
+            return {"name": "s", "images": [{"file": "a.jpg", "symbols": list(symbols)}]}
+
+        photos.check_symbols(listing())
+        photos.check_symbols(listing({"symbology": "upca", "text": "890444000335"},
+                                     {"symbology": None, "text": None, "note": "covered"}))
+        for symbols, message in (
+            ([{"symbology": "ean13", "text": "9780804816633"}], "not the digits of a valid ean13"),
+            ([{"symbology": "upca", "text": "0890444000335"}], "not the digits of a valid upca"),
+            ([{"symbology": "ean13", "text": "0890444000335"}], "is a UPC-A"),
+            ([{"symbology": "ean13", "text": "978080481663\uff12"}], "not the digits"),
+            ([{"symbology": "code39", "text": "A"}], "unknown symbology 'code39'"),
+            ([{"symbology": None, "text": "A"}], "text 'A' of symbology None"),
+            ([{"symbology": "code128", "text": ""}], "text '' of symbology"),
+            ([{"symbology": "code128", "text": 7}], "text 7 of symbology"),
+            ([{"symbology": "qr", "text": None, "note": 7}], "note 7 is not text"),
+            ([{"symbology": "code128"}], "not a symbology, a text"),
+            ([{"symbology": "code128", "text": "A", "box": []}], "not a symbology, a text"),
+            ([{"symbology": "code128", "text": None}], "Code 128 symbol of unknown text"),
+            ([{"symbology": "code128", "text": "A"}, {"symbology": "code128", "text": "B"}], "different texts"),
+        ):
+            with self.assertRaisesRegex(ValueError, message):
+                photos.check_symbols(listing(*symbols))
+        with self.assertRaisesRegex(ValueError, "lists no symbols"):
+            photos.check_symbols({"name": "s", "images": [{"file": "a.jpg"}]})
+        # A list file and a listing handed to generate are both checked.
+        bad = {"name": "s", "split": "dev",
+               "images": [{"file": "a.jpg", "symbols": [{"symbology": "x", "text": None}]}]}
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "s.json")
+            with open(path, "w") as f:
+                json.dump(bad, f)
+            with self.assertRaisesRegex(ValueError, "unknown symbology 'x'"):
+                photos.load_list(path)
+            with self.assertRaisesRegex(ValueError, "unknown symbology 'x'"):
+                photos.generate(d, d, [bad], opener=None)
+        # Several Code 128 symbols of one text are one expected text.
+        twice = {"symbols": [{"symbology": "code128", "text": "A"}] * 2 + [{"symbology": "qr", "text": None}]}
+        self.assertEqual(photos.expected(twice), "A")
+        self.assertIsNone(photos.expected({"symbols": [{"symbology": "ean13", "text": None}]}))
 
     def test_unknown_sets_are_refused(self):
         with self.assertRaisesRegex(ValueError, "no photo set named nope"):
@@ -535,7 +611,8 @@ class SplitTest(unittest.TestCase):
     hash, never picked."""
 
     def listing(self, split, groups, by="group"):
-        listing = {"name": "s", "split": split, "images": [{"file": f"{i}.jpg", "group": g} for i, g in enumerate(groups)]}
+        listing = {"name": "s", "split": split,
+                   "images": [{"file": f"{i}.jpg", "group": g, "symbols": []} for i, g in enumerate(groups)]}
         if by is not None:
             listing["split_by"] = by
         return listing

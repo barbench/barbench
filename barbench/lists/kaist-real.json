@@ -8,3674 +8,2627 @@
  "license": "CC-BY-4.0",
  "notice": "Barcode Dataset from Quick Browser and Smart Inference papers, Duy-Thao Do (KAIST), Zenodo record 13586402. Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).",
  "selection": "Photos in real/img named by 13 digits alone, in baseline JPEG. Left out: crops of the WWU Muenster database (named DIGITS-01-2, non-commercial only), crops of ArTe-Lab photos (0510* and 0610*, which the ArTe-Lab list takes from ArTe-Lab itself, and IMAG* and PICT*, from ArTe-Lab's 1D Barcode Extended collection, which is not listed), progressive JPEGs, and 0898745031393.jpg, which also shows a Code 128 label.",
+ "truth": "Each photo lists the EAN-13 or UPC-A symbol it is a crop of, with the 13 digits of its file name; UPC-A as its 12 digits. No photo was checked for other symbols.",
  "images": [
   {
    "file": "real/img/0008080025111.jpg",
    "sha256": "7d08733e700ee669ebdab38661bb16264dacfb34df8bb96f23ff9f50d7d19693",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0008080025111"
+   "symbols": [{"symbology": "upca", "text": "008080025111"}]
   },
   {
    "file": "real/img/0010900005043.jpg",
    "sha256": "9785a4690a1d9cf94d97b83f17168e90a7f8ddf6450d7ef7db2e27c28be6e648",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0010900005043"
+   "symbols": [{"symbology": "upca", "text": "010900005043"}]
   },
   {
    "file": "real/img/0010900013314.jpg",
    "sha256": "0f533e804d3eb594b404a896b9fa03533871e4ea858697ce9357a057ea785d81",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0010900013314"
+   "symbols": [{"symbology": "upca", "text": "010900013314"}]
   },
   {
    "file": "real/img/0010900080316.jpg",
    "sha256": "747ed2bc2e819afc59dd02db72efc4f0eddab049ac59a2355dcbd63524968ab0",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0010900080316"
+   "symbols": [{"symbology": "upca", "text": "010900080316"}]
   },
   {
    "file": "real/img/0011110414380.jpg",
    "sha256": "2c28822730ae73f1dcc67b10681914c8ed861620b7d82266108b7640722d0545",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110414380"
+   "symbols": [{"symbology": "upca", "text": "011110414380"}]
   },
   {
    "file": "real/img/0011110669711.jpg",
    "sha256": "6b549bef633d2d2d0bb2ab92d91a543cf544010dbd85a0b27f963fb6207b0087",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110669711"
+   "symbols": [{"symbology": "upca", "text": "011110669711"}]
   },
   {
    "file": "real/img/0011110724687.jpg",
    "sha256": "4c9e77861a4719ae918dfb4affa8bd84f0b6139247558dbf32d20d81d8eaee09",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110724687"
+   "symbols": [{"symbology": "upca", "text": "011110724687"}]
   },
   {
    "file": "real/img/0011110819383.jpg",
    "sha256": "ce13c12ca8ac369e1cebf2bc6cc4f8089ffbc174db77b62ba4182483a5102ec3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110819383"
+   "symbols": [{"symbology": "upca", "text": "011110819383"}]
   },
   {
    "file": "real/img/0011110855893.jpg",
    "sha256": "6556758d7a538dc9ff96359e87ece211f5d36ef04bf331d51b665fa1ea3e7018",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110855893"
+   "symbols": [{"symbology": "upca", "text": "011110855893"}]
   },
   {
    "file": "real/img/0011110878960.jpg",
    "sha256": "13cd5d568e7ea7b72af9c38d49d4c9e3a1ecc2c15a5cc1e00279029f4f655e7e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110878960"
+   "symbols": [{"symbology": "upca", "text": "011110878960"}]
   },
   {
    "file": "real/img/0011110881786.jpg",
    "sha256": "65e9d837d10e3925a481c4952fdc6683c70fb6c2d5f8ab5db996b609ae0a9d2f",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110881786"
+   "symbols": [{"symbology": "upca", "text": "011110881786"}]
   },
   {
    "file": "real/img/0011110911506.jpg",
    "sha256": "55716674f84f6abc8bf3d6de31b2ef2e6c74c00a8adef8059d06c3670241fc5c",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011110911506"
+   "symbols": [{"symbology": "upca", "text": "011110911506"}]
   },
   {
    "file": "real/img/0011111124257.jpg",
    "sha256": "a5710ce51229ac19d24cc7432c454978b3ce8cb42a7e5d37981d55635d023173",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011111124257"
+   "symbols": [{"symbology": "upca", "text": "011111124257"}]
   },
   {
    "file": "real/img/0011111396487.jpg",
    "sha256": "3c42d99366345238a9847d423ef5251799284188422c3328eaa3e541eb51624e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0011111396487"
+   "symbols": [{"symbology": "upca", "text": "011111396487"}]
   },
   {
    "file": "real/img/0012044039991.jpg",
    "sha256": "38e608b838b4ae6c2644a4c7582db93c220d113412497df2673974847780c37d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0012044039991"
+   "symbols": [{"symbology": "upca", "text": "012044039991"}]
   },
   {
    "file": "real/img/0012546304337.jpg",
    "sha256": "6ee548b8a301a91f052ad2cc3cd1e221f4b0bf26e7e4e3bfac7e6b39f48277e9",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0012546304337"
+   "symbols": [{"symbology": "upca", "text": "012546304337"}]
   },
   {
    "file": "real/img/0012546676090.jpg",
    "sha256": "2d4a956ccc54bf009475893ccdb7bc98f31b1412deb2c6db3d3a3efc3acb52e8",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0012546676090"
+   "symbols": [{"symbology": "upca", "text": "012546676090"}]
   },
   {
    "file": "real/img/0012546676113.jpg",
    "sha256": "367ffa4e4ec01f46eafbdc1badfe9de682c703ba4f34c40f426b6156ad0f430e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0012546676113"
+   "symbols": [{"symbology": "upca", "text": "012546676113"}]
   },
   {
    "file": "real/img/0012546676151.jpg",
    "sha256": "aa98c2411b5462deeaf108794e26d90aa25f8aff4026bc3d4d0e1caf9c2dd840",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0012546676151"
+   "symbols": [{"symbology": "upca", "text": "012546676151"}]
   },
   {
    "file": "real/img/0012587783610.jpg",
    "sha256": "b64c095809a5ecfab83b87576a4f2bbc51350b7f656d65bb50dd224dabde3451",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0012587783610"
+   "symbols": [{"symbology": "upca", "text": "012587783610"}]
   },
   {
    "file": "real/img/0012953000501.jpg",
    "sha256": "2a379f79807631d4319a31377f75027e468fc25f177ad7c9460fea0d82e5da81",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0012953000501"
+   "symbols": [{"symbology": "upca", "text": "012953000501"}]
   },
   {
    "file": "real/img/0013562300846.jpg",
    "sha256": "daac08d7edf59351cf7f02800c73a690d23162948d21e937074d5655b1e81a4a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0013562300846"
+   "symbols": [{"symbology": "upca", "text": "013562300846"}]
   },
   {
    "file": "real/img/0019100194304.jpg",
    "sha256": "eba8c812a30501d19d015a277ae82460b83d0ee9b6184ca16467b74b14dc9d48",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0019100194304"
+   "symbols": [{"symbology": "upca", "text": "019100194304"}]
   },
   {
    "file": "real/img/0019200856683.jpg",
    "sha256": "fc8b74d2993a74fd17737178055e7853f56cb29ebd8663addca8ea867167e27c",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0019200856683"
+   "symbols": [{"symbology": "upca", "text": "019200856683"}]
   },
   {
    "file": "real/img/0019200893312.jpg",
    "sha256": "ee0896217e92ea606f38ede6dccaf6ca106a95e346dd23e0571e6af0737c0bd7",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0019200893312"
+   "symbols": [{"symbology": "upca", "text": "019200893312"}]
   },
   {
    "file": "real/img/0019336100100.jpg",
    "sha256": "b1b601ab7681603f8c121907ac80395fa28a880a044e40ee58d02e734b30140a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0019336100100"
+   "symbols": [{"symbology": "upca", "text": "019336100100"}]
   },
   {
    "file": "real/img/0020000111971.jpg",
    "sha256": "612c0baaf8a5e008a1337f6fb4a2235f7e7a1d9f567e5f372848533a74b062c6",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0020000111971"
+   "symbols": [{"symbology": "upca", "text": "020000111971"}]
   },
   {
    "file": "real/img/0020626728386.jpg",
    "sha256": "fd37487fc2e37825b7b1a2d9294e0107f923da7935627592bd97deefdd818fe8",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0020626728386"
+   "symbols": [{"symbology": "upca", "text": "020626728386"}]
   },
   {
    "file": "real/img/0022506104105.jpg",
    "sha256": "cc24f06463969d8171c32529307ca282543217c01f51c8a9d60ad1869832797f",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0022506104105"
+   "symbols": [{"symbology": "upca", "text": "022506104105"}]
   },
   {
    "file": "real/img/0022796916167.jpg",
    "sha256": "f0dcf88d08fe3186d2d1d11544437de217287a039730525ec2955a1be1903dc5",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0022796916167"
+   "symbols": [{"symbology": "upca", "text": "022796916167"}]
   },
   {
    "file": "real/img/0024094070411.jpg",
    "sha256": "0d22c03626661fad9f558af0ad69cb5f385dbcfd539a10180022df3b57e90bb1",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0024094070411"
+   "symbols": [{"symbology": "upca", "text": "024094070411"}]
   },
   {
    "file": "real/img/0025700156215.jpg",
    "sha256": "0d09a19dddc848a87063826775d21eb1f80eff69c1707f65d293f4e2a3ddb4f0",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0025700156215"
+   "symbols": [{"symbology": "upca", "text": "025700156215"}]
   },
   {
    "file": "real/img/0025715665368.jpg",
    "sha256": "c52718566ef5792ad147f60a0c28f40d41154acc9da179c3e359e992cf068cdd",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0025715665368"
+   "symbols": [{"symbology": "upca", "text": "025715665368"}]
   },
   {
    "file": "real/img/0026000015608.jpg",
    "sha256": "8cebb811b87975abba53ed5e3a8c816045bfdf388b32766a518394ec41bdc98e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0026000015608"
+   "symbols": [{"symbology": "upca", "text": "026000015608"}]
   },
   {
    "file": "real/img/0028400044042.jpg",
    "sha256": "1bf80a247321d71d0412d1320a4a4537e6c088e9f377d460fe3ec26354172489",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0028400044042"
+   "symbols": [{"symbology": "upca", "text": "028400044042"}]
   },
   {
    "file": "real/img/0033200197140.jpg",
    "sha256": "99adb671f63a01914d215bee10d58ad0cfbb1d4ee82c936c227fb07596a8e9c0",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0033200197140"
+   "symbols": [{"symbology": "upca", "text": "033200197140"}]
   },
   {
    "file": "real/img/0035000555380.jpg",
    "sha256": "cc242df9bb1213685bc39756dcea7f73d842485134f09ac149e45fcedd205d57",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0035000555380"
+   "symbols": [{"symbology": "upca", "text": "035000555380"}]
   },
   {
    "file": "real/img/0035000896506.jpg",
    "sha256": "c9b97c7fc7b3b21bea8aa86167320b9a04b00f64e7b024c28738ce42f4eecc93",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0035000896506"
+   "symbols": [{"symbology": "upca", "text": "035000896506"}]
   },
   {
    "file": "real/img/0036000123234.jpg",
    "sha256": "8feec5d93289406ffbb664acda2d84071f74b3cfc5d8e98d8b82b9752d61c685",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0036000123234"
+   "symbols": [{"symbology": "upca", "text": "036000123234"}]
   },
   {
    "file": "real/img/0036000373738.jpg",
    "sha256": "01b539231e9604c88a8cb072b37b04af9644c3faa8e0feeb9f780ec3657aaa41",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0036000373738"
+   "symbols": [{"symbology": "upca", "text": "036000373738"}]
   },
   {
    "file": "real/img/0036000373905.jpg",
    "sha256": "980709b6f606ea007a00e5e2b4807ef9a3f0aa059834022f2048687c91ffe404",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0036000373905"
+   "symbols": [{"symbology": "upca", "text": "036000373905"}]
   },
   {
    "file": "real/img/0037000042495.jpg",
    "sha256": "bed92d3132ec508808bdd6292508fa977f8ffe14c52fa3507b5ec4c46eaed0f6",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0037000042495"
+   "symbols": [{"symbology": "upca", "text": "037000042495"}]
   },
   {
    "file": "real/img/0037000062219.jpg",
    "sha256": "8f8fb29905aad2584bb543c9e59ddb2f0d6f2015c9429550e9ff456d9100ee60",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0037000062219"
+   "symbols": [{"symbology": "upca", "text": "037000062219"}]
   },
   {
    "file": "real/img/0037000123408.jpg",
    "sha256": "92d4b3f84ef7401890707e9df828f37b0fc26d6bdc18cc0666e97fbdad677600",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0037000123408"
+   "symbols": [{"symbology": "upca", "text": "037000123408"}]
   },
   {
    "file": "real/img/0037000138310.jpg",
    "sha256": "50bbb22e79f1b6d3f835acdae5b5d82bc176e00cb8dca6b586193eb13abe9c72",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0037000138310"
+   "symbols": [{"symbology": "upca", "text": "037000138310"}]
   },
   {
    "file": "real/img/0037000450849.jpg",
    "sha256": "cfc9e003e7838304661c5be7d617586695ba1b151f87f8d1a7c402b78c3aa01b",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0037000450849"
+   "symbols": [{"symbology": "upca", "text": "037000450849"}]
   },
   {
    "file": "real/img/0037000867821.jpg",
    "sha256": "adccb21e225238b1b0f13774f264d9e6ddb4c71f8ffa428f98a2a32a360a25ab",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0037000867821"
+   "symbols": [{"symbology": "upca", "text": "037000867821"}]
   },
   {
    "file": "real/img/0039800000347.jpg",
    "sha256": "ffd047180b792acb0bc08c019b7ae377bded39c7ffa38ec9872cf2fdd7ce59ec",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0039800000347"
+   "symbols": [{"symbology": "upca", "text": "039800000347"}]
   },
   {
    "file": "real/img/0040293982249.jpg",
    "sha256": "dcdeab1b91969baa29ba530f7bd71e7662e3b09c53a3ac71d5b465943d26d855",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0040293982249"
+   "symbols": [{"symbology": "upca", "text": "040293982249"}]
   },
   {
    "file": "real/img/0041250500735.jpg",
    "sha256": "4266fa8c667800f380653a1847d374235fff943e470c1c9dfe1c1ae8334d81cc",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0041250500735"
+   "symbols": [{"symbology": "upca", "text": "041250500735"}]
   },
   {
    "file": "real/img/0041333664453.jpg",
    "sha256": "5a4e94c483e83d3867a291583cce9b2a2bc28d1fa4226b5e1568f1864d36d963",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0041333664453"
+   "symbols": [{"symbology": "upca", "text": "041333664453"}]
   },
   {
    "file": "real/img/0041364001043.jpg",
    "sha256": "3f22a23c9ff83cb0f3d524475ffa8f70e5f5cd477192066bee6d98516a67d33d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0041364001043"
+   "symbols": [{"symbology": "upca", "text": "041364001043"}]
   },
   {
    "file": "real/img/0041570054420.jpg",
    "sha256": "477e7524fb74e3f9442ab764ad956e1748a7eeb559f2abd88b1b16bedb85dffa",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0041570054420"
+   "symbols": [{"symbology": "upca", "text": "041570054420"}]
   },
   {
    "file": "real/img/0042000154291.jpg",
    "sha256": "54e1db7280d095519db2b544f1b218e4c203107b64f81a07ea9cd6650f1266c9",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0042000154291"
+   "symbols": [{"symbology": "upca", "text": "042000154291"}]
   },
   {
    "file": "real/img/0043000043004.jpg",
    "sha256": "2f357c4889fb42ba81449f5c3eab6bf6c304ad374784e34704b00055d5494682",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0043000043004"
+   "symbols": [{"symbology": "upca", "text": "043000043004"}]
   },
   {
    "file": "real/img/0043396375420.jpg",
    "sha256": "3609c26f91ede991dcfb790c137e2fd4a5a7b397d338f0a8ce8cb679fcca7238",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0043396375420"
+   "symbols": [{"symbology": "upca", "text": "043396375420"}]
   },
   {
    "file": "real/img/0045496900434.jpg",
    "sha256": "782ded31c46de077e5c51acfced9674ff94f7b68d9ba7da5d958fb5845c85637",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0045496900434"
+   "symbols": [{"symbology": "upca", "text": "045496900434"}]
   },
   {
    "file": "real/img/0046500733321.jpg",
    "sha256": "0119f315cba5c4a4d14c93725e5e7aa2868f31f24d43c1041583a39f8a831f1b",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0046500733321"
+   "symbols": [{"symbology": "upca", "text": "046500733321"}]
   },
   {
    "file": "real/img/0047171720009.jpg",
    "sha256": "c6892b5f5c0746ab2ef9d1bcd1493dfbb2c4519dbe4d1cae221de0250680bcce",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0047171720009"
+   "symbols": [{"symbology": "upca", "text": "047171720009"}]
   },
   {
    "file": "real/img/0047400302594.jpg",
    "sha256": "54438f5204a1dfaf2b21dfac89fa9f1be1024c3141edec27bb5e77af2caf4bce",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0047400302594"
+   "symbols": [{"symbology": "upca", "text": "047400302594"}]
   },
   {
    "file": "real/img/0047400307308.jpg",
    "sha256": "559a5be1e762744dfdb32d5478743fa3883511333685b39c1a781ab06c26de29",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0047400307308"
+   "symbols": [{"symbology": "upca", "text": "047400307308"}]
   },
   {
    "file": "real/img/0048500018590.jpg",
    "sha256": "be2ce5974e4783f64b996fb3b7734d9a94ac0c1170625d3b02f98c63535d3ab4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0048500018590"
+   "symbols": [{"symbology": "upca", "text": "048500018590"}]
   },
   {
    "file": "real/img/0048500305690.jpg",
    "sha256": "bb035b840cdf37299e291a91597b4843524848dc159e2773afd4375d8fe8c401",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0048500305690"
+   "symbols": [{"symbology": "upca", "text": "048500305690"}]
   },
   {
    "file": "real/img/0048582003309.jpg",
    "sha256": "39505673a8f7df9d255b405a687c428cb33584f893a0afa805756360f9ebdca9",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0048582003309"
+   "symbols": [{"symbology": "upca", "text": "048582003309"}]
   },
   {
    "file": "real/img/0049022599291.jpg",
    "sha256": "9745fe06733eb987844ea59f855dc760296a8111b84b473032bf00f124a938b4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0049022599291"
+   "symbols": [{"symbology": "upca", "text": "049022599291"}]
   },
   {
    "file": "real/img/0050428206034.jpg",
    "sha256": "673a74b8ba697ac5c61b77d5c0d7517642fff02e90174ae34e9eec15dfbdb8cf",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428206034"
+   "symbols": [{"symbology": "upca", "text": "050428206034"}]
   },
   {
    "file": "real/img/0050428262535.jpg",
    "sha256": "fa440e3184445d6e19b8e59817f1ee97b57a52bc7d8318d872813fab93a63ce7",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428262535"
+   "symbols": [{"symbology": "upca", "text": "050428262535"}]
   },
   {
    "file": "real/img/0050428349441.jpg",
    "sha256": "e1c717fffee211da4f56f35e40aa4387d9408a0abae3183afd7306494ad7efe4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428349441"
+   "symbols": [{"symbology": "upca", "text": "050428349441"}]
   },
   {
    "file": "real/img/0050428375624.jpg",
    "sha256": "12d118cf0a5749571df2660d072dc1835e9bb4a98dbe7c47d663faefc28c4207",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428375624"
+   "symbols": [{"symbology": "upca", "text": "050428375624"}]
   },
   {
    "file": "real/img/0050428449363.jpg",
    "sha256": "da33f0bff033c7973052ba60b520a154400879f97d7b1ecba691ce70c254d1e2",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428449363"
+   "symbols": [{"symbology": "upca", "text": "050428449363"}]
   },
   {
    "file": "real/img/0050428456743.jpg",
    "sha256": "b21f65fb336942b199467c67c3d04256fd3344307f044ab7ea9e5c1ef825c3be",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428456743"
+   "symbols": [{"symbology": "upca", "text": "050428456743"}]
   },
   {
    "file": "real/img/0050428514948.jpg",
    "sha256": "baa38c8cdd71b95baa7bd8257521af511e63c3ea18c8598b31fb079cd828afbe",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428514948"
+   "symbols": [{"symbology": "upca", "text": "050428514948"}]
   },
   {
    "file": "real/img/0050428742037.jpg",
    "sha256": "5d6dc6c2240f661c7a10cd30569e83d5b7b3780fbc9b93e9736d241d68316739",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0050428742037"
+   "symbols": [{"symbology": "upca", "text": "050428742037"}]
   },
   {
    "file": "real/img/0051500243923.jpg",
    "sha256": "8b4f2ef14cb273c450aa109a3b247e87739a8957fa83e23a95bd00c0ed3a4be3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0051500243923"
+   "symbols": [{"symbology": "upca", "text": "051500243923"}]
   },
   {
    "file": "real/img/0052000135183.jpg",
    "sha256": "85c38ea8576b4f2dad3d8863e07afcece07f3b0985722ede99585ac45fb1b1d6",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0052000135183"
+   "symbols": [{"symbology": "upca", "text": "052000135183"}]
   },
   {
    "file": "real/img/0052000326734.jpg",
    "sha256": "b0fb1c597588f247f90c7a23fceeda00f4675edad614d514624d1c48cdc04e40",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0052000326734"
+   "symbols": [{"symbology": "upca", "text": "052000326734"}]
   },
   {
    "file": "real/img/0052100071282.jpg",
    "sha256": "c208ba888309963d4c6a7780b774471e6f29b9b629bf1b682cbc9e4bf4c9ea59",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0052100071282"
+   "symbols": [{"symbology": "upca", "text": "052100071282"}]
   },
   {
    "file": "real/img/0052100090009.jpg",
    "sha256": "eabb659292242bf1c7c21a1bbb9cfd21fb2342aa181ea55bed16e98f05a7c365",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0052100090009"
+   "symbols": [{"symbology": "upca", "text": "052100090009"}]
   },
   {
    "file": "real/img/0052100370309.jpg",
    "sha256": "b167767aae67dff8b2fac024a84d89297e89532f5c0c79ea8eb9bfc6286df491",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0052100370309"
+   "symbols": [{"symbology": "upca", "text": "052100370309"}]
   },
   {
    "file": "real/img/0054000200427.jpg",
    "sha256": "3da2401618d0ae609367a54126def507fadb839625e90737a45ce415a4e34e11",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0054000200427"
+   "symbols": [{"symbology": "upca", "text": "054000200427"}]
   },
   {
    "file": "real/img/0054007061328.jpg",
    "sha256": "0b8e932c3599258806462ec95a4073b3c424cd74fc011a3056bb215f748ffe95",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0054007061328"
+   "symbols": [{"symbology": "upca", "text": "054007061328"}]
   },
   {
    "file": "real/img/0062338747347.jpg",
    "sha256": "09d9a3ddeb9f0ac32988638f05a6ec95fce5bf093028fe415bf0ca07d5684713",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0062338747347"
+   "symbols": [{"symbology": "upca", "text": "062338747347"}]
   },
   {
    "file": "real/img/0070247159007.jpg",
    "sha256": "18c3b12ffdf10dcd189e95d8bbfa1bc9a9c19e72df09955279c5b14b8974e43b",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0070247159007"
+   "symbols": [{"symbology": "upca", "text": "070247159007"}]
   },
   {
    "file": "real/img/0070501017906.jpg",
    "sha256": "8896c03bfc95e2a9330399e31cf2b672f1559eca32dcc4af2ef43342d47e3a2f",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0070501017906"
+   "symbols": [{"symbology": "upca", "text": "070501017906"}]
   },
   {
    "file": "real/img/0070501053409.jpg",
    "sha256": "e43893365095155114571f696118691ad910e7ea042f1d64774ec0f7fde17b30",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0070501053409"
+   "symbols": [{"symbology": "upca", "text": "070501053409"}]
   },
   {
    "file": "real/img/0070957729521.jpg",
    "sha256": "427a2955e968d98ac56ecfe36848f483f2774a66d10a6ec7f17b520517d351cc",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0070957729521"
+   "symbols": [{"symbology": "upca", "text": "070957729521"}]
   },
   {
    "file": "real/img/0071072030547.jpg",
    "sha256": "eeea6202100a9b8060dcf989cf76b80f9a2756c54da6f4f0d0d427e0d4e68310",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071072030547"
+   "symbols": [{"symbology": "upca", "text": "071072030547"}]
   },
   {
    "file": "real/img/0071249119259.jpg",
    "sha256": "369e98a8376ccc6fc0beefcdfbed4427c08f2e619ad4dcdf29f3b705ad0eac84",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071249119259"
+   "symbols": [{"symbology": "upca", "text": "071249119259"}]
   },
   {
    "file": "real/img/0071249175446.jpg",
    "sha256": "d55b7ca4c6a75368e732626b8a8bd3867a9b73d1423c0cfed8de0f649084b4f8",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071249175446"
+   "symbols": [{"symbology": "upca", "text": "071249175446"}]
   },
   {
    "file": "real/img/0071249175453.jpg",
    "sha256": "d13f2d88eda8e16d66da437481f0fda8e9df3fd0e92cb65354da5bec653e121d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071249175453"
+   "symbols": [{"symbology": "upca", "text": "071249175453"}]
   },
   {
    "file": "real/img/0071641300019.jpg",
    "sha256": "4499190221ce6e1309659037707ccae3717c566c42a4793437d14a3f684b79e1",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071641300019"
+   "symbols": [{"symbology": "upca", "text": "071641300019"}]
   },
   {
    "file": "real/img/0071641370012.jpg",
    "sha256": "346394d02864710c28aadf8b70e0b4ef85cb87b23414ff1f9ee7bd327470a089",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071641370012"
+   "symbols": [{"symbology": "upca", "text": "071641370012"}]
   },
   {
    "file": "real/img/0071641860018.jpg",
    "sha256": "6d9426a46a3731ff1233a477ab1ad29dade3abedf6542afda9a8c462501ab5e7",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071641860018"
+   "symbols": [{"symbology": "upca", "text": "071641860018"}]
   },
   {
    "file": "real/img/0071921477639.jpg",
    "sha256": "d7230c8adb043ddc22b46c0d17a2283c664f83b547b630e47083145d36e2eca0",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0071921477639"
+   "symbols": [{"symbology": "upca", "text": "071921477639"}]
   },
   {
    "file": "real/img/0072140012939.jpg",
    "sha256": "b59984b7eaf5d8da51c593c237d1c0b461bf50b42bfc3cfc4b19569f6e65a4be",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0072140012939"
+   "symbols": [{"symbology": "upca", "text": "072140012939"}]
   },
   {
    "file": "real/img/0072140817404.jpg",
    "sha256": "061c9287836b12c071f2ec8331998299394b93ac065786668021b10f4f86fb83",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0072140817404"
+   "symbols": [{"symbology": "upca", "text": "072140817404"}]
   },
   {
    "file": "real/img/0072489010016.jpg",
    "sha256": "aaa8a332864d1adb7476b7385681b9af22ec1be4413a030ad5ac39c3c3786511",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0072489010016"
+   "symbols": [{"symbology": "upca", "text": "072489010016"}]
   },
   {
    "file": "real/img/0072613458554.jpg",
    "sha256": "5e2175fbc264c27d21d3e009590e2944e2a4d754563e7f06737ea3a00745a816",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0072613458554"
+   "symbols": [{"symbology": "upca", "text": "072613458554"}]
   },
   {
    "file": "real/img/0072782052676.jpg",
    "sha256": "bf4cff401102260b2f3f109097130cf5ea35319d181cbf95e6d2522f129c61b7",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0072782052676"
+   "symbols": [{"symbology": "upca", "text": "072782052676"}]
   },
   {
    "file": "real/img/0072782057206.jpg",
    "sha256": "df9b7d224cb8ce4abb0aa564f4dfc94c0f96d4df65679e6c44bf7f590f4e6255",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0072782057206"
+   "symbols": [{"symbology": "upca", "text": "072782057206"}]
   },
   {
    "file": "real/img/0072782067557.jpg",
    "sha256": "b68ecd80360986fc2210a00de893786a9f115b50edd23bbd2f70ff9f570a2ba3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0072782067557"
+   "symbols": [{"symbology": "upca", "text": "072782067557"}]
   },
   {
    "file": "real/img/0076174625110.jpg",
    "sha256": "f9df90104507bb88028ec4c77f7793487b537e1a41aed91decf5cbef20484672",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0076174625110"
+   "symbols": [{"symbology": "upca", "text": "076174625110"}]
   },
   {
    "file": "real/img/0077711791923.jpg",
    "sha256": "e9cdd09e8a90652894931d532bb6836f5a28ae84b96ec407d7d8223dda99a443",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0077711791923"
+   "symbols": [{"symbology": "upca", "text": "077711791923"}]
   },
   {
    "file": "real/img/0077885710614.jpg",
    "sha256": "9fd2985195da482f9225631ae501a204c373a755ee290d86cb9c12547336eccc",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0077885710614"
+   "symbols": [{"symbology": "upca", "text": "077885710614"}]
   },
   {
    "file": "real/img/0079400066718.jpg",
    "sha256": "13f0ed2827374df3916cf25a2ba49f7e2344599f8ab74a6cec339b2eb56f591a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0079400066718"
+   "symbols": [{"symbology": "upca", "text": "079400066718"}]
   },
   {
    "file": "real/img/0080432106419.jpg",
    "sha256": "55347aa990c5b2b1d7d1edcf289875a0d750f3dca9d05df997d8aa2930e791af",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0080432106419"
+   "symbols": [{"symbology": "upca", "text": "080432106419"}]
   },
   {
    "file": "real/img/0080516650548.jpg",
    "sha256": "76da35b53a59752f934287640002adb9b667be29d94ce6124f5bb4c1f0efbe92",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0080516650548"
+   "symbols": [{"symbology": "upca", "text": "080516650548"}]
   },
   {
    "file": "real/img/0080878172108.jpg",
    "sha256": "c8e2a343592d932a0f5c204da8a7d6ffd74c98c698a1b4445a67b953191b2793",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0080878172108"
+   "symbols": [{"symbology": "upca", "text": "080878172108"}]
   },
   {
    "file": "real/img/0082242290432.jpg",
    "sha256": "98760ebd9c4aeb423c9177e72f057a04720e360b4f0f6228d026871a5f623aa7",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0082242290432"
+   "symbols": [{"symbology": "upca", "text": "082242290432"}]
   },
   {
    "file": "real/img/0084105307516.jpg",
    "sha256": "a4cc59cd77e5d10e7f9c16131c590ad773af451ea8b8db25162fff77934da46c",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0084105307516"
+   "symbols": [{"symbology": "upca", "text": "084105307516"}]
   },
   {
    "file": "real/img/0084114110978.jpg",
    "sha256": "5d59e0aed9a89538de307a6b54a9705ea40c24b34efc689f8ba268241748f10c",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0084114110978"
+   "symbols": [{"symbology": "upca", "text": "084114110978"}]
   },
   {
    "file": "real/img/0086216170058.jpg",
    "sha256": "46221ef8583437b28325eb7eeb433790201d620d173e83883aef8544d1c159fd",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0086216170058"
+   "symbols": [{"symbology": "upca", "text": "086216170058"}]
   },
   {
    "file": "real/img/0088395013010.jpg",
    "sha256": "2857a3ded7da65c7e9ac9e5a666a5b4d8d84f2829c67be1741585ea07d5ff99a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0088395013010"
+   "symbols": [{"symbology": "upca", "text": "088395013010"}]
   },
   {
    "file": "real/img/0089121288122.jpg",
    "sha256": "a2783b98c365fe24028955c557588fc50529eba706742009264ff72ff2a4f431",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0089121288122"
+   "symbols": [{"symbology": "upca", "text": "089121288122"}]
   },
   {
    "file": "real/img/0089125260001.jpg",
    "sha256": "f358cf4ed71ab64019f1d5242af13b674d0af7bfa2741065d6cb7d0834c94b2a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0089125260001"
+   "symbols": [{"symbology": "upca", "text": "089125260001"}]
   },
   {
    "file": "real/img/0089836180742.jpg",
    "sha256": "d918fd9b05f4d081015f9e1ab6a55461a6af35f9c8a9dd262477c36468a2c386",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0089836180742"
+   "symbols": [{"symbology": "upca", "text": "089836180742"}]
   },
   {
    "file": "real/img/0092437600021.jpg",
    "sha256": "99cfc5b6cf928cbdc6efbbc2bc8715fc5f2123b148d3de82b66ab47354c06ee1",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0092437600021"
+   "symbols": [{"symbology": "upca", "text": "092437600021"}]
   },
   {
    "file": "real/img/0092926999001.jpg",
    "sha256": "cc499b317be5658520477ecc312fd53e73210f37033ba24813019b637c55f493",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0092926999001"
+   "symbols": [{"symbology": "upca", "text": "092926999001"}]
   },
   {
    "file": "real/img/0096619585571.jpg",
    "sha256": "1ec7b5cfd37060a5285f41341a2f43b4ae77c11b33129a170a958a82c839da98",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0096619585571"
+   "symbols": [{"symbology": "upca", "text": "096619585571"}]
   },
   {
    "file": "real/img/0099482401115.jpg",
    "sha256": "229cb25c3c2718fb646b0c38ff63c5d76856f75c6aa303da931d1fe3af08ac71",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0099482401115"
+   "symbols": [{"symbology": "upca", "text": "099482401115"}]
   },
   {
    "file": "real/img/0099482405434.jpg",
    "sha256": "e01d2c4ad4c70804b40976df5d8381dbf2facd061c6041fb0123907f34fd13d6",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0099482405434"
+   "symbols": [{"symbology": "upca", "text": "099482405434"}]
   },
   {
    "file": "real/img/0099482417376.jpg",
    "sha256": "e86407784d3c3cb5a7c730c49c76b315ef56aae6d104486c7b6b79aaf9fe5e43",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0099482417376"
+   "symbols": [{"symbology": "upca", "text": "099482417376"}]
   },
   {
    "file": "real/img/0099482419271.jpg",
    "sha256": "a404fcef49621cb3694167e74d519c3906b24cd713f8006b97d3212807efa4b7",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0099482419271"
+   "symbols": [{"symbology": "upca", "text": "099482419271"}]
   },
   {
    "file": "real/img/0099482441166.jpg",
    "sha256": "84d7ad7ba832424f46811babdbab2d0b76ec68a08d4cf7fa742b652cf5701e2f",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0099482441166"
+   "symbols": [{"symbology": "upca", "text": "099482441166"}]
   },
   {
    "file": "real/img/0185219000222.jpg",
    "sha256": "d7c8e2707a0477e516bf432ef340a7ae9ae6ff2affe476de9cd3eaf8976bc3fe",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0185219000222"
+   "symbols": [{"symbology": "upca", "text": "185219000222"}]
   },
   {
    "file": "real/img/0200000046774.jpg",
    "sha256": "64123be54b14fab64d47088e570db6357736b6556c4ff394631f0fe4698b4c00",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0200000046774"
+   "symbols": [{"symbology": "upca", "text": "200000046774"}]
   },
   {
    "file": "real/img/0209844078989.jpg",
    "sha256": "9c234dc60981d8d79723349211e4f52bb5af094b79cd7585bcbb350ff823b597",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0209844078989"
+   "symbols": [{"symbology": "upca", "text": "209844078989"}]
   },
   {
    "file": "real/img/0211629023619.jpg",
    "sha256": "32e21817dcf60079d87b3cb4ee31ac8fac4e67e2aa699650ba9857413f8b9c03",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0211629023619"
+   "symbols": [{"symbology": "upca", "text": "211629023619"}]
   },
   {
    "file": "real/img/0213320040544.jpg",
    "sha256": "71116a1ce5143ba0ccc7bacd4823c45c41712600ea981529ab618327aea61edf",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0213320040544"
+   "symbols": [{"symbology": "upca", "text": "213320040544"}]
   },
   {
    "file": "real/img/0217247056879.jpg",
    "sha256": "ad6ad704ec19ffa6c1cd00a7c66062a2d2626fad146fe6aa75726ff63777dce3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0217247056879"
+   "symbols": [{"symbology": "upca", "text": "217247056879"}]
   },
   {
    "file": "real/img/0217638022179.jpg",
    "sha256": "b6d83f86f07133da3c8e9d438c31683ef036a8df196aceacbb4af8b1e8ab8b65",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0217638022179"
+   "symbols": [{"symbology": "upca", "text": "217638022179"}]
   },
   {
    "file": "real/img/0219217022242.jpg",
    "sha256": "eb672b61107610a23354515aace4f9dbd51ea59299311f61a086f61efd02d977",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0219217022242"
+   "symbols": [{"symbology": "upca", "text": "219217022242"}]
   },
   {
    "file": "real/img/0219966031625.jpg",
    "sha256": "b2237c5e16e29135706b434c1ed29cde7226633ccfe1e8b7bac13ccd59176250",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0219966031625"
+   "symbols": [{"symbology": "upca", "text": "219966031625"}]
   },
   {
    "file": "real/img/0253028036340.jpg",
    "sha256": "ec461c87857d0215bb6f969331a88843f2dbd1e67faa8d7d281a4f4c84f9048a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0253028036340"
+   "symbols": [{"symbology": "upca", "text": "253028036340"}]
   },
   {
    "file": "real/img/0253060023223.jpg",
    "sha256": "21ac3b2a06375d9a9a24fba1655571819702099453bdc16aaf7a7c141ed481fb",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0253060023223"
+   "symbols": [{"symbology": "upca", "text": "253060023223"}]
   },
   {
    "file": "real/img/0253114040015.jpg",
    "sha256": "a9256383d156cddf3a3a64225aadb4eb94a20e4a9661a0b737b6bf8132c4bf00",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0253114040015"
+   "symbols": [{"symbology": "upca", "text": "253114040015"}]
   },
   {
    "file": "real/img/0253602033581.jpg",
    "sha256": "b190bb7dc9c6b6e33599dc74ac37e2a8941270ea45dd56ea5f950e5f3b7e57e4",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0253602033581"
+   "symbols": [{"symbology": "upca", "text": "253602033581"}]
   },
   {
    "file": "real/img/0287458026244.jpg",
    "sha256": "8b0dd1f2dd639ba197dd21caeaf0977a4baacdd3548e8047275ddccb89f8e608",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0287458026244"
+   "symbols": [{"symbology": "upca", "text": "287458026244"}]
   },
   {
    "file": "real/img/0287458037981.jpg",
    "sha256": "2b1038f2c4e4a5a6b61288fcaa6f2a051c23b32195f7365746b0b6bc7f877372",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0287458037981"
+   "symbols": [{"symbology": "upca", "text": "287458037981"}]
   },
   {
    "file": "real/img/0287565074589.jpg",
    "sha256": "63a89df86520e72e5e187891fc647d8d234e9bb025e846fe2f7ebce7581e3777",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0287565074589"
+   "symbols": [{"symbology": "upca", "text": "287565074589"}]
   },
   {
    "file": "real/img/0290159019811.jpg",
    "sha256": "b3cab6c5abbc2037f095f42186ce5c7d235197e456d3949ccfe123012e9ac029",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0290159019811"
+   "symbols": [{"symbology": "upca", "text": "290159019811"}]
   },
   {
    "file": "real/img/0300650361040.jpg",
    "sha256": "ff627cc3d5303ae8adaec83de8429011dd0126938b771d755f75b796c7c69ea8",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0300650361040"
+   "symbols": [{"symbology": "upca", "text": "300650361040"}]
   },
   {
    "file": "real/img/0301871366036.jpg",
    "sha256": "46167f6b6b0c2d9f27cf54f520158d36ad131919bea3f6d48c3bd7c69b28cc7c",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0301871366036"
+   "symbols": [{"symbology": "upca", "text": "301871366036"}]
   },
   {
    "file": "real/img/0305215251002.jpg",
    "sha256": "0becb5b520c714b26ee9b36c275447c44d88af25b51bf29d17d916011db99758",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0305215251002"
+   "symbols": [{"symbology": "upca", "text": "305215251002"}]
   },
   {
    "file": "real/img/0310158083511.jpg",
    "sha256": "0ffce171f61de0a31c6203963ae9a6ef499f3e57c5601cea173bc2dd76b0494e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0310158083511"
+   "symbols": [{"symbology": "upca", "text": "310158083511"}]
   },
   {
    "file": "real/img/0321130771647.jpg",
    "sha256": "1a2d6e7f0241b0d9f46765dd005f5f1f54fb95d80d9c6dbf08973b2f736beb86",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0321130771647"
+   "symbols": [{"symbology": "upca", "text": "321130771647"}]
   },
   {
    "file": "real/img/0323900038134.jpg",
    "sha256": "462e566be96a5f52d52c8f2be6bf4b97f9096252647cf5f59346ffbb10464ec5",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0323900038134"
+   "symbols": [{"symbology": "upca", "text": "323900038134"}]
   },
   {
    "file": "real/img/0370067980226.jpg",
    "sha256": "7e2a9d55b0aa53fb8385380248f82696a2db4a02c695e79681faa0c1acba8588",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0370067980226"
+   "symbols": [{"symbology": "upca", "text": "370067980226"}]
   },
   {
    "file": "real/img/0381370033875.jpg",
    "sha256": "33fd78d07f431e4165a6ccf72cc6d26db28cff5ef9325fd8a79ad382e617d0ac",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0381370033875"
+   "symbols": [{"symbology": "upca", "text": "381370033875"}]
   },
   {
    "file": "real/img/0381370036913.jpg",
    "sha256": "4a8e5cf0dd4891dc8a4413487835a8427d1b698e9fe155b78370de835f72f54a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0381370036913"
+   "symbols": [{"symbology": "upca", "text": "381370036913"}]
   },
   {
    "file": "real/img/0381371150786.jpg",
    "sha256": "39b58e7168936cd81bfec4290587e8ca0b1520d02f1fbdbae1fea60b9701a105",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0381371150786"
+   "symbols": [{"symbology": "upca", "text": "381371150786"}]
   },
   {
    "file": "real/img/0381371154050.jpg",
    "sha256": "1f47e706672933b8aa46d8f8e39b88975bcfe1c941b68a061766e7998174e755",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0381371154050"
+   "symbols": [{"symbology": "upca", "text": "381371154050"}]
   },
   {
    "file": "real/img/0381519022425.jpg",
    "sha256": "8eddd391ac179a1a31846814b6daeec883b38a6a2d00b1114313441fb025b0fc",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0381519022425"
+   "symbols": [{"symbology": "upca", "text": "381519022425"}]
   },
   {
    "file": "real/img/0602652170645.jpg",
    "sha256": "e604ce52170ca188c7c9594f0cc4a3aaea33269b9fb66d21a9f62a2d82526fd6",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0602652170645"
+   "symbols": [{"symbology": "upca", "text": "602652170645"}]
   },
   {
    "file": "real/img/0602652176517.jpg",
    "sha256": "30344c5d961d96407dbbd4f67d8ff4a5cc868fb0a3da756730a8af339dbd47cb",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0602652176517"
+   "symbols": [{"symbology": "upca", "text": "602652176517"}]
   },
   {
    "file": "real/img/0609332216945.jpg",
    "sha256": "846971184d1093a6ed515fa796cc331c8f826629b0c93c4d5778fbcc2bb52e20",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0609332216945"
+   "symbols": [{"symbology": "upca", "text": "609332216945"}]
   },
   {
    "file": "real/img/0636046354403.jpg",
    "sha256": "f66b67742bb0b12a8ecb0c4df1c413b94dcb723bf6b597110db34b485f020b87",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0636046354403"
+   "symbols": [{"symbology": "upca", "text": "636046354403"}]
   },
   {
    "file": "real/img/0637666022079.jpg",
    "sha256": "4831f4a75e7d24c1a6b868f4d96182edff6d1e97e34f8279afec4a8276aff85e",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0637666022079"
+   "symbols": [{"symbology": "upca", "text": "637666022079"}]
   },
   {
    "file": "real/img/0644890000414.jpg",
    "sha256": "d7bc2f47cb238a232b2969c09c519f3354e7e19b43efd0d57c9c7f0e369749d3",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0644890000414"
+   "symbols": [{"symbology": "upca", "text": "644890000414"}]
   },
   {
    "file": "real/img/0678112194926.jpg",
    "sha256": "4376a6f8a0f942034395b05b5baf13e7087680e09ae54291ba506770c941c4de",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0678112194926"
+   "symbols": [{"symbology": "upca", "text": "678112194926"}]
   },
   {
    "file": "real/img/0718103014557.jpg",
    "sha256": "e0881e73bb31d254f92d0c518dde190d2dd3effb24a64000fc6533208b8e6d77",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0718103014557"
+   "symbols": [{"symbology": "upca", "text": "718103014557"}]
   },
   {
    "file": "real/img/0718103083553.jpg",
    "sha256": "3573e882552f0c3c979cadb744461aec7378ce01d64103bda682b3d1a1ded91d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0718103083553"
+   "symbols": [{"symbology": "upca", "text": "718103083553"}]
   },
   {
    "file": "real/img/0719812338811.jpg",
    "sha256": "cd10dae7c40faadea8d0f0a98e4e484fbc0f6b35fe4fb380ef7810110d95f65a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0719812338811"
+   "symbols": [{"symbology": "upca", "text": "719812338811"}]
   },
   {
    "file": "real/img/0722252101600.jpg",
    "sha256": "aa4239c847bf1a72741b06a2f86b318ff1e92e51b34dd042c988746d2561cd38",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0722252101600"
+   "symbols": [{"symbology": "upca", "text": "722252101600"}]
   },
   {
    "file": "real/img/0722252161031.jpg",
    "sha256": "e2e9598eed185bd4b11cefbad62945faa59126f6b6021048eaf11306ca68faa9",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0722252161031"
+   "symbols": [{"symbology": "upca", "text": "722252161031"}]
   },
   {
    "file": "real/img/0722252601445.jpg",
    "sha256": "5527136ec39c1c9938cbccb4029331005a0cfbc8872355a56b3564ca2ea379f9",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0722252601445"
+   "symbols": [{"symbology": "upca", "text": "722252601445"}]
   },
   {
    "file": "real/img/0737416080042.jpg",
    "sha256": "cde545333945a664163fc32047feed8e074a0814575abfd78e232208c0207035",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0737416080042"
+   "symbols": [{"symbology": "upca", "text": "737416080042"}]
   },
   {
    "file": "real/img/0738435265120.jpg",
    "sha256": "437fa605d5ee6f8aa7faf94d9caa0a02ea998d85d303bd4c90a33af07af9228a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0738435265120"
+   "symbols": [{"symbology": "upca", "text": "738435265120"}]
   },
   {
    "file": "real/img/0738678151853.jpg",
    "sha256": "4ae983bf08dc6795db2a9932a2b2fd2c33ad0feb9110a2a21a51daaab54bd39a",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0738678151853"
+   "symbols": [{"symbology": "upca", "text": "738678151853"}]
   },
   {
    "file": "real/img/0744473912322.jpg",
    "sha256": "4f7babcc55ae3dde5b4c41575b3d176cc774ff8c600601d1c7bc5f3ca4f1e6dc",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0744473912322"
+   "symbols": [{"symbology": "upca", "text": "744473912322"}]
   },
   {
    "file": "real/img/0753469010027.jpg",
    "sha256": "11ce03afd6af38efb01d283940d85e8ad5fc2afeb991ab7ecd6411f31818329b",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0753469010027"
+   "symbols": [{"symbology": "upca", "text": "753469010027"}]
   },
   {
    "file": "real/img/0786936810608.jpg",
    "sha256": "cff14b67c10d76a38356ea8cdf1a5996d1a98dca59ea926de8796643ad1c13d7",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0786936810608"
+   "symbols": [{"symbology": "upca", "text": "786936810608"}]
   },
   {
    "file": "real/img/0792363980258.jpg",
    "sha256": "065f5d21c9e742ab0fa6bc86043b0ab72ba95c62b40ed23f70bf58faa60e92d0",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0792363980258"
+   "symbols": [{"symbology": "upca", "text": "792363980258"}]
   },
   {
    "file": "real/img/0798936828934.jpg",
    "sha256": "4eb1d6f700ce6e32c5149e62ee263131ab1a0eba5048cb97a68f8ed6176b4e61",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0798936828934"
+   "symbols": [{"symbology": "upca", "text": "798936828934"}]
   },
   {
    "file": "real/img/0805002000375.jpg",
    "sha256": "e14d6a3386bb2694c11909f861f97977f16c45a910fba4c94b0c57fba3a6b0c1",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0805002000375"
+   "symbols": [{"symbology": "upca", "text": "805002000375"}]
   },
   {
    "file": "real/img/0808124111639.jpg",
    "sha256": "dab86c13345f3f82ec6907f11d1fc44671c2ada65a21f5210e64c3d5f680c0cf",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0808124111639"
+   "symbols": [{"symbology": "upca", "text": "808124111639"}]
   },
   {
    "file": "real/img/0811102020236.jpg",
    "sha256": "2ed3f3b6e695c8d7bbb6cef519f5ad465d496efbe5677b92c4bd9a81db1c18e0",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811102020236"
+   "symbols": [{"symbology": "upca", "text": "811102020236"}]
   },
   {
    "file": "real/img/0811102020380.jpg",
    "sha256": "32f47c1f0659450eb642209a1cffffed321f3ef7d20af14034dc0cb18bb1d532",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811102020380"
+   "symbols": [{"symbology": "upca", "text": "811102020380"}]
   },
   {
    "file": "real/img/0811502010165.jpg",
    "sha256": "8bb422345223d84ac75e1bee38be2b3dd5c10c1595b23c395f6d34544d7db1fa",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811502010165"
+   "symbols": [{"symbology": "upca", "text": "811502010165"}]
   },
   {
    "file": "real/img/0811502010417.jpg",
    "sha256": "7b2d8b238666201f12ea15b37a68010ca8bc740ca1e551d06d6ec5f419dae99f",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811502010417"
+   "symbols": [{"symbology": "upca", "text": "811502010417"}]
   },
   {
    "file": "real/img/0811502021628.jpg",
    "sha256": "6b4f489c974d91c773ef2cc51e28bceae63a7e526ade334732326da501d77270",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811502021628"
+   "symbols": [{"symbology": "upca", "text": "811502021628"}]
   },
   {
    "file": "real/img/0811502021642.jpg",
    "sha256": "3899fa5972567e7494c800262a311084d52bcf6dee03f0757c4c0bc973237596",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811502021642"
+   "symbols": [{"symbology": "upca", "text": "811502021642"}]
   },
   {
    "file": "real/img/0811502021833.jpg",
    "sha256": "2f420b5cdaaaf96cea6a2189e84e8e747ba52eb200e83a0ba7cdf44ab0dcfc9b",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811502021833"
+   "symbols": [{"symbology": "upca", "text": "811502021833"}]
   },
   {
    "file": "real/img/0811571013579.jpg",
    "sha256": "955ec9d2acca3fbae1c4f3ff069ee8f18e70c1ad1090a126015b0786a08aeadd",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0811571013579"
+   "symbols": [{"symbology": "upca", "text": "811571013579"}]
   },
   {
    "file": "real/img/0813568001439.jpg",
    "sha256": "63d4e8d0643d75d0951e01da5ed2472db689ed4aa81601b1b08fb330290da96d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0813568001439"
+   "symbols": [{"symbology": "upca", "text": "813568001439"}]
   },
   {
    "file": "real/img/0817210015300.jpg",
    "sha256": "e74f80f21c6603a129ce79490bb5ce49723fca7c204c5dfc21cbb83fe41e9bd1",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0817210015300"
+   "symbols": [{"symbology": "upca", "text": "817210015300"}]
   },
   {
    "file": "real/img/0841058005193.jpg",
    "sha256": "c6d597c5d9cac597f856f7ce11f902e997f0a49b6acd4feb87f608427c946948",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0841058005193"
+   "symbols": [{"symbology": "upca", "text": "841058005193"}]
   },
   {
    "file": "real/img/0851939002500.jpg",
    "sha256": "d2583e4b88af8e369b568d7716ce0131af2aa398e05bfbf302ddc895ad25d779",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0851939002500"
+   "symbols": [{"symbology": "upca", "text": "851939002500"}]
   },
   {
    "file": "real/img/0874376005538.jpg",
    "sha256": "da5cfd4dca42b5ec6d4d9e8c6f9b99fb01fda5215ea470fccd1100449889624d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0874376005538"
+   "symbols": [{"symbology": "upca", "text": "874376005538"}]
   },
   {
    "file": "real/img/0884395454408.jpg",
    "sha256": "9f1cb87fd6d538695eb95012072c87eba5222b55c2486726809be8627d9fb423",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0884395454408"
+   "symbols": [{"symbology": "upca", "text": "884395454408"}]
   },
   {
    "file": "real/img/0894700010014.jpg",
    "sha256": "183dd1b67361f6586e4ce5284b433f47ab0ec02c6833f34f4f12d8d4a9d1340c",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0894700010014"
+   "symbols": [{"symbology": "upca", "text": "894700010014"}]
   },
   {
    "file": "real/img/0896446002063.jpg",
    "sha256": "4807e01460a7ff1baef34601f47014ca9984498a8c3636b593cf6e867636affe",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0896446002063"
+   "symbols": [{"symbology": "upca", "text": "896446002063"}]
   },
   {
    "file": "real/img/0898248001015.jpg",
    "sha256": "c8ea357497e36f2848c7184a716228b0305a3bcd1a61b4c69d2864300a5a5b83",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0898248001015"
+   "symbols": [{"symbology": "upca", "text": "898248001015"}]
   },
   {
    "file": "real/img/0898745035445.jpg",
    "sha256": "6845d2ae8a063d7619f099903c6230279efa6a9ec951e9a430b17ae3e4e1366d",
-   "expected": null,
-   "kind": "upca",
-   "payload": "0898745035445"
+   "symbols": [{"symbology": "upca", "text": "898745035445"}]
   },
   {
    "file": "real/img/1501171060002.jpg",
    "sha256": "91ddc4b14b2c053e8a4e832dabc16d4d6e74693c8172df14766642a289e47616",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "1501171060002"
+   "symbols": [{"symbology": "ean13", "text": "1501171060002"}]
   },
   {
    "file": "real/img/2135497017359.jpg",
    "sha256": "c19f33bc04988f750615390b1d596e589814a71b590125ec71449522184d53bc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2135497017359"
+   "symbols": [{"symbology": "ean13", "text": "2135497017359"}]
   },
   {
    "file": "real/img/2200170034500.jpg",
    "sha256": "54ba17354a58759ada0f72242dcb63fec8ef3302415d2ce14d02b76322ebc5da",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2200170034500"
+   "symbols": [{"symbology": "ean13", "text": "2200170034500"}]
   },
   {
    "file": "real/img/2208507040088.jpg",
    "sha256": "a77f814cf1148c1a0ff8633503b01377c6d89ca0ffc860feef3e718fd340e0d0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2208507040088"
+   "symbols": [{"symbology": "ean13", "text": "2208507040088"}]
   },
   {
    "file": "real/img/2209030006275.jpg",
    "sha256": "70438e6b1e745f3fa3009c866bbcbda6bbe4de268dec86e70128ee22a844842c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2209030006275"
+   "symbols": [{"symbology": "ean13", "text": "2209030006275"}]
   },
   {
    "file": "real/img/2228585019745.jpg",
    "sha256": "78b746d035ccb27972ac9919b55fb39333ced24246445254f7aee3c195a53b80",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2228585019745"
+   "symbols": [{"symbology": "ean13", "text": "2228585019745"}]
   },
   {
    "file": "real/img/2230080002917.jpg",
    "sha256": "5e3ed75534b696cf7b3c40e1e67c5f78290ad049be0e03c15a269b3b87322a6e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2230080002917"
+   "symbols": [{"symbology": "ean13", "text": "2230080002917"}]
   },
   {
    "file": "real/img/2238081022767.jpg",
    "sha256": "cbbed5f98362d823c3a4c61d15ac4e81d11e9298a7808cd5024c50d6c8b7575f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2238081022767"
+   "symbols": [{"symbology": "ean13", "text": "2238081022767"}]
   },
   {
    "file": "real/img/2244057017125.jpg",
    "sha256": "77267bc8dedc8c0ca9858653541f861770934d6e4243f50dbe4001cabffcf1c9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2244057017125"
+   "symbols": [{"symbology": "ean13", "text": "2244057017125"}]
   },
   {
    "file": "real/img/2244057022761.jpg",
    "sha256": "918e9925075164e83d23f27a638642529d1c1dd91519673ce76306e45329c626",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2244057022761"
+   "symbols": [{"symbology": "ean13", "text": "2244057022761"}]
   },
   {
    "file": "real/img/2263079003206.jpg",
    "sha256": "a3652baa54c07affc2a7d2afe8e3aac645d83355c9f88c9eac91ab2100f5b5a4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2263079003206"
+   "symbols": [{"symbology": "ean13", "text": "2263079003206"}]
   },
   {
    "file": "real/img/2264751025783.jpg",
    "sha256": "76cb853c6adf7b46477c4a064cdb26461bd857436c5180de671c64b1f9e66e21",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2264751025783"
+   "symbols": [{"symbology": "ean13", "text": "2264751025783"}]
   },
   {
    "file": "real/img/2309634003721.jpg",
    "sha256": "c8d24106af9728bfbe74b3d54c40f08108fb02be137637e1f2f720d13022867a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2309634003721"
+   "symbols": [{"symbology": "ean13", "text": "2309634003721"}]
   },
   {
    "file": "real/img/2411288044217.jpg",
    "sha256": "e2513db386f8de2b432cb56790eedacee007b54a2a0806fb0f642e0cb6f1e8fd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2411288044217"
+   "symbols": [{"symbology": "ean13", "text": "2411288044217"}]
   },
   {
    "file": "real/img/2424271045467.jpg",
    "sha256": "56b40fcc872f355fe7e4c07df36e715e9b72a9eca0e989f2292454fcff235dab",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2424271045467"
+   "symbols": [{"symbology": "ean13", "text": "2424271045467"}]
   },
   {
    "file": "real/img/2432457029781.jpg",
    "sha256": "53d213d130611c6022e6072aabd5807f21a843c9d5d0a774eea0c25c629c8b6a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2432457029781"
+   "symbols": [{"symbology": "ean13", "text": "2432457029781"}]
   },
   {
    "file": "real/img/2456030047498.jpg",
    "sha256": "9679d43b2d0f44c13a56657f9eeadab039de292d0b478f719cba8b31aa58cb72",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2456030047498"
+   "symbols": [{"symbology": "ean13", "text": "2456030047498"}]
   },
   {
    "file": "real/img/2477274032019.jpg",
    "sha256": "dd5df1b448d5b3993ff00e57532be86c2bb6c41529079c286791df0ede237d25",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2477274032019"
+   "symbols": [{"symbology": "ean13", "text": "2477274032019"}]
   },
   {
    "file": "real/img/2481339060411.jpg",
    "sha256": "28cb2eb33a2020125930c029f2a2468724e27b05dd43022871fc9c1452865334",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2481339060411"
+   "symbols": [{"symbology": "ean13", "text": "2481339060411"}]
   },
   {
    "file": "real/img/2488620013125.jpg",
    "sha256": "b055bc09f87bd95a072921935ee51531623b9ad2ebccd927dcc7926c02134c40",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2488620013125"
+   "symbols": [{"symbology": "ean13", "text": "2488620013125"}]
   },
   {
    "file": "real/img/2494558038444.jpg",
    "sha256": "acd634270a3488174f307013da13643fdc0b067f8b59a16de44f3f4c0c065967",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2494558038444"
+   "symbols": [{"symbology": "ean13", "text": "2494558038444"}]
   },
   {
    "file": "real/img/2625078022631.jpg",
    "sha256": "8a63139a35bf5a3ecff955fcf324bb589d3b0d5ca412e4dccd7123f8c8bc5b6a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2625078022631"
+   "symbols": [{"symbology": "ean13", "text": "2625078022631"}]
   },
   {
    "file": "real/img/2689120051895.jpg",
    "sha256": "880b0dfadd0a83f90f983a13b54612c159444ae89a470d44a2cc34f21b06f945",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2689120051895"
+   "symbols": [{"symbology": "ean13", "text": "2689120051895"}]
   },
   {
    "file": "real/img/2692502030371.jpg",
    "sha256": "f086ec1f46d1efb3d9966fff40dbb048b9d897930deb8fab3aaf2a7dbbb4a7f6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2692502030371"
+   "symbols": [{"symbology": "ean13", "text": "2692502030371"}]
   },
   {
    "file": "real/img/2853901063968.jpg",
    "sha256": "8c53d1afa7bc83972d1b6a3b0714563fc80e124248417974404d7fff1866b0cb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2853901063968"
+   "symbols": [{"symbology": "ean13", "text": "2853901063968"}]
   },
   {
    "file": "real/img/2855098081084.jpg",
    "sha256": "480b08f1490d3431ccfd16d82be4aac50f73a77a96141c9bf854298bf2f020da",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2855098081084"
+   "symbols": [{"symbology": "ean13", "text": "2855098081084"}]
   },
   {
    "file": "real/img/2858996057403.jpg",
    "sha256": "f20367ca44ff70b1d3c05b021a73b851a87959c9bf89bb8e3832eaea9be86a41",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2858996057403"
+   "symbols": [{"symbology": "ean13", "text": "2858996057403"}]
   },
   {
    "file": "real/img/2871754014371.jpg",
    "sha256": "f24c95924fa667eab3a4598ea225b87ccc9388aa05e5bc30aee05d43dde9a3d2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2871754014371"
+   "symbols": [{"symbology": "ean13", "text": "2871754014371"}]
   },
   {
    "file": "real/img/2970810001789.jpg",
    "sha256": "0ebddbbd24dcc05581cbb21fa607d6f497fb22116139cd9292b69fa00e436aca",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "2970810001789"
+   "symbols": [{"symbology": "ean13", "text": "2970810001789"}]
   },
   {
    "file": "real/img/3019896976150.jpg",
    "sha256": "1059c91fa821d364f6ae58c4eb6f4b96ad46f57e242aee7eccd6e33956908e12",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3019896976150"
+   "symbols": [{"symbology": "ean13", "text": "3019896976150"}]
   },
   {
    "file": "real/img/3023260031994.jpg",
    "sha256": "fffc885b096e2f09846597db0c1bf48a00287b7478410e179781d5257f7037de",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3023260031994"
+   "symbols": [{"symbology": "ean13", "text": "3023260031994"}]
   },
   {
    "file": "real/img/3023290014080.jpg",
    "sha256": "2d31e332747561b03b97dc5170f081b6160d2712df8ce89265f609d685d2f92a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3023290014080"
+   "symbols": [{"symbology": "ean13", "text": "3023290014080"}]
   },
   {
    "file": "real/img/3036810207800.jpg",
    "sha256": "f8600c274c662bcc7ca4105dbbc92199dad232ed1ff7173610282fff8702d150",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3036810207800"
+   "symbols": [{"symbology": "ean13", "text": "3036810207800"}]
   },
   {
    "file": "real/img/3038359004582.jpg",
    "sha256": "3fba414739fca55ed81e2cda0cb1e7b116d2a48185f1bb369e964e4ed2a0831d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3038359004582"
+   "symbols": [{"symbology": "ean13", "text": "3038359004582"}]
   },
   {
    "file": "real/img/3039050042378.jpg",
    "sha256": "e8a8ea2a962c1742fb3b6288567d9c44c572a400f647dedb5b8a8040c2a1ff3e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3039050042378"
+   "symbols": [{"symbology": "ean13", "text": "3039050042378"}]
   },
   {
    "file": "real/img/3039050632364.jpg",
    "sha256": "fd1f7d6c6d69588f4a88d3115a3ac16423d883d289056d5c27f889d1bcf68996",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3039050632364"
+   "symbols": [{"symbology": "ean13", "text": "3039050632364"}]
   },
   {
    "file": "real/img/3041090008252.jpg",
    "sha256": "f8df8ad8968b7132fba73935cf886950916e6e9232b298e2cd22599a133e67f7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3041090008252"
+   "symbols": [{"symbology": "ean13", "text": "3041090008252"}]
   },
   {
    "file": "real/img/3041090008269.jpg",
    "sha256": "a36820d0de734be9eebcbb5070e91cb1520f9a2b2bf500fccab4b38a0bff4901",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3041090008269"
+   "symbols": [{"symbology": "ean13", "text": "3041090008269"}]
   },
   {
    "file": "real/img/3067162210675.jpg",
    "sha256": "fb0826612dd0ca6487ce9c3cc0ee6dcc1de723d688bd6703fe7991c26bf9313a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3067162210675"
+   "symbols": [{"symbology": "ean13", "text": "3067162210675"}]
   },
   {
    "file": "real/img/3067163611549.jpg",
    "sha256": "420e118e117ff41e814b7b3d00a2309f823543d25daa258bdac2473a5153ff6d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3067163611549"
+   "symbols": [{"symbology": "ean13", "text": "3067163611549"}]
   },
   {
    "file": "real/img/3073780809061.jpg",
    "sha256": "04ddfefbcdfd52a3ab243444b5f07e874f78dd0a43c3525cdd67e26bd00b3512",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3073780809061"
+   "symbols": [{"symbology": "ean13", "text": "3073780809061"}]
   },
   {
    "file": "real/img/3073781000122.jpg",
    "sha256": "f2b647befa9dc3b75e6cd9368d654fed2f09e6467448681b3e0f850d17a4c353",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3073781000122"
+   "symbols": [{"symbology": "ean13", "text": "3073781000122"}]
   },
   {
    "file": "real/img/3073781000139.jpg",
    "sha256": "4f99f5b0b5ac53b5dd7651ca358af5ba8e96997ffce8584a00853cf0ac2b85bd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3073781000139"
+   "symbols": [{"symbology": "ean13", "text": "3073781000139"}]
   },
   {
    "file": "real/img/3073781077384.jpg",
    "sha256": "a251f0c826b7777e49cd76f38a802a0aaeb920dc973d625c8ac7b588210ba4c7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3073781077384"
+   "symbols": [{"symbology": "ean13", "text": "3073781077384"}]
   },
   {
    "file": "real/img/3095751394017.jpg",
    "sha256": "aa99882d393070e4510eece6d361df9c1816f60876677e24a2993018c9252734",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095751394017"
+   "symbols": [{"symbology": "ean13", "text": "3095751394017"}]
   },
   {
    "file": "real/img/3095752194012.jpg",
    "sha256": "34af04f2b22e48aef5ff45838e66be0963b424e82dbdf56b12e917b68833e81d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095752194012"
+   "symbols": [{"symbology": "ean13", "text": "3095752194012"}]
   },
   {
    "file": "real/img/3095754972014.jpg",
    "sha256": "6c1b3aa0b839d4b734521a6ef49d46317fb467b7c291a41e105e383ca8d59b95",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095754972014"
+   "symbols": [{"symbology": "ean13", "text": "3095754972014"}]
   },
   {
    "file": "real/img/3095757080013.jpg",
    "sha256": "211a510c13c073cb311ed9c34aff87e8a7c60b36730eeb720da321662d2ef9b7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095757080013"
+   "symbols": [{"symbology": "ean13", "text": "3095757080013"}]
   },
   {
    "file": "real/img/3095758391101.jpg",
    "sha256": "15a610cd8d3e8a69fde78b65ce0d2f6f4417098590f289a5c814039811ce585c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095758391101"
+   "symbols": [{"symbology": "ean13", "text": "3095758391101"}]
   },
   {
    "file": "real/img/3095758589010.jpg",
    "sha256": "89a89dda64154d2fe25e141f693c31fc201db733c34b7b3fd30e828315193f8b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095758589010"
+   "symbols": [{"symbology": "ean13", "text": "3095758589010"}]
   },
   {
    "file": "real/img/3095758859014.jpg",
    "sha256": "0a5b78b6414d9297eb8a00850b0f50ce943ebd19c0c733f916f9284afdf5ac22",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095758859014"
+   "symbols": [{"symbology": "ean13", "text": "3095758859014"}]
   },
   {
    "file": "real/img/3095759618016.jpg",
    "sha256": "c7d4a2a119c31711ea4ed96aa61d385256f6b678629d32a1d35d22af6016ea5a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3095759618016"
+   "symbols": [{"symbology": "ean13", "text": "3095759618016"}]
   },
   {
    "file": "real/img/3102870061529.jpg",
    "sha256": "bdc7515e07c846eda265788a379da9d43010dae64b401c9750eb3e6a9f09b89b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3102870061529"
+   "symbols": [{"symbology": "ean13", "text": "3102870061529"}]
   },
   {
    "file": "real/img/3154230041207.jpg",
    "sha256": "3bb00b614d1df2dfa07014af87b4c64352d802ea395d5f3469890061b6f30a19",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3154230041207"
+   "symbols": [{"symbology": "ean13", "text": "3154230041207"}]
   },
   {
    "file": "real/img/3164060730042.jpg",
    "sha256": "c73a021174f9ccd6985b62c22d0c59bb333dd4b9a26ba2c56bb295c6e7c4f641",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3164060730042"
+   "symbols": [{"symbology": "ean13", "text": "3164060730042"}]
   },
   {
    "file": "real/img/3165950217766.jpg",
    "sha256": "a9ca7631b476d5594ecc8f8364c6397b126c2ce91951e543d37eefde256a6b3f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3165950217766"
+   "symbols": [{"symbology": "ean13", "text": "3165950217766"}]
   },
   {
    "file": "real/img/3180940087617.jpg",
    "sha256": "9579c3195ced9683a7153b9a19afec01980c68db3a4ca7cf7f7b490e3eab8720",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3180940087617"
+   "symbols": [{"symbology": "ean13", "text": "3180940087617"}]
   },
   {
    "file": "real/img/3180950010346.jpg",
    "sha256": "07c188e1bf7e6e929adf7c4a1fe89b9fad4f0ae2c204f48cdd61f4666fdb3d52",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3180950010346"
+   "symbols": [{"symbology": "ean13", "text": "3180950010346"}]
   },
   {
    "file": "real/img/3185200003017.jpg",
    "sha256": "ac097dfeb16bf814afd36d3a46f373e39f2e2f25330eb63bd0ae5650b5d595a3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3185200003017"
+   "symbols": [{"symbology": "ean13", "text": "3185200003017"}]
   },
   {
    "file": "real/img/3191010083309.jpg",
    "sha256": "4eb4ecbf2a0b1abfcfa9095263eec2e39dd2de89179656558d5a1e7875a39aa2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3191010083309"
+   "symbols": [{"symbology": "ean13", "text": "3191010083309"}]
   },
   {
    "file": "real/img/3222110010152.jpg",
    "sha256": "4dd482f00abf170ee0f9b1313dd6dfc3f98a46bc49baea5f925cad6906b31bec",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3222110010152"
+   "symbols": [{"symbology": "ean13", "text": "3222110010152"}]
   },
   {
    "file": "real/img/3222473632008.jpg",
    "sha256": "a21b61bfda13940bbc5cc3317de888a29147a1e54da7d60b60c7201950a542fa",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3222473632008"
+   "symbols": [{"symbology": "ean13", "text": "3222473632008"}]
   },
   {
    "file": "real/img/3228022120095.jpg",
    "sha256": "dff34b87f7b3da91475e3ced55e2e6df66b36b627367d21a3ba0ed425e466d24",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3228022120095"
+   "symbols": [{"symbology": "ean13", "text": "3228022120095"}]
   },
   {
    "file": "real/img/3233130012712.jpg",
    "sha256": "acd93504a742173c5839cbb9d7c7866997d606e772436d3099c4ba4187161bcc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3233130012712"
+   "symbols": [{"symbology": "ean13", "text": "3233130012712"}]
   },
   {
    "file": "real/img/3245411400729.jpg",
    "sha256": "957c2140094d33496ac326f2a44bdea047a0124d736ffefd81677f54508577b5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3245411400729"
+   "symbols": [{"symbology": "ean13", "text": "3245411400729"}]
   },
   {
    "file": "real/img/3245412476105.jpg",
    "sha256": "a94717fde3eba01a13c818353fb1ea31111977c836aa4cf89cbe40447927b76a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3245412476105"
+   "symbols": [{"symbology": "ean13", "text": "3245412476105"}]
   },
   {
    "file": "real/img/3245413444790.jpg",
    "sha256": "25363dfab8026446c615f6928809f19728aa435495bb4fd5a05ba9b4693d2ff7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3245413444790"
+   "symbols": [{"symbology": "ean13", "text": "3245413444790"}]
   },
   {
    "file": "real/img/3250390859963.jpg",
    "sha256": "f4acbd8cae3ee2af246d59321a0897e9cc478d8841a735a7c94040ae52d372a9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3250390859963"
+   "symbols": [{"symbology": "ean13", "text": "3250390859963"}]
   },
   {
    "file": "real/img/3250391225293.jpg",
    "sha256": "9013901c3e03ad2eaa6250ec3c9f2096ab3efcd89fe9a8a92c2caea71168f3fe",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3250391225293"
+   "symbols": [{"symbology": "ean13", "text": "3250391225293"}]
   },
   {
    "file": "real/img/3250391985500.jpg",
    "sha256": "f41eee2ffc4f177732a8e270eb28702082ed8fda9ffa3daa892774471e86239d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3250391985500"
+   "symbols": [{"symbology": "ean13", "text": "3250391985500"}]
   },
   {
    "file": "real/img/3250392555481.jpg",
    "sha256": "2f4642e01f41c6a5ee2a6e7dce3882eb9d9682aaffa31782c7aeb3a5d3f17915",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3250392555481"
+   "symbols": [{"symbology": "ean13", "text": "3250392555481"}]
   },
   {
    "file": "real/img/3250392605414.jpg",
    "sha256": "e30322153095239d931dc9537abd2aaa75cd7220385c870d392dbdd463243efb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3250392605414"
+   "symbols": [{"symbology": "ean13", "text": "3250392605414"}]
   },
   {
    "file": "real/img/3251513743008.jpg",
    "sha256": "23ca54eee0ec42a5aa38ed86a7edfa956b2e5d34990efadfab76364766a09f13",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3251513743008"
+   "symbols": [{"symbology": "ean13", "text": "3251513743008"}]
   },
   {
    "file": "real/img/3252950003694.jpg",
    "sha256": "2c1dd0e8c1e1297b4430fb6953fcc9928d0f0628eecfe842c018aadf2c708f59",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3252950003694"
+   "symbols": [{"symbology": "ean13", "text": "3252950003694"}]
   },
   {
    "file": "real/img/3252950031024.jpg",
    "sha256": "db82c4ac15c29529357ddc70b9c59a8e10bd2430d90fafca47eb5b78fac97d25",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3252950031024"
+   "symbols": [{"symbology": "ean13", "text": "3252950031024"}]
   },
   {
    "file": "real/img/3254550047528.jpg",
    "sha256": "15047d3f9961b3adc2433425a5bc537debc34b5602f7c45fc962e792067baedf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3254550047528"
+   "symbols": [{"symbology": "ean13", "text": "3254550047528"}]
   },
   {
    "file": "real/img/3254560280670.jpg",
    "sha256": "76717dd507bcf88f959cc4495d7da4f37ae29d31d2b72a0f86b9740e90e236ae",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3254560280670"
+   "symbols": [{"symbology": "ean13", "text": "3254560280670"}]
   },
   {
    "file": "real/img/3254561041607.jpg",
    "sha256": "ef10b984b64075feacf0d8d1fce9d9ad539d0c890bbdb5a44028a8492a1a6783",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3254561041607"
+   "symbols": [{"symbology": "ean13", "text": "3254561041607"}]
   },
   {
    "file": "real/img/3254568079887.jpg",
    "sha256": "c1ed7be5d4469b46894b0253d5deb1630167de5f1712c0a2c1336e1dda0b378e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3254568079887"
+   "symbols": [{"symbology": "ean13", "text": "3254568079887"}]
   },
   {
    "file": "real/img/3256220210492.jpg",
    "sha256": "6044d11240ea08020461065361a74610932d361802d6bc6ee44d8aaf161dbb8a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3256220210492"
+   "symbols": [{"symbology": "ean13", "text": "3256220210492"}]
   },
   {
    "file": "real/img/3256220878173.jpg",
    "sha256": "59f2b7b760bcf3b0cbd06c8f8a38a3a7b0ff6fe9664f14ab93762c69a7804fff",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3256220878173"
+   "symbols": [{"symbology": "ean13", "text": "3256220878173"}]
   },
   {
    "file": "real/img/3256226087708.jpg",
    "sha256": "21b46800dea6ab270c32469ed29e8f89b7db457ffed9a974aa7faca03f3da745",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3256226087708"
+   "symbols": [{"symbology": "ean13", "text": "3256226087708"}]
   },
   {
    "file": "real/img/3256227361074.jpg",
    "sha256": "41e85ab33176c3895eb5de8f6c3290ffbe55cdc79b330c36b001d7622075d2c3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3256227361074"
+   "symbols": [{"symbology": "ean13", "text": "3256227361074"}]
   },
   {
    "file": "real/img/3257983346619.jpg",
    "sha256": "ecfa3c2eb8317ef1d234de9d665363fda1b21e8afa8975e1ddee1d2c175e7adf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3257983346619"
+   "symbols": [{"symbology": "ean13", "text": "3257983346619"}]
   },
   {
    "file": "real/img/3257983580730.jpg",
    "sha256": "94569e61e378ca933c070e2a58b539afe10bc10ec2f01fe539d7b1814fd46b8a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3257983580730"
+   "symbols": [{"symbology": "ean13", "text": "3257983580730"}]
   },
   {
    "file": "real/img/3257983876246.jpg",
    "sha256": "b05a2ad1ca759e2260355054ed9716b3b91bc9999e59f30362895b62a15da81e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3257983876246"
+   "symbols": [{"symbology": "ean13", "text": "3257983876246"}]
   },
   {
    "file": "real/img/3257986632214.jpg",
    "sha256": "f754ead9917307a9656b225b9d5baf92dc42c5b99c3ad9aed3ea17ff10583f44",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3257986632214"
+   "symbols": [{"symbology": "ean13", "text": "3257986632214"}]
   },
   {
    "file": "real/img/3257986904861.jpg",
    "sha256": "4bb1ab16b0fd6024b33e470f218115e72863b26d3ebbd5b4543f79b2ee43631c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3257986904861"
+   "symbols": [{"symbology": "ean13", "text": "3257986904861"}]
   },
   {
    "file": "real/img/3258561430621.jpg",
    "sha256": "152242e66c4d934ce5c9bf113deefe4cd5cbbc5322e7e1ae1ada88c4ff5ac7ed",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3258561430621"
+   "symbols": [{"symbology": "ean13", "text": "3258561430621"}]
   },
   {
    "file": "real/img/3258561450520.jpg",
    "sha256": "64b5c06a7d8c31f1435ad1bbaed4e2d0030dc9a2f3c111e75647d4e54126247c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3258561450520"
+   "symbols": [{"symbology": "ean13", "text": "3258561450520"}]
   },
   {
    "file": "real/img/3258561462165.jpg",
    "sha256": "e3d67d9838dea7d984ee20bccd01075a4083cf99c0a1fcfd96407a12e9fa9332",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3258561462165"
+   "symbols": [{"symbology": "ean13", "text": "3258561462165"}]
   },
   {
    "file": "real/img/3260260206667.jpg",
    "sha256": "582b9a2357d46f1acd4b9b103ab31682a819a2c0cc6b9958c39f2472133ed744",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3260260206667"
+   "symbols": [{"symbology": "ean13", "text": "3260260206667"}]
   },
   {
    "file": "real/img/3261089122503.jpg",
    "sha256": "df100258deeca87accbf720660bcbf82c72bbd5007accc1ef8c6fa55ad8c219b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3261089122503"
+   "symbols": [{"symbology": "ean13", "text": "3261089122503"}]
   },
   {
    "file": "real/img/3261089225518.jpg",
    "sha256": "787a49a6f695c602b8ac9857d46e23b1b92cdc878d99f25fb677608e913300de",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3261089225518"
+   "symbols": [{"symbology": "ean13", "text": "3261089225518"}]
   },
   {
    "file": "real/img/3261089225945.jpg",
    "sha256": "101cb53a4bbf09d373c708fb3e2680d1e5e627338628f82a708217b51c596305",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3261089225945"
+   "symbols": [{"symbology": "ean13", "text": "3261089225945"}]
   },
   {
    "file": "real/img/3263851928665.jpg",
    "sha256": "cc342f601b8170f8ce3fbeef111e21ee3f5b88d29dff3708024d2c8010e45495",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263851928665"
+   "symbols": [{"symbology": "ean13", "text": "3263851928665"}]
   },
   {
    "file": "real/img/3263856410318.jpg",
    "sha256": "017082fb386477432b9fc511b13637ca5d3770bb8201f1280ce3661fe4713201",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263856410318"
+   "symbols": [{"symbology": "ean13", "text": "3263856410318"}]
   },
   {
    "file": "real/img/3263858330621.jpg",
    "sha256": "420316204792029ab1cb128dd2b9d245b75e1452ab5402e92ae4be495e0d9acc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263858330621"
+   "symbols": [{"symbology": "ean13", "text": "3263858330621"}]
   },
   {
    "file": "real/img/3263858602612.jpg",
    "sha256": "bdc991e06c7e66a9d1ff1ea648d186796b38ed72fe0351c8ee4c826dfe0e4cdf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263858602612"
+   "symbols": [{"symbology": "ean13", "text": "3263858602612"}]
   },
   {
    "file": "real/img/3263858674527.jpg",
    "sha256": "2f1746e3f2b9682fab2f87b00bbdb194902c8a7ff8218d2ba9defdb8cd825cbd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263858674527"
+   "symbols": [{"symbology": "ean13", "text": "3263858674527"}]
   },
   {
    "file": "real/img/3263858811519.jpg",
    "sha256": "44e99635eb56d12d54700cde2e1885ffcd6dedcb20c3b47371ff84351f0cf711",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263858811519"
+   "symbols": [{"symbology": "ean13", "text": "3263858811519"}]
   },
   {
    "file": "real/img/3263858827718.jpg",
    "sha256": "f3d141cfe8a5b31b803bdf73da2c4b285f3f74ba96116eca126029bd4c872056",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263858827718"
+   "symbols": [{"symbology": "ean13", "text": "3263858827718"}]
   },
   {
    "file": "real/img/3263858854417.jpg",
    "sha256": "1576c4931efe97e6e4b27e5295c82efb89e24026b795050a67f9d5e6dd811cc1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263858854417"
+   "symbols": [{"symbology": "ean13", "text": "3263858854417"}]
   },
   {
    "file": "real/img/3263859454524.jpg",
    "sha256": "9708ebe08c35bb49e7e484f1ce6666ef4ae1ace403229e354676545cd94bf052",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263859454524"
+   "symbols": [{"symbology": "ean13", "text": "3263859454524"}]
   },
   {
    "file": "real/img/3263859475321.jpg",
    "sha256": "aa2c1967229a60734e4c78abb0e6adc386e1357bbd424ba9e441d22001712ac4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263859475321"
+   "symbols": [{"symbology": "ean13", "text": "3263859475321"}]
   },
   {
    "file": "real/img/3263859501020.jpg",
    "sha256": "98ffae34a8048e45b8861b7180e4e02aa917f286fe7ab790e750ae45239a6ee2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263859501020"
+   "symbols": [{"symbology": "ean13", "text": "3263859501020"}]
   },
   {
    "file": "real/img/3263859540722.jpg",
    "sha256": "765de3911f45d1df57061f65220d5b28aa9c94e098b4ee2e6d2375d1b2813c05",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263859540722"
+   "symbols": [{"symbology": "ean13", "text": "3263859540722"}]
   },
   {
    "file": "real/img/3263859581510.jpg",
    "sha256": "06eb893453b7b0c1a696079b31be7e858f90915f655d4a1685240d0e0ab9ed11",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263859581510"
+   "symbols": [{"symbology": "ean13", "text": "3263859581510"}]
   },
   {
    "file": "real/img/3263859669515.jpg",
    "sha256": "b11035642ef81e8fa82ef32a3e16db878204f97347098ef0d41483a2149c91e0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263859669515"
+   "symbols": [{"symbology": "ean13", "text": "3263859669515"}]
   },
   {
    "file": "real/img/3263859671020.jpg",
    "sha256": "7f8ade6b25746e59296d9c7e31ad741f46e15dff8f1216b5c1a46911cf1a9cb6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3263859671020"
+   "symbols": [{"symbology": "ean13", "text": "3263859671020"}]
   },
   {
    "file": "real/img/3265776109174.jpg",
    "sha256": "aa58397dfc27e3315a56fb10416ce6a47d4907b1831819db31f0e7c929c316f3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3265776109174"
+   "symbols": [{"symbology": "ean13", "text": "3265776109174"}]
   },
   {
    "file": "real/img/3265776629023.jpg",
    "sha256": "e9851e024d702511157118c071861553e3434f4f80e96fe9dd4fe5cff031e9b8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3265776629023"
+   "symbols": [{"symbology": "ean13", "text": "3265776629023"}]
   },
   {
    "file": "real/img/3265850000038.jpg",
    "sha256": "81b4d0aa270cf2265d0a4ba32ac5ee003df20b17068df61e284c8ef44ab8d2d5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3265850000038"
+   "symbols": [{"symbology": "ean13", "text": "3265850000038"}]
   },
   {
    "file": "real/img/3265980837467.jpg",
    "sha256": "c1b9e8a01979ba89b5a4d9e2ed2b310edc8feb310f761506c2c95cadb8697d7d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3265980837467"
+   "symbols": [{"symbology": "ean13", "text": "3265980837467"}]
   },
   {
    "file": "real/img/3265980837474.jpg",
    "sha256": "18ffc9f4f0579c7bef51959a4d9163ed5fb505b4df4e6eab3b219a2a3eb98ad6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3265980837474"
+   "symbols": [{"symbology": "ean13", "text": "3265980837474"}]
   },
   {
    "file": "real/img/3268680028050.jpg",
    "sha256": "3718cf7dab1eda8a807d9a98e4d1c6870848339352700df49ae1ef5117ffe776",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3268680028050"
+   "symbols": [{"symbology": "ean13", "text": "3268680028050"}]
   },
   {
    "file": "real/img/3270190155577.jpg",
    "sha256": "c3050732f2176032a16b76d161e76b62e6ac14c02e759185c00f0e1a8c20f181",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3270190155577"
+   "symbols": [{"symbology": "ean13", "text": "3270190155577"}]
   },
   {
    "file": "real/img/3272770004725.jpg",
    "sha256": "4371b5d5a40212e673f7aa8c3e566b7d2a132b3b43a7f92406ca9f6264e33b62",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3272770004725"
+   "symbols": [{"symbology": "ean13", "text": "3272770004725"}]
   },
   {
    "file": "real/img/3272770093750.jpg",
    "sha256": "866dfa16e3f1e18986c43473097ea6b809b1b63b3e67afdced0afbb79821d63f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3272770093750"
+   "symbols": [{"symbology": "ean13", "text": "3272770093750"}]
   },
   {
    "file": "real/img/3272770097581.jpg",
    "sha256": "13fea826e4f1e89bd43a5d22db7b1f3d0afb3ee69c902021258f1489f729b758",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3272770097581"
+   "symbols": [{"symbology": "ean13", "text": "3272770097581"}]
   },
   {
    "file": "real/img/3272770099004.jpg",
    "sha256": "a37feb41da466039defd10400f99b8e01b9353593ee09133139a16300b4eae7b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3272770099004"
+   "symbols": [{"symbology": "ean13", "text": "3272770099004"}]
   },
   {
    "file": "real/img/3273230063986.jpg",
    "sha256": "b64d905e63ddafe4373c22e509a53da3b52c92443a73fc42aabb3ce0ce5d0f4e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3273230063986"
+   "symbols": [{"symbology": "ean13", "text": "3273230063986"}]
   },
   {
    "file": "real/img/3275411801035.jpg",
    "sha256": "c76f9ddd5e291f940dd8ce700edadd9f982b80c74e6311f8bd03676134d464f3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3275411801035"
+   "symbols": [{"symbology": "ean13", "text": "3275411801035"}]
   },
   {
    "file": "real/img/3276724114058.jpg",
    "sha256": "e4af045d8f28bc632f6d9e748c6bbd325de35a91b7e7585ba7d94c17c227b33a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3276724114058"
+   "symbols": [{"symbology": "ean13", "text": "3276724114058"}]
   },
   {
    "file": "real/img/3277417000061.jpg",
    "sha256": "417069c8a2acb668ea175b9781ac128a21a683e63ac42c5b3bbd40786c516967",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3277417000061"
+   "symbols": [{"symbology": "ean13", "text": "3277417000061"}]
   },
   {
    "file": "real/img/3278699500058.jpg",
    "sha256": "610171b9929fdfbb4f839643d96cc0b1bdf234296af1122e88511079ecca5503",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3278699500058"
+   "symbols": [{"symbology": "ean13", "text": "3278699500058"}]
   },
   {
    "file": "real/img/3281673200004.jpg",
    "sha256": "849d23da7b13464eb2271e159881292032f80ba26b09250e1b373cb04cfe149b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3281673200004"
+   "symbols": [{"symbology": "ean13", "text": "3281673200004"}]
   },
   {
    "file": "real/img/3289744281600.jpg",
    "sha256": "2819efb9c1457248661b7f954f983ec5564b3519a33119ec6c8081ea2ed7cbaf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3289744281600"
+   "symbols": [{"symbology": "ean13", "text": "3289744281600"}]
   },
   {
    "file": "real/img/3289744282911.jpg",
    "sha256": "c5603c31f7754ca51443687265849ac08618ba4bc06df6d9da81b2d1df06f07f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3289744282911"
+   "symbols": [{"symbology": "ean13", "text": "3289744282911"}]
   },
   {
    "file": "real/img/3292990010160.jpg",
    "sha256": "9bd6953c7c0944d446f330ad6ddd62ce6bb2a8de3dc9fc24a4762aa42e6b952c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3292990010160"
+   "symbols": [{"symbology": "ean13", "text": "3292990010160"}]
   },
   {
    "file": "real/img/3292992003955.jpg",
    "sha256": "f88ec79eb8da9b83f1db66df40e905f322dbc5c7de7b3ebf5e3863cb584aaff7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3292992003955"
+   "symbols": [{"symbology": "ean13", "text": "3292992003955"}]
   },
   {
    "file": "real/img/3292992003986.jpg",
    "sha256": "5d17f82cfa85721564ff95ec30a4c58c020039291b10de7ea327690056848d4a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3292992003986"
+   "symbols": [{"symbology": "ean13", "text": "3292992003986"}]
   },
   {
    "file": "real/img/3292992003993.jpg",
    "sha256": "25d3f30bce21ad77cd41c0c10ad087b796171ee38155840ddef73a174e765458",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3292992003993"
+   "symbols": [{"symbology": "ean13", "text": "3292992003993"}]
   },
   {
    "file": "real/img/3292992005010.jpg",
    "sha256": "5cd4869f1a4ef4ede6be245ca993b6c0cac2dbdc3de95d4e35eb504aa3b84be6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3292992005010"
+   "symbols": [{"symbology": "ean13", "text": "3292992005010"}]
   },
   {
    "file": "real/img/3292992005355.jpg",
    "sha256": "37b57983c5b9776733476ef6124cd89617768658c229a6d1c2027dc54bd5d47f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3292992005355"
+   "symbols": [{"symbology": "ean13", "text": "3292992005355"}]
   },
   {
    "file": "real/img/3302740025259.jpg",
    "sha256": "fb06a76385d3e2036c3303898e8d840795d3a81e61b557e2528a08d82bd6fc97",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3302740025259"
+   "symbols": [{"symbology": "ean13", "text": "3302740025259"}]
   },
   {
    "file": "real/img/3302740031212.jpg",
    "sha256": "033c7b74731646ba5285f5ed05fed3c72cbce20467a998b05decead7d09edeae",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3302740031212"
+   "symbols": [{"symbology": "ean13", "text": "3302740031212"}]
   },
   {
    "file": "real/img/3302740031274.jpg",
    "sha256": "40dc6ac62e1d656bf5b4ed531d48fa8e32a87945a5ff6126e1b6df491bdb5c66",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3302740031274"
+   "symbols": [{"symbology": "ean13", "text": "3302740031274"}]
   },
   {
    "file": "real/img/3307130602553.jpg",
    "sha256": "56379d02cc1ae619a4c1fd3adcf2eaa405dd12ed884cb44b0f4f06bc30a8c537",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3307130602553"
+   "symbols": [{"symbology": "ean13", "text": "3307130602553"}]
   },
   {
    "file": "real/img/3308090002520.jpg",
    "sha256": "9f5006bea7dd992be6444cd4d3c9ae4c7d656c11a3a942cdbc2d92f22ca21aa8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3308090002520"
+   "symbols": [{"symbology": "ean13", "text": "3308090002520"}]
   },
   {
    "file": "real/img/3308650751738.jpg",
    "sha256": "3d8944b5e7e52cb87a992b59590f1d5796142769e915fd21faa3a2299936950f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3308650751738"
+   "symbols": [{"symbology": "ean13", "text": "3308650751738"}]
   },
   {
    "file": "real/img/3322693000110.jpg",
    "sha256": "cee1a92847aed2712da221396e04516c8309a2b84f307b354abb3afc9fc40bbc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3322693000110"
+   "symbols": [{"symbology": "ean13", "text": "3322693000110"}]
   },
   {
    "file": "real/img/3329770051072.jpg",
    "sha256": "682a7c92351387d41315637d7c43add99be4bd379c0b1497c51e7617f32a4e77",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3329770051072"
+   "symbols": [{"symbology": "ean13", "text": "3329770051072"}]
   },
   {
    "file": "real/img/3332621081012.jpg",
    "sha256": "1b55ade40f9e1454eee1722074d8d63b328a9d4ede71bf07268e3ff1ea50ed9e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3332621081012"
+   "symbols": [{"symbology": "ean13", "text": "3332621081012"}]
   },
   {
    "file": "real/img/3343929291218.jpg",
    "sha256": "e1eab653cdf9bca836eaced7a7851ddd8e840c01747f41cd4ef0ea3da8b5f904",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3343929291218"
+   "symbols": [{"symbology": "ean13", "text": "3343929291218"}]
   },
   {
    "file": "real/img/3346963004141.jpg",
    "sha256": "82302ba2bbd629d90a0a08e360b27b9c580a47325cced8a929b2c9788e45a084",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3346963004141"
+   "symbols": [{"symbology": "ean13", "text": "3346963004141"}]
   },
   {
    "file": "real/img/3347430009980.jpg",
    "sha256": "e33033ef2d20dd059ca6046a1371f3f2a3d1c7a73bafabceb354d40a7ad89a7b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3347430009980"
+   "symbols": [{"symbology": "ean13", "text": "3347430009980"}]
   },
   {
    "file": "real/img/3347430019309.jpg",
    "sha256": "27e635a09b0c4a8097d89e7cd8e66cab5f20d16572a82435c48c6a2c05f21e21",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3347430019309"
+   "symbols": [{"symbology": "ean13", "text": "3347430019309"}]
   },
   {
    "file": "real/img/3347430022439.jpg",
    "sha256": "b303799f04b9c3a01bf3d2fc1ce8b8855bb8e7450dc6f31fbbb9a3fb378d5e6c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3347430022439"
+   "symbols": [{"symbology": "ean13", "text": "3347430022439"}]
   },
   {
    "file": "real/img/3350031672903.jpg",
    "sha256": "719ff6448e29df66bb3a444ba91c0b0c31d76558189e212190db68dab1daaee6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3350031672903"
+   "symbols": [{"symbology": "ean13", "text": "3350031672903"}]
   },
   {
    "file": "real/img/3350033083752.jpg",
    "sha256": "8eeda7d46cc3f8c1695f266d90e508e8ba17dfee98fd94a7894ccd72428d8126",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3350033083752"
+   "symbols": [{"symbology": "ean13", "text": "3350033083752"}]
   },
   {
    "file": "real/img/3350033589308.jpg",
    "sha256": "63f54404169e44a569b68a7005da84b16e69cf248bdc2ae01f1d14e74095a4c9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3350033589308"
+   "symbols": [{"symbology": "ean13", "text": "3350033589308"}]
   },
   {
    "file": "real/img/3375880670542.jpg",
    "sha256": "fc51c2ca1514a649ce0a4906e389da3c1dc3a7d658c41c188df8cafc1fabe71a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3375880670542"
+   "symbols": [{"symbology": "ean13", "text": "3375880670542"}]
   },
   {
    "file": "real/img/3376370112665.jpg",
    "sha256": "3870b773241622af86425eff30ebbbad834d32b560e4e6c66b48eabb471b155e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3376370112665"
+   "symbols": [{"symbology": "ean13", "text": "3376370112665"}]
   },
   {
    "file": "real/img/3376370131956.jpg",
    "sha256": "ba9811373ab304166aab47bdd0a2cbdddf20380ae5e80ce750c9936a4e0c4ba7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3376370131956"
+   "symbols": [{"symbology": "ean13", "text": "3376370131956"}]
   },
   {
    "file": "real/img/3383740001764.jpg",
    "sha256": "9a86c56cf1516b3b0a3542dc559e17f8ba9677c61c74f919e6c968c767b05311",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3383740001764"
+   "symbols": [{"symbology": "ean13", "text": "3383740001764"}]
   },
   {
    "file": "real/img/3384480028721.jpg",
    "sha256": "15869ee213ad44ae81b1150b963ebce7cdee3f6b7d974e5e0783324d147e7c85",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3384480028721"
+   "symbols": [{"symbology": "ean13", "text": "3384480028721"}]
   },
   {
    "file": "real/img/3384480028950.jpg",
    "sha256": "69b7ed9315a9f545918ea0c3f24c4398b4c0dd48176df142febbdce48d0cd571",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3384480028950"
+   "symbols": [{"symbology": "ean13", "text": "3384480028950"}]
   },
   {
    "file": "real/img/3384480031486.jpg",
    "sha256": "9c26ca9197d92bfc7d0528e716da3242ceeb7b141325d31aa8e10e197519533f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3384480031486"
+   "symbols": [{"symbology": "ean13", "text": "3384480031486"}]
   },
   {
    "file": "real/img/3384480092036.jpg",
    "sha256": "6e5b2599af3c44363f11e31660d46291c6eb6a8ae9f0961ee8bd6be245969f06",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3384480092036"
+   "symbols": [{"symbology": "ean13", "text": "3384480092036"}]
   },
   {
    "file": "real/img/3385570025446.jpg",
    "sha256": "af9d19ceb5b161ede0f3e033ce7f91b7c26f3c6fd3ed4c3329d834f1728c1710",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3385570025446"
+   "symbols": [{"symbology": "ean13", "text": "3385570025446"}]
   },
   {
    "file": "real/img/3399150070023.jpg",
    "sha256": "557795a46aa30404a86d4012ca2636cf5120bcfbbcc590ae3527083d9acaa4e4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3399150070023"
+   "symbols": [{"symbology": "ean13", "text": "3399150070023"}]
   },
   {
    "file": "real/img/3420629108715.jpg",
    "sha256": "df7c2ff3cc9bd986cb6b3aff41a67b615da43a54bab0d057c70552803a134143",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3420629108715"
+   "symbols": [{"symbology": "ean13", "text": "3420629108715"}]
   },
   {
    "file": "real/img/3428201435396.jpg",
    "sha256": "0cc4b4f5b3d4a429f2a920c51d2cdf922d2e43c312dc73b616de2f541cc77c63",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3428201435396"
+   "symbols": [{"symbology": "ean13", "text": "3428201435396"}]
   },
   {
    "file": "real/img/3428273180125.jpg",
    "sha256": "2e909922025644cdbbe623f529473af1a10d8fdb3e01641fb79f1e7e956ea6c2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3428273180125"
+   "symbols": [{"symbology": "ean13", "text": "3428273180125"}]
   },
   {
    "file": "real/img/3434380022180.jpg",
    "sha256": "db495dbd1de141ab2471e287cd263d269c1daa4af992c335a6fe40cd2bb39c91",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3434380022180"
+   "symbols": [{"symbology": "ean13", "text": "3434380022180"}]
   },
   {
    "file": "real/img/3436598133498.jpg",
    "sha256": "68dd8c95300a42646f56d56ba589e15ae6ea9f7a55c61d43bef8de1a1d12844d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3436598133498"
+   "symbols": [{"symbology": "ean13", "text": "3436598133498"}]
   },
   {
    "file": "real/img/3436598135768.jpg",
    "sha256": "66ea5589161d24a3ed028d5522d644d3f75887dcbfe0c7b12d04b418f47cbb4a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3436598135768"
+   "symbols": [{"symbology": "ean13", "text": "3436598135768"}]
   },
   {
    "file": "real/img/3436598135775.jpg",
    "sha256": "ba938833700e8f2ab493df71a6389dd1fab60eeb411bbe6294081c8cd50fa4c5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3436598135775"
+   "symbols": [{"symbology": "ean13", "text": "3436598135775"}]
   },
   {
    "file": "real/img/3436598135782.jpg",
    "sha256": "301a1aa5961cf138f273a158b8526324714a4cd91a63374a99281e0d79553317",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3436598135782"
+   "symbols": [{"symbology": "ean13", "text": "3436598135782"}]
   },
   {
    "file": "real/img/3436598136994.jpg",
    "sha256": "02c397cd010ad391af069e7111bd548346930115718a8daac101cf680e400225",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3436598136994"
+   "symbols": [{"symbology": "ean13", "text": "3436598136994"}]
   },
   {
    "file": "real/img/3438860004062.jpg",
    "sha256": "e8fc42314390207cb03657df3e80f9d404e32e1b44806b39ce67a7c1fce174d8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3438860004062"
+   "symbols": [{"symbology": "ean13", "text": "3438860004062"}]
   },
   {
    "file": "real/img/3449860407975.jpg",
    "sha256": "35deb2c539d1a7bb503450c538c06cfc0ffdb0ce3ca9cbc361b22af5e2022734",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3449860407975"
+   "symbols": [{"symbology": "ean13", "text": "3449860407975"}]
   },
   {
    "file": "real/img/3451790988677.jpg",
    "sha256": "e1dc57fcdbb0342d9e76ea19b449566f7410f3142bb14c0c312cfe64d1aa6b03",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3451790988677"
+   "symbols": [{"symbology": "ean13", "text": "3451790988677"}]
   },
   {
    "file": "real/img/3451790988813.jpg",
    "sha256": "098b60d3c1cccbaddf830f226f8dab04dce881adc8e4d90ffd21ceb36043dd10",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3451790988813"
+   "symbols": [{"symbology": "ean13", "text": "3451790988813"}]
   },
   {
    "file": "real/img/3453020023455.jpg",
    "sha256": "d1c5a2e2e451204661b81c5421b71e5a73aaac340c73e8b6ef59d9a3b593d2ac",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3453020023455"
+   "symbols": [{"symbology": "ean13", "text": "3453020023455"}]
   },
   {
    "file": "real/img/3456774791342.jpg",
    "sha256": "6d18391169cbee001b146100a52976dd30b3bc58a5683ccd4b7406a59b160510",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3456774791342"
+   "symbols": [{"symbology": "ean13", "text": "3456774791342"}]
   },
   {
    "file": "real/img/3480347120413.jpg",
    "sha256": "1c73b648c9d542aa5bda99bc5e65ea29f98fc378ac7a2066d855cca07ced6963",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3480347120413"
+   "symbols": [{"symbology": "ean13", "text": "3480347120413"}]
   },
   {
    "file": "real/img/3483130000879.jpg",
    "sha256": "1dcdcfa3b3f13de73ec4b3e2c9bef6cb712044c41d19e2c9e78ce34ea3d7c04f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3483130000879"
+   "symbols": [{"symbology": "ean13", "text": "3483130000879"}]
   },
   {
    "file": "real/img/3492843923009.jpg",
    "sha256": "c7557c6f01acb2c0b0f1741eee72e5febc3f1144143928fd922df85e596cef34",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3492843923009"
+   "symbols": [{"symbology": "ean13", "text": "3492843923009"}]
   },
   {
    "file": "real/img/3503112000625.jpg",
    "sha256": "26b6df1d42f31e891d0eee5ef1760917a839c1dd7a483efd5b6a309debfc31d0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3503112000625"
+   "symbols": [{"symbology": "ean13", "text": "3503112000625"}]
   },
   {
    "file": "real/img/3521048216156.jpg",
    "sha256": "ef143ebb324c4171e20aa633a8c8cc7d22e137c0d736ff6b32b08df14b689fa6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3521048216156"
+   "symbols": [{"symbology": "ean13", "text": "3521048216156"}]
   },
   {
    "file": "real/img/3521872711056.jpg",
    "sha256": "6fd34aa000a3e2585e1008679b86a51a80e4d663d2cf663d6fc9463fecac0030",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3521872711056"
+   "symbols": [{"symbology": "ean13", "text": "3521872711056"}]
   },
   {
    "file": "real/img/3560070382828.jpg",
    "sha256": "42405bbfc6070fca5042f0a05f6cbcea41bfbf95b6bbff29485f54f1e20a2f49",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3560070382828"
+   "symbols": [{"symbology": "ean13", "text": "3560070382828"}]
   },
   {
    "file": "real/img/3560070669813.jpg",
    "sha256": "bd7d4aa12f961faf4343eb7b2addba3eb373ee5450510daf92fe752e88f424a8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3560070669813"
+   "symbols": [{"symbology": "ean13", "text": "3560070669813"}]
   },
   {
    "file": "real/img/3560070677825.jpg",
    "sha256": "8710627ed8dfd39e663917fca25074708e4a435f4ee93b7c2c794011fbd6227d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3560070677825"
+   "symbols": [{"symbology": "ean13", "text": "3560070677825"}]
   },
   {
    "file": "real/img/3560070742332.jpg",
    "sha256": "5f8750be7e64395cd61cac48c9ccbda6ff8f6090022cedf56cfd245baa9d0643",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3560070742332"
+   "symbols": [{"symbology": "ean13", "text": "3560070742332"}]
   },
   {
    "file": "real/img/3560070907410.jpg",
    "sha256": "c4785c98401911399ab58deb14842c8ccac2bc03d41291c053fde81ebe367fec",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3560070907410"
+   "symbols": [{"symbology": "ean13", "text": "3560070907410"}]
   },
   {
    "file": "real/img/3560071121068.jpg",
    "sha256": "d4abdb52833f6c30630104c4fa8ee1e350ab2cdff554022069544e8438078f08",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3560071121068"
+   "symbols": [{"symbology": "ean13", "text": "3560071121068"}]
   },
   {
    "file": "real/img/3560071182816.jpg",
    "sha256": "fc6903c62b8a2e1445a52dfb7f1fe95b2edf06b88a35cf6b7b13779baad23691",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3560071182816"
+   "symbols": [{"symbology": "ean13", "text": "3560071182816"}]
   },
   {
    "file": "real/img/3564706540255.jpg",
    "sha256": "fbed5735395f97a69722d9ed9fe9f9fb3cb2e4400c121069b5258614697b8e20",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3564706540255"
+   "symbols": [{"symbology": "ean13", "text": "3564706540255"}]
   },
   {
    "file": "real/img/3576569100095.jpg",
    "sha256": "bc8f3834556ad0c536e06778a2b750a437dd3aaec6bae5a858644de18252b9aa",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3576569100095"
+   "symbols": [{"symbology": "ean13", "text": "3576569100095"}]
   },
   {
    "file": "real/img/3578030005090.jpg",
    "sha256": "a59a15aa020f84729d3eaf9a86362aa3342f5abb0bb96a559dbc16a698bbfe19",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3578030005090"
+   "symbols": [{"symbology": "ean13", "text": "3578030005090"}]
   },
   {
    "file": "real/img/3595531011900.jpg",
    "sha256": "1b90af6eff2cb79d48a8712f5b2670a888a8f6469470af34a026d0925afd13d5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3595531011900"
+   "symbols": [{"symbology": "ean13", "text": "3595531011900"}]
   },
   {
    "file": "real/img/3596710303663.jpg",
    "sha256": "7a55be982e89eaf535ef56d3dc3edf1b0ee93b03dd3af41c585eba0b9528105b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3596710303663"
+   "symbols": [{"symbology": "ean13", "text": "3596710303663"}]
   },
   {
    "file": "real/img/3596710462186.jpg",
    "sha256": "f76a5e64f4870bff39e0fcf561feeb8b468d0c067dc12234b01d9c47ece76c19",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3596710462186"
+   "symbols": [{"symbology": "ean13", "text": "3596710462186"}]
   },
   {
    "file": "real/img/3596710479467.jpg",
    "sha256": "b3937e358d74de408c841d2006f3328941ff1e328f8daf38e8ca02daa51b2b62",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3596710479467"
+   "symbols": [{"symbology": "ean13", "text": "3596710479467"}]
   },
   {
    "file": "real/img/3596810056674.jpg",
    "sha256": "05d9d6f71beb588f73b20b77a2a2ddeb5feee89cc8752234590021689e1993a8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3596810056674"
+   "symbols": [{"symbology": "ean13", "text": "3596810056674"}]
   },
   {
    "file": "real/img/3605970054915.jpg",
    "sha256": "5f4427e2b425d915fc25d8914c82908227d8a3911197aa6ee0c7dff730a74e58",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3605970054915"
+   "symbols": [{"symbology": "ean13", "text": "3605970054915"}]
   },
   {
    "file": "real/img/3608734749508.jpg",
    "sha256": "9908b9082024fae6946eb791dcb672ecf859c5e794f08bb5c62a581953dc7ba0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3608734749508"
+   "symbols": [{"symbology": "ean13", "text": "3608734749508"}]
   },
   {
    "file": "real/img/3661112054045.jpg",
    "sha256": "bbcf7bff96cb28dddeadcfcb252eca4392a67da59dd665b01ae763ceedff6a90",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3661112054045"
+   "symbols": [{"symbology": "ean13", "text": "3661112054045"}]
   },
   {
    "file": "real/img/3661112055813.jpg",
    "sha256": "ffb8a0aeed1eafb9fb98421a6021d0281314cd08216c49d2b549bc830df946f0",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3661112055813"
+   "symbols": [{"symbology": "ean13", "text": "3661112055813"}]
   },
   {
    "file": "real/img/3661112056261.jpg",
    "sha256": "e9cd372bd18459f4c3f56fa43f87149b6f1097cce8a6a63f2daa1189f47c61b3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3661112056261"
+   "symbols": [{"symbology": "ean13", "text": "3661112056261"}]
   },
   {
    "file": "real/img/3661112056810.jpg",
    "sha256": "ff9ce551ba06dd6a9176eeb721603a9a470f4d4d9251c1a2660cb48ecb97c46e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3661112056810"
+   "symbols": [{"symbology": "ean13", "text": "3661112056810"}]
   },
   {
    "file": "real/img/3661112056834.jpg",
    "sha256": "c5a851e81879519f3ab392d03e94a0f721b36f2d740be6bb7e7761615078a2f8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3661112056834"
+   "symbols": [{"symbology": "ean13", "text": "3661112056834"}]
   },
   {
    "file": "real/img/3661112092092.jpg",
    "sha256": "8579e3c975a29b73a7d4cb4bb77c658982bdca3f5721979d8fc6490975185262",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3661112092092"
+   "symbols": [{"symbology": "ean13", "text": "3661112092092"}]
   },
   {
    "file": "real/img/3664335020088.jpg",
    "sha256": "a4b5c8bc4405248dc0ddaa64d3c00591079287bd32946be3cfe1f65c840a5abc",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3664335020088"
+   "symbols": [{"symbology": "ean13", "text": "3664335020088"}]
   },
   {
    "file": "real/img/3700003780783.jpg",
    "sha256": "bc022e8a0f8f6c2d3de1b283b2fe02373df1054e7c1bd0f996201ce5c5d98ee1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3700003780783"
+   "symbols": [{"symbology": "ean13", "text": "3700003780783"}]
   },
   {
    "file": "real/img/3700048837527.jpg",
    "sha256": "1b32014ae01458496c52731cd996603ee9a74481ecf1519cc3e72f1a3582350a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3700048837527"
+   "symbols": [{"symbology": "ean13", "text": "3700048837527"}]
   },
   {
    "file": "real/img/3700152400051.jpg",
    "sha256": "43fa25fb6ec823e65780431f254621af5e91917163c110c061d8d3fae7e53ca2",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3700152400051"
+   "symbols": [{"symbology": "ean13", "text": "3700152400051"}]
   },
   {
    "file": "real/img/3700194100117.jpg",
    "sha256": "9413e86a44a6fa338c0c37120e4d20b82da24bc8073cba14954f5f03c96f6980",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3700194100117"
+   "symbols": [{"symbology": "ean13", "text": "3700194100117"}]
   },
   {
    "file": "real/img/3700216253159.jpg",
    "sha256": "b8e68976a34ecf7f937b2cd98137e18b440602373eb8fe33e1166ea4a16bb8fd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3700216253159"
+   "symbols": [{"symbology": "ean13", "text": "3700216253159"}]
   },
   {
    "file": "real/img/3760005540419.jpg",
    "sha256": "cace44f89970d8c8a2f0e57d31ab5c8e7958cdf3821cd9351c316b7e59bcded3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760005540419"
+   "symbols": [{"symbology": "ean13", "text": "3760005540419"}]
   },
   {
    "file": "real/img/3760010095584.jpg",
    "sha256": "4b8636041ce5a79dd65a401346c3f91e35efacefe0b7500c44710bfd01b158bf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760010095584"
+   "symbols": [{"symbology": "ean13", "text": "3760010095584"}]
   },
   {
    "file": "real/img/3760014990632.jpg",
    "sha256": "8747e60db930f4a1193d5b896f4c70b5fce4c9c660b8e99f4ef0624350000a9d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760014990632"
+   "symbols": [{"symbology": "ean13", "text": "3760014990632"}]
   },
   {
    "file": "real/img/3760017710077.jpg",
    "sha256": "ad436514d437d1398176c496f7766437b89f6d616800e697fafc86619dd3da47",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760017710077"
+   "symbols": [{"symbology": "ean13", "text": "3760017710077"}]
   },
   {
    "file": "real/img/3760048441834.jpg",
    "sha256": "17a244519f8407e851a10682da82d58bd28ae4423c1255ce80541e12101d80f6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760048441834"
+   "symbols": [{"symbology": "ean13", "text": "3760048441834"}]
   },
   {
    "file": "real/img/3760057250038.jpg",
    "sha256": "91a25b423b27699f8b2489d3ffbc1f26ee497baa9046966c0bcb7cf26e561397",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760057250038"
+   "symbols": [{"symbology": "ean13", "text": "3760057250038"}]
   },
   {
    "file": "real/img/3760070424898.jpg",
    "sha256": "f45874d6640ccd726631bb99039ff89aa44716dac880b2a9c5007a8dddb5356a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760070424898"
+   "symbols": [{"symbology": "ean13", "text": "3760070424898"}]
   },
   {
    "file": "real/img/3760091570253.jpg",
    "sha256": "a3c1fce00dacfed927fede7ac9b3532e9c7e15bcb4eb504a135a2cb2de242e33",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760091570253"
+   "symbols": [{"symbology": "ean13", "text": "3760091570253"}]
   },
   {
    "file": "real/img/3760091579201.jpg",
    "sha256": "e8e1a583b8f38ebc08df1bbd2f3a779de80f830adfa56ccd3a6efe41ab0f2dda",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760091579201"
+   "symbols": [{"symbology": "ean13", "text": "3760091579201"}]
   },
   {
    "file": "real/img/3760091970275.jpg",
    "sha256": "456bde405913493e3181d142fd936239b7451eb0f8b4e96bd505a4df8f8c1b2b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760091970275"
+   "symbols": [{"symbology": "ean13", "text": "3760091970275"}]
   },
   {
    "file": "real/img/3760133675441.jpg",
    "sha256": "6d2430c22a353a482940b2d6ca2e0241e5c23f7223b597f895c61e5573db0d10",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760133675441"
+   "symbols": [{"symbology": "ean13", "text": "3760133675441"}]
   },
   {
    "file": "real/img/3760166270453.jpg",
    "sha256": "a84ec52ed2e52490ce1ff9b36c854da0ccb12bc44fcada5097ea26e1dd373714",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760166270453"
+   "symbols": [{"symbology": "ean13", "text": "3760166270453"}]
   },
   {
    "file": "real/img/3760224580593.jpg",
    "sha256": "05121abd7dabe062289da305b68defe869226b6317c3a1315ac01159faf08b7e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760224580593"
+   "symbols": [{"symbology": "ean13", "text": "3760224580593"}]
   },
   {
    "file": "real/img/3760233360315.jpg",
    "sha256": "f5b114c6c4d57ab1dd91dd347376ff5bdeff7ea694343c96a7e845a103c79c57",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760233360315"
+   "symbols": [{"symbology": "ean13", "text": "3760233360315"}]
   },
   {
    "file": "real/img/3760281772047.jpg",
    "sha256": "9e5fc5e79d243195c9cde51e63b7da657fc8ab60fba7e9177ae4bc57fb68b909",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3760281772047"
+   "symbols": [{"symbology": "ean13", "text": "3760281772047"}]
   },
   {
    "file": "real/img/3770003442042.jpg",
    "sha256": "36dbbe6f62221077945dd719b5fb5f0d1ace1225e46354e1122ea8d78b07b0b4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3770003442042"
+   "symbols": [{"symbology": "ean13", "text": "3770003442042"}]
   },
   {
    "file": "real/img/3770003442059.jpg",
    "sha256": "f976ad091f6571f1893c2a3a3b373c6c728e426fa3e520a5a332d3c816405275",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3770003442059"
+   "symbols": [{"symbology": "ean13", "text": "3770003442059"}]
   },
   {
    "file": "real/img/3770004232185.jpg",
    "sha256": "be48b8abba846e34e74fe80979c14d8c5f79a7571262e205eef20a3e9400c8ba",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3770004232185"
+   "symbols": [{"symbology": "ean13", "text": "3770004232185"}]
   },
   {
    "file": "real/img/3770007002020.jpg",
    "sha256": "79d547cc6852aa09d777d221e488e5c6a760056d45f25d4516659232cb32206f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3770007002020"
+   "symbols": [{"symbology": "ean13", "text": "3770007002020"}]
   },
   {
    "file": "real/img/3838975533448.jpg",
    "sha256": "e3200151f05690ad5e2770e82ee712ceae7cc1187e38d3d644498c64a01b3770",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3838975533448"
+   "symbols": [{"symbology": "ean13", "text": "3838975533448"}]
   },
   {
    "file": "real/img/3847800000871.jpg",
    "sha256": "73c7f21888c1c3a4cc4e18a391cd48c4893e19e5dcdd78393240503bf99f7611",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "3847800000871"
+   "symbols": [{"symbology": "ean13", "text": "3847800000871"}]
   },
   {
    "file": "real/img/4006196886325.jpg",
    "sha256": "2ab02ccbbf2d6e1cd7fd44cc13ecf0cef097ec4a9ef88fffbae6477e99c294d4",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4006196886325"
+   "symbols": [{"symbology": "ean13", "text": "4006196886325"}]
   },
   {
    "file": "real/img/4007947010983.jpg",
    "sha256": "13b76f05a21bb0af66b78f5d476e636c636fa224cdd68408d5fcda05fa9475e3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4007947010983"
+   "symbols": [{"symbology": "ean13", "text": "4007947010983"}]
   },
   {
    "file": "real/img/4008298081103.jpg",
    "sha256": "1d939a4e39cdccd0f886770360952d770f47482ddf2ac765dc4cc278c51b5ff7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4008298081103"
+   "symbols": [{"symbology": "ean13", "text": "4008298081103"}]
   },
   {
    "file": "real/img/4018342125233.jpg",
    "sha256": "0b9bca269b835c4e195c2d473e817284f5c22b40309f6ac7aff74f5d14a9dad1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4018342125233"
+   "symbols": [{"symbology": "ean13", "text": "4018342125233"}]
   },
   {
    "file": "real/img/4056489148203.jpg",
    "sha256": "9207944b62b77d2d592d676a46283bfd8b2499762991dc64cae34e9a16bd1bd3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4056489148203"
+   "symbols": [{"symbology": "ean13", "text": "4056489148203"}]
   },
   {
    "file": "real/img/4061458039277.jpg",
    "sha256": "691896d0f73a695b704c496b8cd2b7ec5f92bb42de2feff6250ebf2c8639b9a8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4061458039277"
+   "symbols": [{"symbology": "ean13", "text": "4061458039277"}]
   },
   {
    "file": "real/img/4311596447510.jpg",
    "sha256": "9228c92c69cdac7b317624e5882a16de8c06dcf54533cc9025c11b60f78c0aae",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4311596447510"
+   "symbols": [{"symbology": "ean13", "text": "4311596447510"}]
   },
   {
    "file": "real/img/4314187032751.jpg",
    "sha256": "119f94ec256ce47f86b0f002c218af319e47a50380143b6c24194af22e94ca04",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4314187032751"
+   "symbols": [{"symbology": "ean13", "text": "4314187032751"}]
   },
   {
    "file": "real/img/4316268474894.jpg",
    "sha256": "9112e92446862bf2d31e0e24b9c635f07a1f5abb0bca688228fec228fe1cabda",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4316268474894"
+   "symbols": [{"symbology": "ean13", "text": "4316268474894"}]
   },
   {
    "file": "real/img/4316268571647.jpg",
    "sha256": "5f2561c0c47a1dab996cb8c24bfa47e414ca07241af580252de720b1c61a3c2e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4316268571647"
+   "symbols": [{"symbology": "ean13", "text": "4316268571647"}]
   },
   {
    "file": "real/img/4712511891072.jpg",
    "sha256": "39f06776127c4ed923ff51b02aa3ad33613ee989b2e1677f34483f47c199bf4a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4712511891072"
+   "symbols": [{"symbology": "ean13", "text": "4712511891072"}]
   },
   {
    "file": "real/img/4968988050904.jpg",
    "sha256": "ecaad681a46d6971f731f789f4cf077aebf826face253f0e735821a5971ea055",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "4968988050904"
+   "symbols": [{"symbology": "ean13", "text": "4968988050904"}]
   },
   {
    "file": "real/img/5000167157413.jpg",
    "sha256": "55a1bd105dc2837711070c0ffe1dc295495c5ef8142ad11068a9460f61fa5a6e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5000167157413"
+   "symbols": [{"symbology": "ean13", "text": "5000167157413"}]
   },
   {
    "file": "real/img/5028197678234.jpg",
    "sha256": "f127e51222c028960c622884cf741799f1e3aef6596165d51924e89527928909",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5028197678234"
+   "symbols": [{"symbology": "ean13", "text": "5028197678234"}]
   },
   {
    "file": "real/img/5060360503288.jpg",
    "sha256": "0f6246c8b0c540b88f576f590202f31c9eb00897729c9f63cc0153b0ee1b1b62",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5060360503288"
+   "symbols": [{"symbology": "ean13", "text": "5060360503288"}]
   },
   {
    "file": "real/img/5099874227700.jpg",
    "sha256": "173b1a02570988cd93ae848f421cc1d9f5acbd26f1ed4f72c06a1eaca14496cf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5099874227700"
+   "symbols": [{"symbology": "ean13", "text": "5099874227700"}]
   },
   {
    "file": "real/img/5400141048988.jpg",
    "sha256": "90d6d7596b4e02599b379093226b3bdc0a3ff87f3696e288005c12340850344d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5400141048988"
+   "symbols": [{"symbology": "ean13", "text": "5400141048988"}]
   },
   {
    "file": "real/img/5400155077233.jpg",
    "sha256": "b6109c1e562d7406677e62d5779d7ab1c4d47c5a49cce66d091354b6baef287f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5400155077233"
+   "symbols": [{"symbology": "ean13", "text": "5400155077233"}]
   },
   {
    "file": "real/img/5411328060686.jpg",
    "sha256": "07d99f99c6bfa02f2977ee3f808c73400a346eb66f263744370e5f74cb573d1a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5411328060686"
+   "symbols": [{"symbology": "ean13", "text": "5411328060686"}]
   },
   {
    "file": "real/img/5425028576125.jpg",
    "sha256": "69b5750d3c3acaf08792f4338d4d884d9a633889f95564b20d28a64b3230237e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5425028576125"
+   "symbols": [{"symbology": "ean13", "text": "5425028576125"}]
   },
   {
    "file": "real/img/5601009981854.jpg",
    "sha256": "484d24eb5513901a5494aecf5241e7c9f9e305262ea89201c7ebac48fb46b3e5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5601009981854"
+   "symbols": [{"symbology": "ean13", "text": "5601009981854"}]
   },
   {
    "file": "real/img/5900531000010.jpg",
    "sha256": "0b5577e610bf3264fdc4caae81a15faf10ae497f745a1bdf278ca0d583fa22aa",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5900531000010"
+   "symbols": [{"symbology": "ean13", "text": "5900531000010"}]
   },
   {
    "file": "real/img/5902899126227.jpg",
    "sha256": "4610e39e4531857a1d3dba0adfc98878470b119616cd667e33165fa0f50eee93",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5902899126227"
+   "symbols": [{"symbology": "ean13", "text": "5902899126227"}]
   },
   {
    "file": "real/img/5998997405906.jpg",
    "sha256": "8c7526c06ce4f951306a8f059cfcbfa9c3ec640eef0e763e03f3f84ca22f7113",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5998997405906"
+   "symbols": [{"symbology": "ean13", "text": "5998997405906"}]
   },
   {
    "file": "real/img/5998997405913.jpg",
    "sha256": "3d33c78a9c12c1423abe2a68b9e9993c597ad09bae3003f87b801e080d4e52f8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "5998997405913"
+   "symbols": [{"symbology": "ean13", "text": "5998997405913"}]
   },
   {
    "file": "real/img/7350027794776.jpg",
    "sha256": "e2be617aeba8699adfb603039a4b00ddb3112a4bf8a8162a3f3e6ba1030aec49",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7350027794776"
+   "symbols": [{"symbology": "ean13", "text": "7350027794776"}]
   },
   {
    "file": "real/img/7610029167351.jpg",
    "sha256": "a4c3f74f4ad339e0a5ccc5c2896c77bb6f55b9af7395c62e5f6ab5587114257b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7610029167351"
+   "symbols": [{"symbology": "ean13", "text": "7610029167351"}]
   },
   {
    "file": "real/img/7610645300095.jpg",
    "sha256": "eb23001fc74883bf74bd3c2850242ab128ecd1ed8078c64ec661922c37552c70",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7610645300095"
+   "symbols": [{"symbology": "ean13", "text": "7610645300095"}]
   },
   {
    "file": "real/img/7610695002673.jpg",
    "sha256": "49d7791fef7abe8a0427eb4ee58735da5304f72cdcc3a41e292e95ad8cf3a76e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7610695002673"
+   "symbols": [{"symbology": "ean13", "text": "7610695002673"}]
   },
   {
    "file": "real/img/7610695003489.jpg",
    "sha256": "f6cbaeedc92d197143b79423af3ac149076e54ffbd8e3646847116a477d72c18",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7610695003489"
+   "symbols": [{"symbology": "ean13", "text": "7610695003489"}]
   },
   {
    "file": "real/img/7610829193246.jpg",
    "sha256": "7645b1333a9d5ab4aabdefd2117a6392764e7aa7e257b19ae54d53887844350f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7610829193246"
+   "symbols": [{"symbology": "ean13", "text": "7610829193246"}]
   },
   {
    "file": "real/img/7613034028358.jpg",
    "sha256": "88d46013b197997e8271bdb1cd7c4d9b786386ddb690e96bc7d562b291375c9b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7613034028358"
+   "symbols": [{"symbology": "ean13", "text": "7613034028358"}]
   },
   {
    "file": "real/img/7613035336131.jpg",
    "sha256": "8d9514bef986eda0953e458c3b4b18408766bb60451d13f63fa202af2abfe797",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7613035336131"
+   "symbols": [{"symbology": "ean13", "text": "7613035336131"}]
   },
   {
    "file": "real/img/7613035989535.jpg",
    "sha256": "4b37290cd00bc3e575382f7f763ce3c5fd6204891fd4085c78d7736fb03716ed",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7613035989535"
+   "symbols": [{"symbology": "ean13", "text": "7613035989535"}]
   },
   {
    "file": "real/img/7617027981514.jpg",
    "sha256": "02db7312ada987a29f258baaf9062b6f740085a9f93f07513ccfd44df105a183",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7617027981514"
+   "symbols": [{"symbology": "ean13", "text": "7617027981514"}]
   },
   {
    "file": "real/img/7640152110436.jpg",
    "sha256": "ff2c58390f9a4a6b74fec49e311ef0d3eb6605fdf41c63171c726c14f2db6d18",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7640152110436"
+   "symbols": [{"symbology": "ean13", "text": "7640152110436"}]
   },
   {
    "file": "real/img/7776416961848.jpg",
    "sha256": "0521ca98cdd86fad7a93cd5857c7bc64ba60658638707719001d6e8b0da29d52",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7776416961848"
+   "symbols": [{"symbology": "ean13", "text": "7776416961848"}]
   },
   {
    "file": "real/img/7794000597938.jpg",
    "sha256": "207d7df84853e136c2d39c1e8196d148862dfe041389cb0dae8d356f175191d7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "7794000597938"
+   "symbols": [{"symbology": "ean13", "text": "7794000597938"}]
   },
   {
    "file": "real/img/8410297151026.jpg",
    "sha256": "854a64ca612fd1db931cea3d052362f2e3e289b234fecd26b26325eaedb9984e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8410297151026"
+   "symbols": [{"symbology": "ean13", "text": "8410297151026"}]
   },
   {
    "file": "real/img/8410320208420.jpg",
    "sha256": "9d346d91d5526c9e8562c9a5fbe04ddfff8b309952ac49a4f99248f22a65ee44",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8410320208420"
+   "symbols": [{"symbology": "ean13", "text": "8410320208420"}]
   },
   {
    "file": "real/img/8410500008109.jpg",
    "sha256": "16a950efc7b4c6e77a769f6c9f0323a48429faea746e11ed76f4ff66d01b704d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8410500008109"
+   "symbols": [{"symbology": "ean13", "text": "8410500008109"}]
   },
   {
    "file": "real/img/8410500008871.jpg",
    "sha256": "0329a41a442face87bad5a2215eb5129a21cb3a3a09557bde3d4d8045e117a46",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8410500008871"
+   "symbols": [{"symbology": "ean13", "text": "8410500008871"}]
   },
   {
    "file": "real/img/8412276994969.jpg",
    "sha256": "74aeceabeb0da94b15b17248dacda382a0463c0bdf7ee0e3dce86011c6c23cc3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8412276994969"
+   "symbols": [{"symbology": "ean13", "text": "8412276994969"}]
   },
   {
    "file": "real/img/8412279158153.jpg",
    "sha256": "568e70c5fa5509151f6dc19e76bcbf3cc789dd4eb2f8f9577480761617cd26eb",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8412279158153"
+   "symbols": [{"symbology": "ean13", "text": "8412279158153"}]
   },
   {
    "file": "real/img/8412749007615.jpg",
    "sha256": "76b3bb34cf49e07ad47d739cfe75e5b41ee9a9ac1c586c2694e0e55a6ac89327",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8412749007615"
+   "symbols": [{"symbology": "ean13", "text": "8412749007615"}]
   },
   {
    "file": "real/img/8421691751538.jpg",
    "sha256": "eb5f227ffe4ea61c53189df12d0e0b45c3418282aa396be109839726e53ab332",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8421691751538"
+   "symbols": [{"symbology": "ean13", "text": "8421691751538"}]
   },
   {
    "file": "real/img/8422947520014.jpg",
    "sha256": "942dca1d11bdb1d1354e43217f558e76fca711120634e1c19877f4740734c264",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8422947520014"
+   "symbols": [{"symbology": "ean13", "text": "8422947520014"}]
   },
   {
    "file": "real/img/8423261112015.jpg",
    "sha256": "fe4b83c57fb514fee70817cb2cc6035c441168ecabd7f234b48abd9c580abed6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8423261112015"
+   "symbols": [{"symbology": "ean13", "text": "8423261112015"}]
   },
   {
    "file": "real/img/8425545174016.jpg",
    "sha256": "43c7364608d71a2f5b835dec9b286ae87d3c80d8f4b000cde08062adcdaa97b9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8425545174016"
+   "symbols": [{"symbology": "ean13", "text": "8425545174016"}]
   },
   {
    "file": "real/img/8428159122268.jpg",
    "sha256": "44f3cc044d8ad810182b80d4f01fd394c0f7e343e0e32625e3fbaaa269eabacf",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8428159122268"
+   "symbols": [{"symbology": "ean13", "text": "8428159122268"}]
   },
   {
    "file": "real/img/8435382805486.jpg",
    "sha256": "4c77ba79e07a33ae4e07e8d8dfde949559c25bde6c6cbcc8eede3fa46c22398a",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8435382805486"
+   "symbols": [{"symbology": "ean13", "text": "8435382805486"}]
   },
   {
    "file": "real/img/8480017169723.jpg",
    "sha256": "276e55dca6f5cc356817bb5dbecd6793bb8a090583428d9c1e89b3d370285403",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8480017169723"
+   "symbols": [{"symbology": "ean13", "text": "8480017169723"}]
   },
   {
    "file": "real/img/8595139719418.jpg",
    "sha256": "422968a27bce90d09d2ee87143605bd49aedb3eae4fe40734e02d9ed443b7b2f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8595139719418"
+   "symbols": [{"symbology": "ean13", "text": "8595139719418"}]
   },
   {
    "file": "real/img/8595139738815.jpg",
    "sha256": "c1a05938537637f99d5a1b83c8d85fdf26e11a02b60a759f4eadc3b209ee95a8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8595139738815"
+   "symbols": [{"symbology": "ean13", "text": "8595139738815"}]
   },
   {
    "file": "real/img/8595139738822.jpg",
    "sha256": "29bb208b0c4dda8c6b00cc9a6275937d63df8fad45aa7695180568f31d694fda",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8595139738822"
+   "symbols": [{"symbology": "ean13", "text": "8595139738822"}]
   },
   {
    "file": "real/img/8712439063403.jpg",
    "sha256": "479d3b657d8175c9b51c6ad23e6ead413457b490f34b96e2e2b49d0c99580f5b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8712439063403"
+   "symbols": [{"symbology": "ean13", "text": "8712439063403"}]
   },
   {
    "file": "real/img/8801007218618.jpg",
    "sha256": "b1d5250434ccad910fd4226b0f773e96e0e46ab29236e5bc6a8498de679c6322",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801007218618"
+   "symbols": [{"symbology": "ean13", "text": "8801007218618"}]
   },
   {
    "file": "real/img/8801037088724.jpg",
    "sha256": "5e1da5d8d1b358b37e7d0254498ae46ffebea9ed64568eebaad97739df04545b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801037088724"
+   "symbols": [{"symbology": "ean13", "text": "8801037088724"}]
   },
   {
    "file": "real/img/8801037091106.jpg",
    "sha256": "a02bca2bb2befcbf5c240ac5a9089b489ff14cec2ab77a8d17e567f7c4763fc5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801037091106"
+   "symbols": [{"symbology": "ean13", "text": "8801037091106"}]
   },
   {
    "file": "real/img/8801045132129.jpg",
    "sha256": "e866ac99486046fa282ea357cb295ae96df573e3f0c1dad607dfb5adb766070b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801045132129"
+   "symbols": [{"symbology": "ean13", "text": "8801045132129"}]
   },
   {
    "file": "real/img/8801045320212.jpg",
    "sha256": "33ef6e095798632c4554deabe420021ba93abee9fe1a5f781c627406bcd93f62",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801045320212"
+   "symbols": [{"symbology": "ean13", "text": "8801045320212"}]
   },
   {
    "file": "real/img/8801045522838.jpg",
    "sha256": "f91a15cf091a7810839c65ff51e2e2727785b6abad844752d8a2ce67fefa512d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801045522838"
+   "symbols": [{"symbology": "ean13", "text": "8801045522838"}]
   },
   {
    "file": "real/img/8801045525235.jpg",
    "sha256": "25cc3a09306e8ee75185f37d7383f60b8ca4a206342598430a8287c7ed5c1a1e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801045525235"
+   "symbols": [{"symbology": "ean13", "text": "8801045525235"}]
   },
   {
    "file": "real/img/8801051264487.jpg",
    "sha256": "da99fed877843d71838783320466b95c27bbbfb0fdac5321b99c6acd3f1ad3ef",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801051264487"
+   "symbols": [{"symbology": "ean13", "text": "8801051264487"}]
   },
   {
    "file": "real/img/8801052730547.jpg",
    "sha256": "fdfd389cf13e29b28b225d28a5be6f9d44abb07a2ff1b7f3211dfa145dd667a3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801052730547"
+   "symbols": [{"symbology": "ean13", "text": "8801052730547"}]
   },
   {
    "file": "real/img/8801056070809.jpg",
    "sha256": "fc166ee36273c68e7626de173d960df652324bc66766f71666d543b7376c5c1f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801056070809"
+   "symbols": [{"symbology": "ean13", "text": "8801056070809"}]
   },
   {
    "file": "real/img/8801083453002.jpg",
    "sha256": "e1d54e30eae89bdc721401b9a1fbc0ddb69b9100878ed4414584ea0bb322b6f7",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801083453002"
+   "symbols": [{"symbology": "ean13", "text": "8801083453002"}]
   },
   {
    "file": "real/img/8801115134237.jpg",
    "sha256": "d4ac5290b623cc509eed5309d836b5befc46788e41e098ad72a85a90d36717ed",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801115134237"
+   "symbols": [{"symbology": "ean13", "text": "8801115134237"}]
   },
   {
    "file": "real/img/8801155735081.jpg",
    "sha256": "78823db0258ce93809789a2c644371f91cff811cc342eef855a2d2bda0185548",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801155735081"
+   "symbols": [{"symbology": "ean13", "text": "8801155735081"}]
   },
   {
    "file": "real/img/8801214507185.jpg",
    "sha256": "235d66bff5bf74ef059cf83586add41724838aa7afeb30b55015bcae41627337",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8801214507185"
+   "symbols": [{"symbology": "ean13", "text": "8801214507185"}]
   },
   {
    "file": "real/img/8803206100862.jpg",
    "sha256": "bdbc3af691000da41aa95de1c67c9a28c166b32d1f809204a64c1a5f1838050c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8803206100862"
+   "symbols": [{"symbology": "ean13", "text": "8803206100862"}]
   },
   {
    "file": "real/img/8806182557187.jpg",
    "sha256": "eab56ab671b40e7cf330a200553f62e15c27fe026db75342daf171161fa48dcd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8806182557187"
+   "symbols": [{"symbology": "ean13", "text": "8806182557187"}]
   },
   {
    "file": "real/img/8808739000306.jpg",
    "sha256": "f3d552b71632eafaf161504cb43a872b63fff404665b590fc345eeea4a5a1e23",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8808739000306"
+   "symbols": [{"symbology": "ean13", "text": "8808739000306"}]
   },
   {
    "file": "real/img/8808739000504.jpg",
    "sha256": "5026ba5ca97d35afb73e2eb5285eb3d3395c32d30649c00b45cc03c0f376b103",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8808739000504"
+   "symbols": [{"symbology": "ean13", "text": "8808739000504"}]
   },
   {
    "file": "real/img/8809296884972.jpg",
    "sha256": "84a089eb0757bde879802ebb9b4f2c81ab9c80fc65a2632897f5f0d15c5e415e",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8809296884972"
+   "symbols": [{"symbology": "ean13", "text": "8809296884972"}]
   },
   {
    "file": "real/img/8809427880187.jpg",
    "sha256": "dfe0bd7c8cc9a4ba3279e752fcacce68a2792edb98dbef0d72cd14676c7f226f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8809427880187"
+   "symbols": [{"symbology": "ean13", "text": "8809427880187"}]
   },
   {
    "file": "real/img/8809487490180.jpg",
    "sha256": "6228fa16d32090a58dc7a542d41da84c4bcc79e24a3e9e54d70e50abbf1c8d71",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8809487490180"
+   "symbols": [{"symbology": "ean13", "text": "8809487490180"}]
   },
   {
    "file": "real/img/8850109001437.jpg",
    "sha256": "c90ef9e67e8779f8c47d99e63c05cc59d44f3ad016170150f4bf63f5d5a889b1",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8850109001437"
+   "symbols": [{"symbology": "ean13", "text": "8850109001437"}]
   },
   {
    "file": "real/img/8935136860292.jpg",
    "sha256": "cce8cebffd97642a275c64e079252da2eadcf059a48856e11b79d844fd056ea6",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8935136860292"
+   "symbols": [{"symbology": "ean13", "text": "8935136860292"}]
   },
   {
    "file": "real/img/8936079280819.jpg",
    "sha256": "3209519ad779af525f6db86d46ffb8c2a600b9f89d7f88141752bd6209f30463",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "8936079280819"
+   "symbols": [{"symbology": "ean13", "text": "8936079280819"}]
   },
   {
    "file": "real/img/9100000781099.jpg",
    "sha256": "43c13d4dba50ec38fd01572cda035660641fc4cc3a9ef8f144d42e4e16e751f5",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9100000781099"
+   "symbols": [{"symbology": "ean13", "text": "9100000781099"}]
   },
   {
    "file": "real/img/9417871101537.jpg",
    "sha256": "071871d06e61695069e298113fe49dea87dc747dfb93812a7b0adfb707eaa765",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9417871101537"
+   "symbols": [{"symbology": "ean13", "text": "9417871101537"}]
   },
   {
    "file": "real/img/9780060589462.jpg",
    "sha256": "2d65c80cc1b380956dcef9b4b377e86322a4bcd6e58e2c03343bc79889350264",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9780060589462"
+   "symbols": [{"symbology": "ean13", "text": "9780060589462"}]
   },
   {
    "file": "real/img/9780062018205.jpg",
    "sha256": "6adb82de289e0fffd40116b28d386c293397a3487cbfb2f6faa32bcc99c74137",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9780062018205"
+   "symbols": [{"symbology": "ean13", "text": "9780062018205"}]
   },
   {
    "file": "real/img/9780307345974.jpg",
    "sha256": "9009824cf0d463bb0356194fd42d446920d81006ba0cd7509f3c595508cf589f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9780307345974"
+   "symbols": [{"symbology": "ean13", "text": "9780307345974"}]
   },
   {
    "file": "real/img/9780307465351.jpg",
    "sha256": "1970adc52ecda72a44428b455a9d71cbaedd35ba9a8030589b228869ab69eefd",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9780307465351"
+   "symbols": [{"symbology": "ean13", "text": "9780307465351"}]
   },
   {
    "file": "real/img/9780393316049.jpg",
    "sha256": "a416feb900a0847c29e2b057186b8408938c25fc2165f9c6c53154fc19f8e1af",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9780393316049"
+   "symbols": [{"symbology": "ean13", "text": "9780393316049"}]
   },
   {
    "file": "real/img/9780393337136.jpg",
    "sha256": "6b7581fecadffc14cdc2f87df5a0239574b6896251037f683337802ecac6a601",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9780393337136"
+   "symbols": [{"symbology": "ean13", "text": "9780393337136"}]
   },
   {
    "file": "real/img/9780446563048.jpg",
    "sha256": "9431170792720b1b054a927dce5bf93d18c45b01b3838e9d4546a44f34e9340d",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9780446563048"
+   "symbols": [{"symbology": "ean13", "text": "9780446563048"}]
   },
   {
    "file": "real/img/9781400033935.jpg",
    "sha256": "59f5b94b1d94e7f18fcccbb499c4eea5a6171002df251922d93011252968194c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781400033935"
+   "symbols": [{"symbology": "ean13", "text": "9781400033935"}]
   },
   {
    "file": "real/img/9781400049622.jpg",
    "sha256": "8aa0194f49e626c675ae0a44c6abc9ca553df1d53022dd050b4d1c5183c0c7ac",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781400049622"
+   "symbols": [{"symbology": "ean13", "text": "9781400049622"}]
   },
   {
    "file": "real/img/9781400082315.jpg",
    "sha256": "93d87a9681c4c4c025f49948827d763ec51edbed4e19b3d4b6c67badc6eb583f",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781400082315"
+   "symbols": [{"symbology": "ean13", "text": "9781400082315"}]
   },
   {
    "file": "real/img/9781441413024.jpg",
    "sha256": "938323a10d4efc7a1a276ef1c327fab9abdb1d52e15d606299de19da3db5927c",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781441413024"
+   "symbols": [{"symbology": "ean13", "text": "9781441413024"}]
   },
   {
    "file": "real/img/9781573921817.jpg",
    "sha256": "3c016bc179e860e8101590bb395a2143d8503288a7a8132609787266035fa75b",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781573921817"
+   "symbols": [{"symbology": "ean13", "text": "9781573921817"}]
   },
   {
    "file": "real/img/9781591840565.jpg",
    "sha256": "8fc179e7d3e945c6eaf8cf3b9c36fb1dffa9384f7e25d06798bf0fd1b3fb5de9",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781591840565"
+   "symbols": [{"symbology": "ean13", "text": "9781591840565"}]
   },
   {
    "file": "real/img/9781591843177.jpg",
    "sha256": "f932fef78cd55466c0fe0a0216496a889565cd6527981861f86c0138b6e42ce3",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781591843177"
+   "symbols": [{"symbology": "ean13", "text": "9781591843177"}]
   },
   {
    "file": "real/img/9781591844099.jpg",
    "sha256": "0cb8807ba9519ef6d77c053d7dd3f213c7338746c37437c25173151ecf1575e8",
-   "expected": null,
-   "kind": "ean13",
-   "payload": "9781591844099"
+   "symbols": [{"symbology": "ean13", "text": "9781591844099"}]
   }
  ]
 }
