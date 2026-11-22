@@ -82,9 +82,11 @@ class MirrorTest(unittest.TestCase):
         with tarfile.open(self.path("one", "photos-test.tar")) as tar:
             names = tar.getnames()
             self.assertEqual(names, sorted(names))
-            self.assertEqual(set(names), {"a/1.png", "b/1.png", "_mirror/test/LICENSE", "_mirror/test/CREDITS.md"})
+            # A repository set's photos sit in a folder named for the set.
+            self.assertEqual(set(names), {"test/a/1.png", "test/b/1.png", "_mirror/test/LICENSE",
+                                          "_mirror/test/CREDITS.md"})
             self.assertTrue(all(i.mtime == 0 and i.uid == 0 and i.uname == "" for i in tar.getmembers()))
-            self.assertEqual(tar.extractfile("a/1.png").read(), self.png)
+            self.assertEqual(tar.extractfile("test/a/1.png").read(), self.png)
             credits = tar.extractfile("_mirror/test/CREDITS.md").read().decode()
         self.assertIn("unmodified", credits)
         self.assertIn(mirror.LEGAL["Apache-2.0"], credits)
@@ -132,9 +134,9 @@ class MirrorTest(unittest.TestCase):
         }
         # An asset whose digest matches but lacks a photo, or holds the
         # wrong bytes for one.
-        for name, members in (("missing photo", [("a/1.png", self.png)]),
-                              ("wrong photo", [("a/1.png", self.other), ("b/1.png", self.other)]),
-                              ("unnamed asset", [("a/1.png", self.png), ("b/1.png", self.other)])):
+        for name, members in (("missing photo", [("test/a/1.png", self.png)]),
+                              ("wrong photo", [("test/a/1.png", self.other), ("test/b/1.png", self.other)]),
+                              ("unnamed asset", [("test/a/1.png", self.png), ("test/b/1.png", self.other)])):
             mirror._tar(self.path(name + ".tar"), members)
             with open(self.path(name + ".tar"), "rb") as f:
                 broken[name] = f.read()
@@ -177,7 +179,8 @@ class MirrorTest(unittest.TestCase):
         config = self.build()
         self.serve_release(config)
         self.asked.clear()
-        outside = dict(self.listing, images=[dict(self.listing["images"][0], file="../escape.png")])
+        # Up out of the set's folder, and out of the cache.
+        outside = dict(self.listing, images=[dict(self.listing["images"][0], file="../../escape.png")])
         mirror.fill(outside, self.path("cache"), self.opener, config)
         self.assertEqual(self.asked, [])
         self.assertFalse(os.path.exists(self.path("escape.png")))
@@ -224,16 +227,16 @@ class MirrorTest(unittest.TestCase):
 
     def test_only_regular_photos_within_the_cap_are_taken(self):
         config = self.build()
-        for name, add in (("link", lambda tar: tar.addfile(tarfile.TarInfo("a/1.png"))),
+        for name, add in (("link", lambda tar: tar.addfile(tarfile.TarInfo("test/a/1.png"))),
                           ("big", None)):
             path = self.path(name + ".tar")
             with tarfile.open(path, "w", format=tarfile.USTAR_FORMAT) as tar:
                 if name == "link":
-                    info = tarfile.TarInfo("a/1.png")
+                    info = tarfile.TarInfo("test/a/1.png")
                     info.type, info.linkname = tarfile.SYMTYPE, "/etc/passwd"
                     tar.addfile(info)
                 else:
-                    info = tarfile.TarInfo("a/1.png")
+                    info = tarfile.TarInfo("test/a/1.png")
                     info.size = 1
                     tar.addfile(info, io.BytesIO(b"x"))
             with open(path, "rb") as f:

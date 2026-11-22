@@ -34,7 +34,8 @@ changes this repository, people and agents alike. Read the [README](README.md) a
 ## Benchmark rules
 
 1. **Fair to every reader.** No reader's output is ground truth: a symbol's text comes from its
-   source or from the line printed with it, read by eye, and its corners are placed by eye
+   source or from the line printed with it, read by eye, or where neither gives it, from its bars,
+   measured module by module and closed by its check character; its corners are placed by eye
    (`barbench annotate`). Every adapter asks its reader for the same thing; a change that helps
    one reader more than another says so.
 2. **The library records facts, readers declare what they hold out.** Every photo has a frozen

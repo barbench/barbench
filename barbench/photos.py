@@ -2,7 +2,8 @@
 barcodes that are not Code 128 as negatives.
 
 Each set of photos is a listing in `lists/`, with every photo's
-SHA-256: ZXing's blackbox test images (Apache-2.0), downloaded one by one
+SHA-256: ZXing's blackbox test images (Apache-2.0), and photos taken for
+barbench and kept in its photos repository (CC0), downloaded one by one
 from a pinned commit; photos of Code 128 labels from Wikimedia Commons,
 each under its own licence, downloaded one by one from their pinned
 originals; and the KAIST and ArTe-Lab barcode sets (CC BY 4.0 and 3.0),
@@ -44,9 +45,10 @@ TIMEOUT, TRIES = 60, 2
 #: How often an archive download is tried. Zenodo answers with server
 #: errors now and then, so it waits 2, 4, 8 and 16 seconds between tries.
 ARCHIVE_TRIES = 5
-#: What a listed file may be called: a folder and a numbered PNG, never a
-#: path out of the cache.
-FILE_NAME = re.compile(r"[a-z0-9-]+/[0-9]+\.png")
+#: What a file from a repository may be called: a folder and a numbered PNG,
+#: as ZXing's are, or a plain name of a PNG or JPEG, never a path out of
+#: the cache.
+FILE_NAME = re.compile(r"[a-z0-9-]+/[0-9]+\.png|[a-z0-9-]+\.(png|jpg)")
 #: The same for a photo in an archive. It names the member to read, never
 #: a path the archive chooses, and its cache path under the set's folder.
 MEMBER_NAME = re.compile(r"[A-Za-z0-9_-]+(/[A-Za-z0-9_()-]+)*\.jpg")
@@ -182,7 +184,7 @@ def load_list(path=MANIFEST):
 #: the EAN-13 with a leading zero that has the same bars, so each symbol
 #: has one spelling (a reader that reports the EAN-13 form, as zxing-cpp
 #: 3.1.1 does, is to be scored as reading the UPC-A).
-SYMBOLOGIES = ("code128", "ean13", "upca", "itf", "qr", "aztec")
+SYMBOLOGIES = ("code128", "ean13", "upca", "itf", "code39", "qr", "aztec", "datamatrix")
 #: The largest a corner's coordinate may be: far past any photo
 #: MAX_BYTES allows.
 MAX_COORDINATE = 1 << 24
@@ -309,13 +311,19 @@ def load_lists(names=None):
     return [found[n] for n in names]
 
 
+#: The one set whose photos are cached under the cache itself, as they were
+#: before there were other sets; its release tar holds them there too.
+ROOT_CACHED = "zxing-blackbox"
+
+
 def cache_path(listing, file, cache):
     """Where `fetch` keeps a listed photo: ZXing's under the cache itself,
     as its files were cached before there were other sets, and every
-    other set's under a folder named for the set."""
-    if "archive" in listing or "host" in listing:
-        return os.path.join(cache, listing["name"], file)
-    return os.path.join(cache, file)
+    other set's under a folder named for the set, so two sets' files of
+    the same name never meet."""
+    if listing["name"] == ROOT_CACHED:
+        return os.path.join(cache, file)
+    return os.path.join(cache, listing["name"], file)
 
 
 def fetch(listing, cache, opener=urllib.request.urlopen, use_mirror=True):
@@ -332,6 +340,8 @@ def fetch(listing, cache, opener=urllib.request.urlopen, use_mirror=True):
         return _fetch_archive(listing, cache, opener)
     if "host" in listing:
         return _fetch_files(listing, cache, opener)
+    if not SET_NAME.fullmatch(listing["name"]):
+        raise ValueError(f"{listing['name']!r}: not a set's name")
     base = (
         listing["repository"].replace("github.com", "raw.githubusercontent.com")
         + f"/{listing['commit']}/{listing['path']}/"

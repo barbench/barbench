@@ -1,0 +1,257 @@
+{
+ "name": "maintainer-photos",
+ "repository": "https://github.com/barbench/photos",
+ "commit": "3e61df03ec923309f89caff8b70bcf8c44fb8af0",
+ "path": "maintainer-photos",
+ "licence_files": {
+  "LICENSE": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+ },
+ "license": "CC0-1.0",
+ "notice": "Photos of barcodes taken with a phone by a Streepjes maintainer, cropped round the symbols, with their metadata removed, and dedicated to the public domain under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/).",
+ "selection": "Crops of a maintainer's own phone photos of barcodes, chosen in November 2026 from those that show nothing personal. Each is cut from the photo as it was exported, without re-encoding: the JPEGs are the camera's own data, trimmed to whole blocks; three photos stored as HEIC are kept as 8-bit grey PNGs holding exactly the luma barbench takes from them in colour. Left out: a QR code whose artwork is a cartoon character; labels that may be Code 128 or Code 39 but are too small in the photo to count their bars (a tilt indicator, a shock indicator, a spectacle-frame tag); photos with a second Code 128 symbol of other text, or one too damaged to read (a price tag with two, two more shots of the bicycle frame, whose second label is scratched off); and price tags with small codes of unknown symbology beside the main one. Groups are scenes, named before their hashes were looked at; the two pretzel-box photos are one scene. The photographer maintains Streepjes. None of these photos was used to develop it, and at its maintainers' choice the four in its held-out slices e and f, all negatives, count as held out for it, since they are listed after its declaration.",
+ "truth": "Every symbol each photo shows, looked at in November 2026 on magnified views. The EAN-13 texts are the lines printed under the bars, read by eye, each with a check digit that agrees; on the gel-pen label the crop cuts the first digit in half, and the one digit the check allows fits the half shown. The periodical's five-digit add-on is in its EAN-13 symbol's note. The storage-pouffe label prints no digits, so its EAN-13 text is unread; scanlines cross 30 bars with EAN-13's guard bars at both ends and in the middle. The radiator label's Interleaved 2 of 5 symbol has 29 bars in two widths, so ten digits, of which its line shows only nine, so its text is unread. The observation-deck ticket's text is its line, which is framed by asterisks, as Code 39's start and stop characters are; its scanlines cross 50 to 55 bars, near Code 39's 60 for ten characters and far from Code 128's 40, some too narrow at this size to tell apart. The QR and Data Matrix texts are unread. Neither Code 128 symbol prints its whole text, so each was measured from its bars without any reader: intensity profiles across the bars, run widths turned into modules by the sums of neighbouring bar and space widths, and the symbols looked up in the Code 128 table. The receipt, which prints no line, reads Start C and six pairs of digits, agreed on by 32 of 36 scanlines and fitted best by its rendered pattern, and its check character closes. The bicycle label reads Start B, G, B, 1, 5, I, 0, a switch to Code C and the pairs 08 and 16, on a 134-module grid fitted to the label's curve round the frame tube; its check character closes, and the printed line agrees where it can be read, GB15 and 0816. Its I lies under the scratched-off part of that line, and its middle bar is faint: the bars measured leave three candidates, and the check character allows only I, so that one character rests on the check. The corners of both Code 128 symbols were placed by eye on magnified views, and their direction taken from the start and stop patterns.",
+ "images": [
+  {
+   "file": "holiday-park-brochure.jpg",
+   "sha256": "7c041024bafa32511253692145cc75d0ca29ebcb5323612b498cfbdfbec535eb",
+   "group": "maintainer-photos/holiday-park-brochure",
+   "slice": "a",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "qr",
+     "text": null
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "picture-book-isbn.jpg",
+   "sha256": "0bfa4f363e4545419c078e6a164885108f8020570a9ef94692ccbe22c6a81a1e",
+   "group": "maintainer-photos/picture-book",
+   "slice": "2",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "ean13",
+     "text": "9789044815450"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "pretzel-box-1.jpg",
+   "sha256": "7679e5d0f899fb96e02e74c6dc32bd0e972095f4a74805f607f8f39ac1297a15",
+   "group": "maintainer-photos/pretzel-box",
+   "slice": "f",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "ean13",
+     "text": "4337256652766"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "pretzel-box-2.jpg",
+   "sha256": "e56b8a277404ced777f6cdc0bd7e9ca75d95efa0e035507b6737ef5524d7013a",
+   "group": "maintainer-photos/pretzel-box",
+   "slice": "f",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "ean13",
+     "text": "4337256652766"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "bicycle-frame-label.jpg",
+   "sha256": "b24b6010b69ce8ab9a3bcfe28bb044ad7c9f0addce41f40f6264711fc93de317",
+   "group": "maintainer-photos/bicycle-frame-label",
+   "slice": "b",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "code128",
+     "text": "GB15I00816",
+     "corners": [
+      [
+       40.5,
+       49.5
+      ],
+      [
+       459,
+       41.5
+      ],
+      [
+       459,
+       200
+      ],
+      [
+       40,
+       203.5
+      ]
+     ],
+     "note": "the I, under the scratched-off part of the printed line, is faint in the bars and fixed by the check character; the label wraps round the frame tube, so its modules narrow towards the ends"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "observation-deck-ticket.jpg",
+   "sha256": "35f41de5c22add06ab046929a98138e1ef95219b48643443c93efddae60a3203",
+   "group": "maintainer-photos/observation-deck-ticket",
+   "slice": "d",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "code39",
+     "text": "CNXRMZW2R1",
+     "note": "upside down: it reads from right to left in the photo"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "newspaper-qr.jpg",
+   "sha256": "fc2627588846b0451d89fde830d57a1a257f258f7604300172c8ac8677fc8a9b",
+   "group": "maintainer-photos/newspaper-qr",
+   "slice": "3",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "qr",
+     "text": null
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "storage-pouffe-label.jpg",
+   "sha256": "0c2686efb08496c98abcaa41faadee456787f47a8d9586f337a8cdf0d4bbec80",
+   "group": "maintainer-photos/storage-pouffe-label",
+   "slice": "e",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "ean13",
+     "text": null,
+     "note": "no digits are printed with it; 30 bars with EAN-13's guard bars"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "wrapper-ean-datamatrix.jpg",
+   "sha256": "1e99e0b928aa0c1e048010e2d613d60f14ed412a6c9dcc840d73f7a346ca2250",
+   "group": "maintainer-photos/wrapper-ean-datamatrix",
+   "slice": "a",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "ean13",
+     "text": "8006540882351"
+    },
+    {
+     "symbology": "datamatrix",
+     "text": null
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "periodical-ean-add-on.png",
+   "sha256": "eeaa69895f1b9b682d988186f4803a759ee281710afb44acfae0c6336a08c422",
+   "group": "maintainer-photos/periodical-ean-add-on",
+   "slice": "8",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "ean13",
+     "text": "8710841544619",
+     "note": "with a five-digit add-on, 04726, to its right"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "supermarket-receipt.jpg",
+   "sha256": "299595a1271e30e29ba9091cdde488b8ec48d1f980a82d1411bebbbbafac0783",
+   "group": "maintainer-photos/supermarket-receipt",
+   "slice": "6",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "code128",
+     "text": "993695272540",
+     "corners": [
+      [
+       222,
+       61.5
+      ],
+      [
+       229,
+       715
+      ],
+      [
+       77.5,
+       716
+      ],
+      [
+       67,
+       62.5
+      ]
+     ]
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "gel-pen-label.png",
+   "sha256": "2ee05e79b3ee0bed7fa44e14d7405bc5ff894fe14d746b83e1bb598081cd7826",
+   "group": "maintainer-photos/gel-pen-label",
+   "slice": "7",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "ean13",
+     "text": "8052694099060",
+     "note": "the crop cuts its first digit in half; 8, the one digit its check digit allows, fits the half shown"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "radiator-panel-label.jpg",
+   "sha256": "9f64c2e9179629340a86164b6c53621b7d048e346edfb7b661923cd8d0815f9c",
+   "group": "maintainer-photos/radiator-panel-label",
+   "slice": "7",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "itf",
+     "text": null,
+     "note": "29 bars, so ten digits, of which the line printed with it shows nine, 9014 214 03"
+    }
+   ],
+   "source": "maintainer-photos"
+  },
+  {
+   "file": "postage-datamatrix.png",
+   "sha256": "7af6fc431640a747166ebcbb5a6da949de6d2b6aff7793ee5d3d337f230676af",
+   "group": "maintainer-photos/postage-datamatrix",
+   "slice": "f",
+   "added": "2026-11-23",
+   "symbols": [
+    {
+     "symbology": "datamatrix",
+     "text": null
+    }
+   ],
+   "source": "maintainer-photos"
+  }
+ ]
+}

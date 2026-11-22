@@ -672,7 +672,7 @@ class InstalledTest(unittest.TestCase):
         self.assertTrue(barbench.__file__.startswith(sys.prefix), barbench.__file__)
         self.assertEqual(barbench.__version__, importlib.metadata.version("barbench"))
         # The photo lists and the readers' declarations ship inside it.
-        self.assertEqual(len(photos.load_lists()), 4)
+        self.assertEqual(len(photos.load_lists()), 5)
         self.assertIn("streepjes", slices.declarations())
         # So does the Vision helper's source, which the vision adapter builds.
         self.assertTrue(importlib.resources.files("barbench").joinpath("vision.swift").is_file())

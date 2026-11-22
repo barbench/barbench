@@ -170,10 +170,11 @@ class CommandTest(unittest.TestCase):
         test = dict(listing, name="held", images=[dict(listing["images"][0], **facts("held/A"))])
         with open(os.path.join(self.lists, "held.json"), "w") as f:
             json.dump(test, f)
-        os.makedirs(os.path.join(self.cache, "a"))
-        for name in ("1.png", "2.png"):
-            with open(os.path.join(self.cache, "a", name), "wb") as f:
-                f.write(self.png)
+        for set_name in ("set", "held"):
+            os.makedirs(os.path.join(self.cache, set_name, "a"))
+            for name in ("1.png", "2.png"):
+                with open(os.path.join(self.cache, set_name, "a", name), "wb") as f:
+                    f.write(self.png)
 
     def tearDown(self):
         self.dir.cleanup()
@@ -234,10 +235,10 @@ class CommandTest(unittest.TestCase):
             with self.assertRaises(SystemExit) as e:
                 self.run_cli("overview", photo, out)
             self.assertEqual(e.exception.code, 2, photo)
-        os.remove(os.path.join(self.cache, "a", "2.png"))
+        os.remove(os.path.join(self.cache, "set", "a", "2.png"))
         with self.assertRaises(SystemExit):
             self.run_cli("overview", "set/a/2.png", out)
-        with open(os.path.join(self.cache, "a", "1.png"), "ab") as f:
+        with open(os.path.join(self.cache, "set", "a", "1.png"), "ab") as f:
             f.write(b"x")
         with self.assertRaises(SystemExit):
             self.run_cli("overview", "set/a/1.png", out)

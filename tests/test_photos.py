@@ -203,10 +203,37 @@ class FetchTest(unittest.TestCase):
             self.listing["images"][0]["sha256"] = capped
             with self.assertRaisesRegex(ValueError, "larger than"):
                 photos.fetch(self.listing, cache, self.opener(huge))
-            self.assertFalse(os.path.exists(os.path.join(cache, "a", "1.png")))
+            self.assertFalse(os.path.exists(photos.cache_path(self.listing, "a/1.png", cache)))
+
+    def test_a_set_keeps_its_photos_in_its_own_folder(self):
+        # Plain names of PNGs and JPEGs are taken too, each set's under a
+        # folder of its name, so two sets' files of one name never meet;
+        # ZXing's stay under the cache itself, where they always were.
+        jpg = jpeg_bytes()
+        flat = dict(self.listing, images=[
+            dict(self.listing["images"][0], file="label.png"),
+            dict(self.listing["images"][1], file="label-2.jpg", sha256=hashlib.sha256(jpg).hexdigest()),
+        ])
+        served = {"label.png": self.png, "label-2.jpg": jpg}
+
+        def opener(request, timeout=None):
+            self.urls.append(request.full_url)
+            return FakeResponse(served[request.full_url.rsplit("/", 1)[1]])
+
+        with tempfile.TemporaryDirectory() as cache, tempfile.TemporaryDirectory() as out:
+            manifest = photos.generate(out, cache, [flat], opener)
+            self.assertEqual(sorted(os.listdir(os.path.join(cache, "test"))), ["label-2.jpg", "label.png"])
+            self.assertEqual(self.urls[-1], "https://raw.githubusercontent.com/example/photos/" + "0" * 40
+                             + "/images/label-2.jpg")
+            self.assertEqual([e["file"] for e in manifest["images"]], ["test-label.pgm", "test-label-2.pgm"])
+            self.assertEqual(pgm.read(os.path.join(out, "test-label-2.pgm")).shape, (8, 8))
+        self.assertEqual(photos.cache_path(dict(flat, name="zxing-blackbox"), "a/1.png", "c"), os.path.join("c", "a/1.png"))
+        self.assertEqual(photos.cache_path(flat, "a/1.png", "c"), os.path.join("c", "test", "a/1.png"))
+        with tempfile.TemporaryDirectory() as cache, self.assertRaisesRegex(ValueError, "not a set's name"):
+            photos.fetch(dict(flat, name="../up"), cache, opener)
 
     def test_names_that_leave_the_cache_are_refused(self):
-        for name in ("../escape.png", "/etc/x.png", "a/../../x.png", "a/1.txt"):
+        for name in ("../escape.png", "/etc/x.png", "a/../../x.png", "a/1.txt", "a/b.jpg", "../x.jpg", "x.gif"):
             self.listing["images"][0]["file"] = name
             with tempfile.TemporaryDirectory() as cache, self.assertRaisesRegex(ValueError, "name"):
                 photos.fetch(self.listing, cache, self.opener(self.png))
@@ -490,15 +517,17 @@ class CommonsTest(unittest.TestCase):
 class ListTest(unittest.TestCase):
     def test_the_committed_lists(self):
         listings = {listing["name"]: listing for listing in photos.load_lists()}
-        self.assertEqual(sorted(listings), ["artelab-medium", "commons-code128", "kaist-real", "zxing-blackbox"])
+        self.assertEqual(sorted(listings), ["artelab-medium", "commons-code128", "kaist-real", "maintainer-photos",
+                                            "zxing-blackbox"])
         licences = {
             "zxing-blackbox": "Apache-2.0",
             "kaist-real": "CC-BY-4.0",
             "artelab-medium": "CC-BY-3.0",
             "commons-code128": "CC-BY-4.0 AND CC0-1.0 AND LicenseRef-Public-Domain",
+            "maintainer-photos": "CC0-1.0",
         }
         counts = {"zxing-blackbox": (120, 40), "kaist-real": (524, 0), "artelab-medium": (345, 0),
-                  "commons-code128": (13, 13)}
+                  "commons-code128": (13, 13), "maintainer-photos": (14, 2)}
         digests = set()
         for name, listing in listings.items():
             self.assertEqual(listing["license"], licences[name])
@@ -570,6 +599,21 @@ class ListTest(unittest.TestCase):
         self.assertEqual([texts[f"BarcodeDatasets/{f}.jpg"] for f in ("Dataset1/05102009199", "Dataset2/Foto(844)",
                                                                        "Dataset2/Foto(849)")],
                          ["8002330112752", "7321925005431", "7321925005431"])
+        # The maintainer photos' symbologies; the two Code 128 texts were
+        # measured from the bars, since neither prints its whole text.
+        self.assertEqual({e["file"]: [s["symbology"] for s in e["symbols"]]
+                          for e in listings["maintainer-photos"]["images"]}, {
+            "holiday-park-brochure.jpg": ["qr"], "picture-book-isbn.jpg": ["ean13"],
+            "pretzel-box-1.jpg": ["ean13"], "pretzel-box-2.jpg": ["ean13"],
+            "bicycle-frame-label.jpg": ["code128"], "observation-deck-ticket.jpg": ["code39"],
+            "newspaper-qr.jpg": ["qr"], "storage-pouffe-label.jpg": ["ean13"],
+            "wrapper-ean-datamatrix.jpg": ["ean13", "datamatrix"], "periodical-ean-add-on.png": ["ean13"],
+            "supermarket-receipt.jpg": ["code128"], "gel-pen-label.png": ["ean13"],
+            "radiator-panel-label.jpg": ["itf"], "postage-datamatrix.png": ["datamatrix"],
+        })
+        self.assertEqual({e["file"]: photos.expected(e) for e in listings["maintainer-photos"]["images"]
+                          if photos.expected(e)},
+                         {"bicycle-frame-label.jpg": "GB15I00816", "supermarket-receipt.jpg": "993695272540"})
         # The Commons photos that show more than their Code 128 symbol.
         extra = {e["file"]: [s["symbology"] for s in e["symbols"][1:]]
                  for e in listings["commons-code128"]["images"] if len(e["symbols"]) > 1}
@@ -591,12 +635,14 @@ class ListTest(unittest.TestCase):
                                       "corners": [[1, 1], [9.5, 2], [9, 4.5], [1.5, 4]]}))
         photos.check_symbols(listing({"symbology": "upca", "text": "890444000335"},
                                      {"symbology": None, "text": None, "note": "covered"}))
+        photos.check_symbols(listing({"symbology": "code39", "text": "CNXRMZW2R1"},
+                                     {"symbology": "datamatrix", "text": None}))
         for symbols, message in (
             ([{"symbology": "ean13", "text": "9780804816633"}], "not the digits of a valid ean13"),
             ([{"symbology": "upca", "text": "0890444000335"}], "not the digits of a valid upca"),
             ([{"symbology": "ean13", "text": "0890444000335"}], "is a UPC-A"),
             ([{"symbology": "ean13", "text": "978080481663\uff12"}], "not the digits"),
-            ([{"symbology": "code39", "text": "A"}], "unknown symbology 'code39'"),
+            ([{"symbology": "code93", "text": "A"}], "unknown symbology 'code93'"),
             ([{"symbology": None, "text": "A"}], "text 'A' of symbology None"),
             ([{"symbology": "code128", "text": ""}], "text '' of symbology"),
             ([{"symbology": "code128", "text": 7}], "text 7 of symbology"),
@@ -650,9 +696,10 @@ class ListTest(unittest.TestCase):
             for e in listing["images"]:
                 self.assertTrue(e["group"].startswith(f"{name}/"), e["file"])
                 self.assertEqual(e["slice"], slices.of_group(e["group"]), e["file"])
-                # Every photo so far came with the first lists; a photo added
-                # later carries its own date, and this pin moves with it.
-                self.assertEqual(e["added"], "2026-11-21", e["file"])
+                # Every photo so far came with the first lists, but for the
+                # maintainer photos; a photo added later carries its own
+                # date, and this pin moves with it.
+                self.assertEqual(e["added"], "2026-11-23" if name == "maintainer-photos" else "2026-11-21", e["file"])
                 groups.setdefault(e["group"], []).append(e["file"])
         # Near-duplicates travel together: the three Zlin lamp tags, and the
         # ArTe-Lab photos with no digits from the set, which show the same
@@ -663,8 +710,10 @@ class ListTest(unittest.TestCase):
         # ZXing's four shots of each Code 128 label are one group.
         self.assertEqual(groups["zxing-blackbox/code128-2/005-3379497200006"],
                          [f"code128-2/{n:02d}.png" for n in range(1, 5)])
-        # 600 groups by text, less the three photos and two lamp tags merged.
-        self.assertEqual(len(groups), 595)
+        # 600 groups by text, less the three photos and two lamp tags merged,
+        # and 13 maintainer scenes, the two pretzel-box photos being one.
+        self.assertEqual(len(groups["maintainer-photos/pretzel-box"]), 2)
+        self.assertEqual(len(groups), 608)
 
 
 class RowsTest(unittest.TestCase):

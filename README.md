@@ -110,6 +110,20 @@ time, a second apart, with a User-Agent that names this repository, since
 Wikimedia's robot policy asks automated clients for contact details; a 429
 answer is waited out as its Retry-After says.
 
+**Maintainer photos** (`barbench/lists/maintainer-photos.json`) are 14
+phone photos of barcodes on everyday things, taken by a Streepjes
+maintainer, cropped round the symbols (the JPEGs without re-encoding,
+three photos stored as HEIC as grey PNGs of their luma), stripped of
+their metadata and dedicated under CC0. They live in barbench's
+[photos repository](https://github.com/barbench/photos), from which each
+is downloaded at a pinned commit, as ZXing's are. Two are Code 128
+positives, a receipt and a worn bicycle-frame label, and the rest are
+negatives: EAN-13 (one with a five-digit add-on), Interleaved 2 of 5,
+Code 39, QR and Data Matrix. The receipt prints no line under its symbol,
+and the bicycle label's line is partly scratched off, so their texts were
+measured from the bars, module by module, and each closes with its Code
+128 check character; the list's `truth` says how.
+
 Two more sets add 869 photos of EAN-13 and UPC-A barcodes, negatives for
 now, listed with their digits so they can become positives for readers of
 EAN:
@@ -146,7 +160,7 @@ photos byte for byte, at the paths barbench caches them under, with
 and a statement that nothing was changed. `barbench/mirror.json` names the
 release, the barbench commit that built it and each tar's size and
 SHA-256. `barbench photos` takes a set's missing photos from the mirror
-first (about 141 MB for every set, against about 450 MB of archives from
+first (about 143 MB for every set, against about 450 MB of archives from
 the sources) and checks every one against the list. When the mirror cannot
 be reached, gives an asset or a photo that is not the one named, or
 `mirror.json` is not right, barbench says so and fetches from the set's
@@ -166,7 +180,8 @@ on a credible request.
 ### What each photo shows
 
 Each photo in a list carries `symbols`, the symbols known to be in it:
-each a `symbology` (`code128`, `ean13`, `upca`, `itf`, `qr` or `aztec`, or
+each a `symbology` (`code128`, `ean13`, `upca`, `itf`, `code39`, `qr`,
+`aztec` or `datamatrix`, or
 `null` when its kind cannot be told) and the `text` a reader should
 report, `null` where nobody has read it, with optional `corners` and
 `note`. The list's `truth` says where they come from: the digits ZXing,
@@ -201,12 +216,13 @@ start-bottom, where the start is where reading begins and "top" is the
 upper edge with the start on the left, so with y down they go clockwise,
 and they give the symbol's position, size, rotation and direction. The
 direction was taken from the printed text, which reads the way the symbol
-does, not from the start and stop patterns. barbench checks that corners
+does, not from the start and stop patterns, except on the two maintainer
+photos whose texts were measured from their bars. barbench checks that corners
 are four points that run clockwise round a convex quadrilateral inside the
 photo, which catches a mirrored order but not one that starts at the wrong
 corner.
 
-All 53 Code 128 symbols have corners, placed by eye on magnified views in
+All 55 Code 128 symbols have corners, placed by eye on magnified views in
 November 2026. A second look at six of them, made without seeing the
 first, agreed to within about a pixel, and on a blurred photo the listed
 corners are good to two or three; a symbol's note says where a straight
@@ -271,7 +287,7 @@ run on; `--slices` (digits and ranges, such as `0-d`) and `--added-after`
 choose others, and each report says which slices and date it covers and
 what it left out. Every current set is public, so a reader may have met
 its photos outside barbench (ZXing's are ZXing's own test images); such
-facts belong in a reader's declaration. With 53 Code 128 photos in 21
+facts belong in a reader's declaration. With 55 Code 128 photos in 23
 groups, no choice of slices measures much yet: honest numbers need several
 hundred, in many groups, added after the readers declare.
 
@@ -338,7 +354,7 @@ names the machine and gives the load average; `barbench/timing.py` says
 more.
 
 For the photo tier, `python -m barbench photos DIR` in place of `corpus`
-downloads and converts the photos into `DIR-cache`: about 141 MB from the
+downloads and converts the photos into `DIR-cache`: about 143 MB from the
 mirror, or about 450 MB of archives from the sources when the mirror
 fails, of which only the 140 MB of listed photos stay. `--sets
 zxing-blackbox` limits it to the ZXing set, which is 20 MB.

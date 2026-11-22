@@ -10,7 +10,7 @@
 # from target/, where no barbench folder can be imported instead.
 #
 # Needs Python 3.12 or newer and the network. The photos job downloads
-# about 141 MB from the photo mirror the first time (450 MB of archives from
+# about 143 MB from the photo mirror the first time (450 MB of archives from
 # the sources when the mirror fails) and keeps the listed photos in
 # BARBENCH_PHOTO_CACHE (default target/photo-cache). Set STREEPJES_BIN to a
 # streepjes binary to run and test that reader too.
@@ -32,8 +32,8 @@ if [ -n "${STREEPJES_BIN:-}" ]; then
 fi
 # Gates on zxing-cpp that check barbench, not zxing-cpp: a corpus, a
 # decoder or scoring that broke would make it misread or read far less.
-# Its pinned version reads about 51% of the small synthetic corpus and 49
-# of the 53 Code 128 photos; a new pin that moves those moves the floors.
+# Its pinned version reads about 51% of the small synthetic corpus and 50
+# of the 55 Code 128 photos; a new pin that moves those moves the floors.
 gates=(--no-misreads zxing-cpp)
 
 step() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }

@@ -13,7 +13,7 @@ scripts/ci.sh
 
 It needs Python 3.12 or newer and the network. It builds barbench into a wheel, installs it into a
 virtual environment under `target/`, and runs the tests and a small synthetic run against that
-wheel, then downloads the photos (about 141 MB from the mirror the first time, or 450 MB of
+wheel, then downloads the photos (about 143 MB from the mirror the first time, or 450 MB of
 archives from the sources; the photos are cached) and runs zxing-cpp on them. Pass job names to
 run a subset: `scripts/ci.sh test synthetic`. Set `STREEPJES_BIN` to a `streepjes` binary to run
 and test that reader too.

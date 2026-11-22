@@ -7,6 +7,13 @@ All notable changes to barbench are documented in this file. The format follows
 
 ### Added
 
+- The `maintainer-photos` set: 14 phone photos of barcodes taken by a Streepjes maintainer and
+  dedicated under CC0, kept in the new [barbench/photos](https://github.com/barbench/photos)
+  repository at a pinned commit. Two are Code 128 positives, a receipt and a worn bicycle-frame
+  label, whose texts were measured from their bars; the rest are EAN-13, Interleaved 2 of 5,
+  Code 39, QR and Data Matrix negatives. Lists may now name `code39` and `datamatrix` symbols, a
+  set from a repository may list plainly named JPEGs and PNGs, and each such set is cached in a
+  folder of its own (ZXing's stay where they were).
 - barbench has a repository of its own, with the history of its code, which `git log` shows. It
   began in the repository of the Streepjes reader and grew there: the synthetic
   and sweep tiers, read-rate curves, the photo tier (ZXing's blackbox photos, Wikimedia Commons
