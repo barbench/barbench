@@ -1,4 +1,4 @@
-"""Tests for barbench. Run from bench/: python -m unittest discover -s tests"""
+"""Tests for barbench. Run from the repository root: python -m unittest discover -s tests"""
 
 import contextlib
 import copy

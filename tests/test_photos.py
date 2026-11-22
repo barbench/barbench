@@ -1,4 +1,4 @@
-"""Tests for the photo tier. Run from bench/: python -m unittest discover -s tests"""
+"""Tests for the photo tier. Run from the repository root: python -m unittest discover -s tests"""
 
 import email.message
 import hashlib
@@ -386,7 +386,7 @@ class CommonsTest(unittest.TestCase):
             self.assertEqual(timeout, photos.TIMEOUT)
             # Wikimedia asks for contact details: the project's repository.
             self.assertEqual(
-                request.get_header("User-agent"), "barbench/0.1 (https://github.com/streepjes/streepjes)"
+                request.get_header("User-agent"), "barbench/0.1 (https://github.com/barbench/barbench)"
             )
             self.urls.append(request.full_url)
             answer = answers.pop(0) if len(answers) > 1 else answers[0]

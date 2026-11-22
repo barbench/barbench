@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Third-party actions are pinned to exact commits; the comment names the
+# release each hash belongs to.
+
+jobs:
+  ci:
+    name: Tests, synthetic tier and photo tier
+    runs-on: ubuntu-latest
+    # The photo tier downloads; a stalled download fails rather than hangs.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      # These keep the photos and pip's downloads between runs, so neither
+      # is fetched again. An older entry is safe to start from: photos are
+      # checked against their digests, and pyproject.toml pins exact
+      # versions, whose files PyPI never replaces. The photos come from
+      # 450 MB of archives, so their cache is saved even when a job fails
+      # (below), lest every failing run fetch them again.
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/barbench-photos
+          key: barbench-photos-${{ hashFiles('barbench/lists/*.json') }}
+          restore-keys: barbench-photos-
+      # Wheels are built for one Python version; a key without it would
+      # match after the runner's Python changes and never save new wheels.
+      - id: python
+        run: echo "version=$(python3 -c 'import sys; print(sys.version.split()[0])')" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pip
+          key: barbench-pip-${{ runner.os }}-${{ steps.python.outputs.version }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: barbench-pip-${{ runner.os }}-${{ steps.python.outputs.version }}-
+      - run: scripts/ci.sh
+        env:
+          BARBENCH_PHOTO_CACHE: ${{ runner.temp }}/barbench-photos
+      - if: always()
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/barbench-photos
+          key: barbench-photos-${{ hashFiles('barbench/lists/*.json') }}

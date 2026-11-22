@@ -20,7 +20,7 @@ class Unavailable(Exception):
 
 
 def streepjes(paths, binary=None):
-    """The `streepjes` command (crates/streepjes-cli): one process for the
+    """The Streepjes reader's `streepjes` command: one process for the
     batch, with the default (fast) effort and Code 128 only."""
     binary = binary or os.environ.get("STREEPJES_BIN") or shutil.which("streepjes")
     if not binary or not os.path.exists(binary):

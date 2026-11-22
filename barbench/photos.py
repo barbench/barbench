@@ -62,7 +62,7 @@ LOCAL_NAME = re.compile(r"[a-z0-9-]+\.jpg")
 #: automated clients for contact details, so it names this project's
 #: public repository; a client without them is answered 429 after a few
 #: downloads, for minutes on end.
-COMMONS_USER_AGENT = "barbench/0.1 (https://github.com/streepjes/streepjes)"
+COMMONS_USER_AGENT = "barbench/0.1 (https://github.com/barbench/barbench)"
 #: The downloads from Commons are one at a time, this many seconds apart
 #: (the policy allows a client with contact details far more); a 429 or 503
 #: answer is waited out as its Retry-After says, up to MAX_WAIT seconds,

@@ -1,13 +1,14 @@
-# barbench v0
+# barbench
 
-A reproducible benchmark for 1D barcode readers, starting with Code 128. It
-lives here until it moves to a neutral home of its own (see "Later" below).
+A reproducible benchmark for 1D barcode readers, starting with Code 128.
+It began in the repository of the Streepjes reader and lives here, apart
+from any one reader.
 
 ## What it measures
 
-Two tiers. **Synthetic**: Code 128 symbols whose modules come from
-third-party encoders (zxing-cpp and python-barcode, alternating), drawn and
-degraded with numpy over a fixed grid:
+Synthetic tiers and a photo tier. **Synthetic**: Code 128 symbols whose
+modules come from third-party encoders (zxing-cpp and python-barcode,
+alternating), drawn and degraded with numpy over a fixed grid:
 
 | Parameter  | Values                  |
 |------------|-------------------------|
@@ -76,24 +77,24 @@ reaches down to 84%, and at 0 of 20 up to 16%.
 
 ### Photos
 
-The **photos** tier is 40 real photographs of Code 128 labels (ten symbols,
-four shots each: angles, blur, glare, fingers in the frame) and, as
-negatives, 80 photos of EAN-13 and UPC-A barcodes, which a Code 128 reader
-should leave alone. They are ZXing's blackbox test images, © 2007-2020
-ZXing authors, Apache-2.0. The repository holds only their list
-(`bench/barbench/lists/zxing-blackbox.json`): each is downloaded from a
-pinned ZXing commit, checked against its SHA-256, and converted to PGM.
+The **photos** tier is 40 real photographs of Code 128 labels (ten
+symbols, four shots each: angles, blur, glare, fingers in the frame) and,
+as negatives, 80 photos of EAN-13 and UPC-A barcodes, which a Code 128
+reader should leave alone. They are ZXing's blackbox test images, ©
+2007-2020 ZXing authors, Apache-2.0. The repository holds only their list
+(`barbench/lists/zxing-blackbox.json`): each is downloaded from a pinned
+ZXing commit, checked against its SHA-256, and converted to PGM.
 
 zxing-cpp's test suite includes some of these images (and ZXing's includes
-all of them), so this tier favours it. Streepjes's misses here are to be
+all of them), so this tier favours it. A reader's misses here are to be
 fixed by better decoding, not by tuning to these files.
 
-**Wikimedia Commons** (`bench/barbench/lists/commons-code128.json`) adds
-13 photos and scans of Code 128 labels that neither reader's own tests
-use: postal registration labels, GS1-128 pallet and parcel labels, a price
-tag, shelf, device and street-lamp tags, and thermal receipts. They come
-from Commons' Code 128, GS1-128 and Barcode categories. Each file has its
-own author and licence (CC0, CC BY 4.0 or public domain), which the list
+**Wikimedia Commons** (`barbench/lists/commons-code128.json`) adds 13
+photos and scans of Code 128 labels that neither reader's own tests use:
+postal registration labels, GS1-128 pallet and parcel labels, a price tag,
+shelf, device and street-lamp tags, and thermal receipts. They come from
+Commons' Code 128, GS1-128 and Barcode categories. Each file has its own
+author and licence (CC0, CC BY 4.0 or public domain), which the list
 records with the file's page and pinned original, and so does
 `ATTRIBUTION.md`. The text of each Code 128 symbol is the line printed
 under it, read by eye, without its grouping spaces and without the
@@ -107,9 +108,9 @@ contact details; a 429 answer is waited out as its Retry-After says.
 
 Two more sets add 869 photos of EAN-13 and UPC-A barcodes, negatives for
 now, listed with their digits (for all but three photos that the set gives
-none for) so they can become positives when Streepjes reads EAN:
+none for) so they can become positives for readers of EAN:
 
-- **KAIST** (`bench/barbench/lists/kaist-real.json`): 524 cropped phone
+- **KAIST** (`barbench/lists/kaist-real.json`): 524 cropped phone
   photos from the dataset of the Quick Browser and Smart Inference papers
   (Duy-Thao Do, [Zenodo 13586402](https://zenodo.org/records/13586402)),
   CC BY 4.0. Its `real` folder also holds crops of other sets, which are
@@ -119,7 +120,7 @@ none for) so they can become positives when Streepjes reads EAN:
   one photo that also shows a Code 128 label. The 524 kept are the
   baseline JPEGs among the photos named by their 13 digits, which match
   neither of those sets; their licence is the one the dataset states.
-- **ArTe-Lab** (`bench/barbench/lists/artelab-medium.json`): the 345
+- **ArTe-Lab** (`barbench/lists/artelab-medium.json`): the 345
   photos of the Medium Barcode 1D Collection (University of Insubria;
   Zamberletti et al., 2011), with and without autofocus, CC BY 3.0.
 
@@ -225,7 +226,7 @@ another split or none, so a test result is never seen by accident.
 Each reader runs through an adapter with the same contract: PGM paths in,
 decoded Code 128 texts per image out.
 
-- **streepjes**: the `streepjes` command (`crates/streepjes-cli`), default
+- **streepjes**: the Streepjes reader's `streepjes` command, default
   effort, one process for the batch. Set `STREEPJES_BIN` to the binary.
 - **zxing-cpp**: its Python binding, in process, in its plain text mode.
 - **zbar**: `zbarimg`, one process per image, if installed.
@@ -234,25 +235,23 @@ A reader that is not installed is skipped and reported as such.
 
 ## Running it
 
-It needs Python 3.12 or newer. barbench is a package
-(`bench/pyproject.toml`, which pins its dependencies exactly) and runs
-from where it is installed, photo lists included. From the repository root:
+It needs Python 3.12 or newer. barbench is a package (`pyproject.toml`,
+which pins its dependencies exactly) and runs from where it is installed,
+photo lists included:
 
 ```bash
-python3 -m venv target/bench-venv
-target/bench-venv/bin/pip install ./bench
-cargo build --release -p streepjes-cli
-target/bench-venv/bin/python -m barbench corpus target/bench/corpus
-STREEPJES_BIN=target/release/streepjes \
-    target/bench-venv/bin/python -m barbench run target/bench/corpus --out target/bench/results.json
+python3 -m venv target/venv
+target/venv/bin/pip install .
+target/venv/bin/python -m barbench corpus target/corpus
+target/venv/bin/python -m barbench run target/corpus --out target/results.json
 ```
 
-Install again after changing barbench (`pip install ./bench` reinstalls
-it), or run it from `bench/`, where `python -m barbench` finds this folder
-before the installed copy. Each report names the barbench commit that made
-it (`barbench_commit`): the one pip installed from when that was a Git
-URL, else that of the checkout, with `-dirty` when files under `bench/`
-differ from it. It is `null` when an installed copy is no longer what its
+Install again after changing barbench (`pip install .` reinstalls it), or
+run `python -m barbench` from the repository root, where it finds the
+checkout before the installed copy. Each report names the barbench commit
+that made it (`barbench_commit`): the one pip installed from when that was
+a Git URL, else that of the checkout, with `-dirty` when its files differ
+from it. It is `null` when an installed copy is no longer what its
 checkout holds, or when Git cannot tell.
 
 For the curves, `python -m barbench sweep DIR` in place of `corpus`, then
@@ -264,20 +263,25 @@ downloads and converts the photos into `DIR-cache` (the archives are about
 450 MB together; only the 140 MB of listed photos stay). `--sets
 zxing-blackbox` limits it to the ZXing set, which is 20 MB.
 
-`scripts/ci.sh bench` does the same on a smaller corpus and on the
-development photos, runs the tests in `bench/tests`, and fails if
-streepjes misreads, reads a code where there is none, fails on a file, or
-reads under half the synthetic symbols or 90% of the photos.
+`scripts/ci.sh` does the same on a smaller synthetic corpus and on the
+development photos, against the installed wheel, and runs the tests in
+`tests/`; CONTRIBUTING.md says more. It reads with zxing-cpp, and with
+streepjes too when `STREEPJES_BIN` is set.
 
 ## Later
 
-- Move to a neutral organisation, with the other projects' maintainers
-  invited to check their adapters.
+- Invite the other readers' maintainers to check their adapters.
 - Pin every reader and tool in a Docker image, and publish results from CI
   as a static page.
 - More tiers: more real photos of Code 128 (ZXing's set is small and
   familiar to zxing-cpp, and Commons holds few with a usable licence),
-  print defects, perspective, and more symbologies as Streepjes reads them.
+  print defects, perspective, and more symbologies.
 - Time per image rather than per batch, measured the same way for every
   reader.
 - Only released versions are benchmarked for published results.
+
+## Licence
+
+barbench is dual licensed under [MIT](LICENSE-MIT) OR
+[Apache-2.0](LICENSE-APACHE). The photos it downloads are not part of it;
+each set's licence and credits are in [ATTRIBUTION.md](ATTRIBUTION.md).

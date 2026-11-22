@@ -1,4 +1,4 @@
-"""Tests for the baseline JPEG decoder. Run from bench/: python -m unittest discover -s tests
+"""Tests for the baseline JPEG decoder. Run from the repository root: python -m unittest discover -s tests
 
 The JPEGs are written here by a small baseline encoder, so no image files
 are needed. Its Huffman tables are made up (any complete-enough canonical
