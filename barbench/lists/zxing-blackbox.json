@@ -3,6 +3,7 @@
  "repository": "https://github.com/zxing/zxing",
  "commit": "1eb71d2557ffdf64c7a7af1a5464489d294e825a",
  "path": "core/src/test/resources/blackbox",
+ "licence_files": {"LICENSE": "3f62881f0566227a24b12e5a754cc79f39aaa94883038e95c94812e1f50af42f", "NOTICE": "4db4b60aace29ec6c5c4f13ca9cac1930d3c0c54bcc67dceead0c10771120e66"},
  "license": "Apache-2.0",
  "notice": "Copyright 2007-2020 ZXing authors. Licensed under the Apache License, Version 2.0.",
  "truth": "Each photo lists the symbol its folder is for: in code128-2 the text the list always had, in ean13-2 and upca-2 the text in the .txt file ZXing keeps beside each image at the pinned commit (UPC-A as 12 digits). The code128-2 photos were looked over in November 2026: each Code 128 symbol's corners were placed by eye on magnified views, and the other bar codes seen are listed with their texts unread, an Interleaved 2 of 5 symbol in 37 to 40 the codes cut off at the edges of 04, 07, 08, 13, 14, 16, 25, 27 and 35, and an asset tag's code under a finger in 09. The ean13-2 and upca-2 photos were not checked for other symbols.",

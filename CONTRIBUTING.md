@@ -13,9 +13,10 @@ scripts/ci.sh
 
 It needs Python 3.12 or newer and the network. It builds barbench into a wheel, installs it into a
 virtual environment under `target/`, and runs the tests and a small synthetic run against that
-wheel, then downloads the photos (about 450 MB of archives the first time; the photos are cached)
-and runs zxing-cpp on them. Pass job names to run a subset: `scripts/ci.sh test synthetic`. Set
-`STREEPJES_BIN` to a `streepjes` binary to run and test that reader too.
+wheel, then downloads the photos (about 141 MB from the mirror the first time, or 450 MB of
+archives from the sources; the photos are cached) and runs zxing-cpp on them. Pass job names to
+run a subset: `scripts/ci.sh test synthetic`. Set `STREEPJES_BIN` to a `streepjes` binary to run
+and test that reader too.
 
 Add a line under `[Unreleased]` in `CHANGELOG.md` for user-visible changes.
 
@@ -29,6 +30,14 @@ reader's output. Give each photo a `group` named by the rule in the README (its 
 label's text or a name for the scene), decided before you look at where it lands; its `slice` is
 then the first hex digit of the group's SHA-256, which barbench checks; and the date it was
 `added`.
+
+## Releasing a photo mirror
+
+When the photos listed change, a maintainer builds the next release's assets with
+`python -m barbench mirror OUT --cache DIR --release photos-N`, checks the credits in each tar,
+publishes the tars as release `photos-N` of this repository, and then commits the `mirror.json`
+that `OUT` holds as `barbench/mirror.json`, so no barbench points at a release before it exists. Releases are publishing:
+AGENTS.md's rule 7 asks before each one.
 
 ## Declaring what a reader holds out
 

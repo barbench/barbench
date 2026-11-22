@@ -105,9 +105,10 @@ parentheses around GS1 application identifiers, which is how streepjes
 reports GS1 data, and zxing-cpp in its plain text mode, which barbench
 uses. (The zbar adapter has not been checked on GS1 data.) The list's
 `selection` says what was looked at and why the rest was left out. They
-are downloaded one at a time, a second apart, with a User-Agent that names
-this repository, since Wikimedia's robot policy asks automated clients for
-contact details; a 429 answer is waited out as its Retry-After says.
+are downloaded from Commons, when the mirror cannot give them, one at a
+time, a second apart, with a User-Agent that names this repository, since
+Wikimedia's robot policy asks automated clients for contact details; a 429
+answer is waited out as its Retry-After says.
 
 Two more sets add 869 photos of EAN-13 and UPC-A barcodes, negatives for
 now, listed with their digits so they can become positives for readers of
@@ -127,11 +128,40 @@ EAN:
   photos of the Medium Barcode 1D Collection (University of Insubria;
   Zamberletti et al., 2011), with and without autofocus, CC BY 3.0.
 
-Their photos are read from each set's archive, pinned by size and SHA-256,
-which is downloaded only while a listed photo is missing from the cache
-and deleted afterwards. barbench decodes their baseline JPEGs itself
-(`barbench/jpeg.py`): the Python JPEG libraries bundle libjpeg, whose IJG
-licence is not on the allowlist.
+From their sources, their photos are read from each set's archive, pinned
+by size and SHA-256, which is downloaded only while a listed photo is
+missing from the cache and the mirror, and deleted afterwards. barbench
+decodes their baseline JPEGs itself (`barbench/jpeg.py`): the Python JPEG
+libraries bundle libjpeg, whose IJG licence is not on the allowlist.
+
+
+### The photo mirror
+
+Every photo listed when a release was made is in barbench's photo mirror,
+so a source that moves or goes down stops no one: a release `photos-N` of
+this repository holds one uncompressed tar per set, whose members are the
+photos byte for byte, at the paths barbench caches them under, with
+`_mirror/SET/` holding the set's credits, the licence texts it needs
+(ZXing's `LICENSE` and `NOTICE`, links to the Creative Commons licences)
+and a statement that nothing was changed. `barbench/mirror.json` names the
+release, the barbench commit that built it and each tar's size and
+SHA-256. `barbench photos` takes a set's missing photos from the mirror
+first (about 141 MB for every set, against about 450 MB of archives from
+the sources) and checks every one against the list. When the mirror cannot
+be reached, gives an asset or a photo that is not the one named, or
+`mirror.json` is not right, barbench says so and fetches from the set's
+source; a photo listed after the release is fetched from its source too.
+Set `BARBENCH_NO_MIRROR` to skip the mirror.
+
+`python -m barbench mirror OUT --cache DIR --release photos-N` writes a
+release's tars and its `mirror.json`; photos missing from the cache come
+from the sources, never the mirror. The tars are reproducible (sorted
+members, no owners or times): anyone can rebuild a release from the commit
+that built it and compare digests. A new release is made when the set of
+photos changes; old ones stay, so an old barbench still finds its photos.
+Five Commons photos carry a public-domain tag that covers the label rather
+than the photograph or scan; the credits say so, and a photo is taken out
+on a credible request.
 
 ### What each photo shows
 
@@ -308,8 +338,9 @@ names the machine and gives the load average; `barbench/timing.py` says
 more.
 
 For the photo tier, `python -m barbench photos DIR` in place of `corpus`
-downloads and converts the photos into `DIR-cache` (the archives are about
-450 MB together; only the 140 MB of listed photos stay). `--sets
+downloads and converts the photos into `DIR-cache`: about 141 MB from the
+mirror, or about 450 MB of archives from the sources when the mirror
+fails, of which only the 140 MB of listed photos stay. `--sets
 zxing-blackbox` limits it to the ZXing set, which is 20 MB.
 
 `scripts/ci.sh` does the same on a smaller synthetic corpus and on every

@@ -9,6 +9,7 @@
     python -m barbench time DIR [--readers a,b] [--runs N] [--out timing.json]
     python -m barbench plot REPORT --out curves.svg
     python -m barbench annotate VIEW ... --cache DIR   (views for placing corners; see annotate.py)
+    python -m barbench mirror OUT --cache DIR --release photos-N   (a mirror release's assets)
 
 Which photos a reader holds out is its own declaration; see slices.py.
 How `time` splits start-up from the cost per image is in timing.py.
@@ -19,7 +20,7 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, annotate, corpus, photos, plot, score, slices, source, timing
+from . import __version__, adapters, annotate, corpus, mirror, photos, plot, score, slices, source, timing
 
 
 def main(argv=None):
@@ -68,6 +69,10 @@ def main(argv=None):
     sheets.add_argument("set")
     sheets.add_argument("prefix", help="pages are written as PREFIX-00.png, PREFIX-01.png, ...")
     sheets.add_argument("--cache", required=True, help="the photo cache `barbench photos` filled")
+    mirrored = sub.add_parser("mirror", help="write a photo mirror release's assets to OUT, from the sources")
+    mirrored.add_argument("out")
+    mirrored.add_argument("--cache", required=True, help="where downloads are kept")
+    mirrored.add_argument("--release", required=True, help="the release's name, photos-N")
     run = sub.add_parser("run", help="run readers on the corpus in DIR")
     run.add_argument("dir")
     run.add_argument("--readers", default=",".join(adapters.ADAPTERS))
@@ -114,6 +119,15 @@ def main(argv=None):
         except (ValueError, OSError) as e:
             parser.error(str(e))
         print(f"{args.photo}: {img.shape[1]}x{img.shape[0]}, wrote {args.out}")
+        return 0
+
+    if args.command == "mirror":
+        if not mirror.RELEASE.fullmatch(args.release):
+            parser.error(f"{args.release!r} is not a release name like photos-1")
+        config = mirror.build(args.out, args.cache, args.release, built_from=source.commit())
+        for name, asset in config["sets"].items():
+            print(f"{asset['file']}: {asset['bytes']} bytes, sha256 {asset['sha256']}")
+        print(f"wrote {os.path.join(args.out, 'mirror.json')}")
         return 0
 
     if args.command in ("corpus", "sweep") and args.seed < 0:

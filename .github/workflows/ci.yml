@@ -20,8 +20,9 @@ jobs:
       # is fetched again. An older entry is safe to start from: photos are
       # checked against their digests, and pyproject.toml pins exact
       # versions, whose files PyPI never replaces. The photos come from
-      # 450 MB of archives, so their cache is saved even when a job fails
-      # (below), lest every failing run fetch them again.
+      # 141 MB of mirror assets, or 450 MB of archives from the sources, so
+      # their cache is saved even when a job fails (below), lest every
+      # failing run fetch them again.
       - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ runner.temp }}/barbench-photos

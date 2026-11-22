@@ -7,7 +7,8 @@ from a pinned commit; photos of Code 128 labels from Wikimedia Commons,
 each under its own licence, downloaded one by one from their pinned
 originals; and the KAIST and ArTe-Lab barcode sets (CC BY 4.0 and 3.0),
 whose listed photos are taken from a pinned archive. The repository
-carries none of the photos. Each is checked against its digest,
+carries none of the photos; barbench's photo mirror (mirror.py) carries
+every one, and is asked first. Each is checked against its digest,
 decoded here from PNG or baseline JPEG (zlib and numpy, no imaging library;
 see jpeg.py for why) and written as a PGM with the same manifest the
 synthetic tier writes.
@@ -317,9 +318,16 @@ def cache_path(listing, file, cache):
     return os.path.join(cache, file)
 
 
-def fetch(listing, cache, opener=urllib.request.urlopen):
+def fetch(listing, cache, opener=urllib.request.urlopen, use_mirror=True):
     """Downloads every photo in `listing` into `cache` unless a file with
-    the right digest is already there. Returns the paths, in order."""
+    the right digest is already there: from barbench's photo mirror first,
+    when `use_mirror` and the mirror has the set, then from the set's own
+    source. Returns the paths, in order."""
+    if use_mirror:
+        # Imported here: mirror.py builds on this module.
+        from . import mirror
+
+        mirror.fill(listing, cache, opener)
     if "archive" in listing:
         return _fetch_archive(listing, cache, opener)
     if "host" in listing:
@@ -451,12 +459,12 @@ def _fetch_archive(listing, cache, opener):
     return paths
 
 
-def _download_to(url, path, size, opener):
-    """Writes the `size` bytes at `url` to `path`, tried ARCHIVE_TRIES times.
-    More bytes than that is an error; fewer, a transfer cut short, is tried
-    again."""
+def _download_to(url, path, size, opener, tries=ARCHIVE_TRIES):
+    """Writes the `size` bytes at `url` to `path`, tried `tries` times. More
+    bytes than that is an error; fewer, a transfer cut short, is tried
+    again. A 4xx answer is not: the file is not there to try again for."""
     request = urllib.request.Request(url, headers={"User-Agent": "barbench"})
-    for attempt in range(ARCHIVE_TRIES):
+    for attempt in range(tries):
         try:
             with opener(request, timeout=TIMEOUT) as response, open(path, "wb") as f:
                 written = 0
@@ -468,8 +476,8 @@ def _download_to(url, path, size, opener):
             if written != size:
                 raise ConnectionError(f"{url}: {written} bytes, not the listed {size}")
             return
-        except (urllib.error.URLError, http.client.HTTPException, TimeoutError, ConnectionError):
-            if attempt + 1 == ARCHIVE_TRIES:
+        except (urllib.error.URLError, http.client.HTTPException, TimeoutError, ConnectionError) as e:
+            if attempt + 1 == tries or (isinstance(e, urllib.error.HTTPError) and 400 <= e.code < 500):
                 raise
             time.sleep(2 << attempt)
 

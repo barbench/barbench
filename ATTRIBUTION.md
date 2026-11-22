@@ -1,15 +1,16 @@
 # Attribution
 
 barbench's repository holds no photos: each set is a list of files that barbench downloads at run
-time and checks against their digests. Every set is listed here, in the same change that adds it.
-Licences must be on the test-asset allowlist in [AGENTS.md](AGENTS.md).
+time and checks against their digests, from its photo mirror (release assets of this repository,
+which carry these credits and licences) or from the sources. Every set is listed here, in the same
+change that adds it. Licences must be on the test-asset allowlist in [AGENTS.md](AGENTS.md).
 
 | Path | Title | Author | Source | Licence |
 | ---- | ----- | ------ | ------ | ------- |
-| `barbench/lists/zxing-blackbox.json` (downloaded at run time, not in the repository) | ZXing blackbox test photos: `code128-2` (40 Code 128 photos), `ean13-2` and `upca-2` (80 negatives), with the text of each EAN-13 and UPC-A photo from the `.txt` file beside it | ZXing authors | [zxing/zxing](https://github.com/zxing/zxing) at commit `1eb71d2557ffdf64c7a7af1a5464489d294e825a`, `core/src/test/resources/blackbox` | Apache-2.0 |
-| `barbench/lists/commons-code128.json` (downloaded at run time, not in the repository) | 13 photos and scans of Code 128 labels from Wikimedia Commons, each under its own licence, listed below | See below | [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Code_128), each file from its pinned original | CC-BY-4.0 AND CC0-1.0 AND LicenseRef-Public-Domain |
-| `barbench/lists/kaist-real.json` (downloaded at run time, not in the repository) | Barcode Dataset from Quick Browser and Smart Inference papers: 524 photos from `real.zip`, `real/img` (only baseline JPEGs named by 13 digits; the crops of the WWU Muenster and ArTe-Lab sets are left out) | Duy-Thao Do (KAIST) | [Zenodo record 13586402](https://zenodo.org/records/13586402), `real.zip`, SHA-256 `11d04e7cee06024e8b6d2f89e0136bdccc69554061941dcfa552243fabe68538` | CC-BY-4.0 |
-| `barbench/lists/artelab-medium.json` (downloaded at run time, not in the repository) | Medium Barcode 1D Collection: all 345 photos | ArTe-Lab, University of Insubria (A. Zamberletti, I. Gallo, M. Carullo, E. Binaghi) | [ArTe-Lab downloads](https://artelab.dista.uninsubria.it/downloads/datasets/barcode/medium_barcode_1d/medium_barcode_1d.html), `medium_barcode_1d.zip` | CC-BY-3.0 |
+| `barbench/lists/zxing-blackbox.json` (downloaded at run time; not in the repository, but in its photo mirror releases) | ZXing blackbox test photos: `code128-2` (40 Code 128 photos), `ean13-2` and `upca-2` (80 negatives), with the text of each EAN-13 and UPC-A photo from the `.txt` file beside it | ZXing authors | [zxing/zxing](https://github.com/zxing/zxing) at commit `1eb71d2557ffdf64c7a7af1a5464489d294e825a`, `core/src/test/resources/blackbox` | Apache-2.0 |
+| `barbench/lists/commons-code128.json` (downloaded at run time; not in the repository, but in its photo mirror releases) | 13 photos and scans of Code 128 labels from Wikimedia Commons, each under its own licence, listed below | See below | [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Code_128), each file from its pinned original | CC-BY-4.0 AND CC0-1.0 AND LicenseRef-Public-Domain |
+| `barbench/lists/kaist-real.json` (downloaded at run time; not in the repository, but in its photo mirror releases) | Barcode Dataset from Quick Browser and Smart Inference papers: 524 photos from `real.zip`, `real/img` (only baseline JPEGs named by 13 digits; the crops of the WWU Muenster and ArTe-Lab sets are left out) | Duy-Thao Do (KAIST) | [Zenodo record 13586402](https://zenodo.org/records/13586402), `real.zip`, SHA-256 `11d04e7cee06024e8b6d2f89e0136bdccc69554061941dcfa552243fabe68538` | CC-BY-4.0 |
+| `barbench/lists/artelab-medium.json` (downloaded at run time; not in the repository, but in its photo mirror releases) | Medium Barcode 1D Collection: all 345 photos | ArTe-Lab, University of Insubria (A. Zamberletti, I. Gallo, M. Carullo, E. Binaghi) | [ArTe-Lab downloads](https://artelab.dista.uninsubria.it/downloads/datasets/barcode/medium_barcode_1d/medium_barcode_1d.html), `medium_barcode_1d.zip` | CC-BY-3.0 |
 
 ## Wikimedia Commons photos
 

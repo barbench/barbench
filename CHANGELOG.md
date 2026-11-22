@@ -25,5 +25,9 @@ All notable changes to barbench are documented in this file. The format follows
   version names the macOS build and the chip, since Vision comes with the OS.
 - `barbench time DIR`: each reader's start-up and its cost per image, as medians of runs on the
   tier's smallest image and on the whole tier, with the machine and the load average recorded.
+- A photo mirror: `barbench mirror` writes one reproducible tar per set, with its credits and
+  licence texts, for a release `photos-N`, and `barbench photos` takes missing photos from the
+  release `mirror.json` names before each set's source, falling back to the source with a warning
+  (`BARBENCH_NO_MIRROR` skips it). ZXing's list names its `LICENSE` and `NOTICE` for the tar.
 - Its own licence files, `AGENTS.md`, `CONTRIBUTING.md`, `ATTRIBUTION.md`, `scripts/ci.sh` and CI
   workflow. The Wikimedia User-Agent names this repository.

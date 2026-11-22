@@ -10,7 +10,8 @@
 # from target/, where no barbench folder can be imported instead.
 #
 # Needs Python 3.12 or newer and the network. The photos job downloads
-# about 450 MB of archives the first time and keeps the listed photos in
+# about 141 MB from the photo mirror the first time (450 MB of archives from
+# the sources when the mirror fails) and keeps the listed photos in
 # BARBENCH_PHOTO_CACHE (default target/photo-cache). Set STREEPJES_BIN to a
 # streepjes binary to run and test that reader too.
 set -euo pipefail
