@@ -31,13 +31,14 @@ For each reader: how many symbols it read, how many it misread (any output
 other than the payload), how many negatives it read a code in, and the
 wall-clock seconds for the batch, plus read rates by each parameter.
 
-The seconds are **not comparable** between readers yet: streepjes's
+These seconds are **not comparable** between readers: streepjes's
 include starting its process and parsing the files, zxing-cpp's exclude
 reading the files, zbar starts a process per image, and vision's include
-starting its process and loading its models. Each reader also runs with its
-own defaults: streepjes at its fast effort, zxing-cpp with its rotation,
-downscaling and inversion retries on, and vision with Apple's, at a pinned
-revision.
+starting its process and loading its models. `barbench time` (below)
+splits each reader's time into its start-up and its cost per image. Each
+reader also runs with its own defaults: streepjes at its fast effort,
+zxing-cpp with its rotation, downscaling and inversion retries on, and
+vision with Apple's, at a pinned revision.
 
 ### Curves
 
@@ -295,6 +296,17 @@ For the curves, `python -m barbench sweep DIR` in place of `corpus`, then
 `run` as above with `--out`, and `python -m barbench plot RESULTS --out
 curves.svg`.
 
+For timing, `python -m barbench time DIR --out timing.json` on any tier
+gives each reader's start-up and its cost per image, as the medians of
+five runs (`--runs`). A reader that runs as a process runs on the tier's
+smallest image and on the whole tier, one process each time, ZBar's too;
+the first is its start-up, and the rest of the second, over the other
+images, its cost per image, reading the files included. zxing-cpp runs in
+barbench's process: its start-up is the import, and its cost per image
+leaves out reading the files. The times are wall-clock, so the report
+names the machine and gives the load average; `barbench/timing.py` says
+more.
+
 For the photo tier, `python -m barbench photos DIR` in place of `corpus`
 downloads and converts the photos into `DIR-cache` (the archives are about
 450 MB together; only the 140 MB of listed photos stay). `--sets
@@ -313,8 +325,8 @@ when `STREEPJES_BIN` is set.
 - More tiers: more real photos of Code 128 (ZXing's set is small and
   familiar to zxing-cpp, and Commons holds few with a usable licence),
   print defects, perspective, and more symbologies.
-- Time per image rather than per batch, measured the same way for every
-  reader.
+- Time zxing-cpp's file reading too, as the other readers' cost per
+  image includes theirs.
 - Only released versions are benchmarked for published results.
 
 ## Licence

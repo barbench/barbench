@@ -21,7 +21,7 @@ import numpy as np
 
 from barbench import __main__ as cli
 import barbench
-from barbench import adapters, corpus, pgm, photos, plot, score, slices, source
+from barbench import adapters, corpus, pgm, photos, plot, score, slices, source, timing
 
 
 class PgmTest(unittest.TestCase):
@@ -31,6 +31,12 @@ class PgmTest(unittest.TestCase):
             path = os.path.join(d, "a.pgm")
             pgm.write(path, image)
             np.testing.assert_array_equal(pgm.read(path), image)
+
+    def test_the_size_is_read_from_the_header(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "a.pgm")
+            pgm.write(path, np.zeros((5, 12), np.uint8))
+            self.assertEqual(pgm.size(path), (12, 5))
 
     def test_truncated_files_are_refused(self):
         with tempfile.TemporaryDirectory() as d:
@@ -802,6 +808,138 @@ class VisionAdapterTest(unittest.TestCase):
         self.assertEqual(results[1], {"texts": []})
         self.assertIn("error", results[2])
         self.assertTrue(version.startswith("Apple Vision barcodes revision 4, macOS "), version)
+
+
+def _runs(log):
+    """The files of each run a fake reader logged, one run per line."""
+    return [line.rstrip("\n").split("|")[:-1] for line in log]
+
+
+class TimingTest(unittest.TestCase):
+    """`barbench time`: what it runs and how it splits the times. No test
+    asserts on how long anything took."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        d = self.dir.name
+        self.log = os.path.join(d, "log")
+        # b.pgm is the smallest image, and so the one start-up is timed on.
+        for name, shape in (("a.pgm", (8, 8)), ("b.pgm", (4, 6)), ("c.pgm", (8, 10))):
+            pgm.write(os.path.join(d, name), np.full(shape, 255, np.uint8))
+        self.write_manifest(["a.pgm", "b.pgm", "c.pgm"])
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def write_manifest(self, files):
+        manifest = {"tier": "synthetic", "seed": 0, "images": [{"file": f} for f in files]}
+        with open(os.path.join(self.dir.name, "manifest.json"), "w") as f:
+            json.dump(manifest, f)
+
+    def fake_streepjes(self, status=0, lines="for f; do echo '{\"codes\": []}'; done\n"):
+        """A streepjes that logs the files of each run and prints LINES."""
+        return _script(self.dir.name, "streepjes",
+                       '[ "$1" = --version ] && { echo "streepjes 0.0.0"; exit 0; }\n'
+                       f'shift 3\nprintf "%s|" "$@" >> "{self.log}"\necho >> "{self.log}"\n{lines}exit {status}\n')
+
+    def time(self, *args, env=None):
+        out = os.path.join(self.dir.name, "timing.json")
+        with mock.patch.dict(os.environ, env or {}):
+            with contextlib.redirect_stdout(io.StringIO()) as printed:
+                status = cli.main(["time", self.dir.name, *args, "--out", out])
+        self.assertEqual(status, 0)
+        self.assertIn("per image", printed.getvalue())
+        with open(out) as f:
+            return json.load(f)
+
+    def logged(self):
+        with open(self.log) as f:
+            return _runs(f)
+
+    def test_start_up_and_cost_per_image(self):
+        timed = timing.split([0.010, 0.012, 0.011], [0.110, 0.111, 0.120], 101)
+        self.assertAlmostEqual(timed["startup_s"], 0.011)
+        self.assertAlmostEqual(timed["tier_s"], 0.111)
+        self.assertAlmostEqual(timed["per_image_s"], 0.001)
+        self.assertEqual(timed["startup_runs"], [0.010, 0.012, 0.011])
+        # Noise can make a tier run shorter than a one-image run.
+        self.assertEqual(timing.split([0.02], [0.01], 3)["per_image_s"], 0.0)
+        with self.assertRaises(ValueError):
+            timing.split([0.01], [0.01], 1)
+
+    def test_a_process_reader_runs_on_the_smallest_image_and_on_the_tier(self):
+        bin = self.fake_streepjes()
+        report = self.time("--readers", "streepjes", "--runs", "2", env={"STREEPJES_BIN": bin})
+        d = self.dir.name
+        small = [os.path.join(d, "b.pgm")]
+        tier = [os.path.join(d, f) for f in ("a.pgm", "b.pgm", "c.pgm")]
+        # A warm-up of each, then two counted runs of each, taking turns.
+        self.assertEqual(self.logged(), [small, tier] * 3)
+        self.assertEqual((report["images"], report["smallest"], report["runs"]), (3, "b.pgm", 2))
+        self.assertEqual(report["median_pixels"], 64)
+        self.assertEqual(report["tier"], "synthetic")
+        streepjes = report["readers"]["streepjes"]
+        self.assertEqual(streepjes["version"], "streepjes 0.0.0")
+        self.assertEqual((len(streepjes["startup_runs"]), len(streepjes["tier_runs"])), (2, 2))
+        self.assertGreaterEqual(streepjes["per_image_s"], 0.0)
+        self.assertIn("python", report["machine"])
+
+    def test_a_run_that_fails_gives_no_time(self):
+        for fake, error in (
+            ({"status": 2}, "exited 2"),
+            ({"lines": "echo '{\"codes\": []}'\n"}, "1 lines for 3 files"),
+        ):
+            bin = self.fake_streepjes(**fake)
+            with self.assertRaisesRegex(RuntimeError, error):
+                self.time("--readers", "streepjes", "--runs", "1", env={"STREEPJES_BIN": bin})
+
+    def test_zbar_is_timed_as_one_process_for_the_tier(self):
+        zbar_log = os.path.join(self.dir.name, "zbar-log")
+        _script(self.dir.name, "zbarimg", '[ "$1" = --version ] && { echo 0.23; exit 0; }\n'
+                f'shift 4\nprintf "%s|" "$@" >> "{zbar_log}"\necho >> "{zbar_log}"\nexit 4\n')
+        path = self.dir.name + os.pathsep + os.environ.get("PATH", "")
+        report = self.time("--readers", "zbar", "--runs", "1", env={"PATH": path})
+        with open(zbar_log) as f:
+            runs = _runs(f)
+        tier = [os.path.join(self.dir.name, f) for f in ("a.pgm", "b.pgm", "c.pgm")]
+        self.assertEqual(runs, [[os.path.join(self.dir.name, "b.pgm")], tier] * 2)
+        self.assertEqual(report["readers"]["zbar"]["version"], "zbar 0.23")
+
+    def test_a_reader_that_is_missing_is_skipped(self):
+        report = self.time("--readers", "streepjes", env={"STREEPJES_BIN": "/nonexistent/streepjes"})
+        self.assertIn("not found", report["readers"]["streepjes"]["skipped"])
+        self.assertIn("skipped", timing.table(report))
+
+    def test_usage_errors(self):
+        for args in (["--readers", "streepjs"], ["--runs", "0"]):
+            with self.assertRaises(SystemExit) as e, contextlib.redirect_stderr(io.StringIO()):
+                cli.main(["time", self.dir.name, *args])
+            self.assertEqual(e.exception.code, 2, args)
+        # One image gives no cost per image.
+        self.write_manifest(["a.pgm"])
+        with self.assertRaises(SystemExit) as e, contextlib.redirect_stderr(io.StringIO()):
+            cli.main(["time", self.dir.name, "--readers", "streepjes"])
+        self.assertEqual(e.exception.code, 2)
+
+    def test_every_reader_can_be_timed(self):
+        self.assertEqual(set(adapters.ADAPTERS), set(timing.PROCESSES) | {"zxing-cpp"})
+
+    def test_zxing_cpp_is_timed_in_process(self):
+        try:
+            import zxingcpp  # noqa: F401
+        except ImportError:
+            self.skipTest("zxing-cpp is not installed")
+        report = self.time("--readers", "zxing-cpp", "--runs", "1")
+        zxing = report["readers"]["zxing-cpp"]
+        self.assertTrue(zxing["version"].startswith("zxing-cpp "))
+        self.assertEqual([len(zxing[k]) for k in ("python_runs", "import_runs", "read_runs")], [1, 1, 1])
+        self.assertGreaterEqual(zxing["startup_s"], 0.0)
+        self.assertAlmostEqual(zxing["tier_s"], zxing["startup_s"] + zxing["read_runs"][0])
+        # A Python that cannot import it, isolated, leaves its start-up untimed.
+        broken = _script(self.dir.name, "python", 'echo "No module named zxingcpp" >&2\nexit 1\n')
+        with mock.patch.object(timing.sys, "executable", broken):
+            report = self.time("--readers", "zxing-cpp", "--runs", "1")
+        self.assertIn("cannot be timed", report["readers"]["zxing-cpp"]["skipped"])
 
 
 if __name__ == "__main__":

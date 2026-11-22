@@ -49,12 +49,10 @@ def _json_lines(reader, stdout, count):
 def streepjes(paths, binary=None):
     """The Streepjes reader's `streepjes` command: one process for the
     batch, with the default (fast) effort and Code 128 only."""
-    binary = binary or os.environ.get("STREEPJES_BIN") or shutil.which("streepjes")
-    if not binary or not os.path.exists(binary):
-        raise Unavailable("streepjes binary not found (set STREEPJES_BIN)")
+    binary = _streepjes_binary(binary)
     start = time.perf_counter()
     done = subprocess.run(
-        [binary, "--formats", "code128", "--", *paths],
+        [binary, *STREEPJES_OPTIONS, *paths],
         capture_output=True,
         text=True,
         check=False,
@@ -62,9 +60,24 @@ def streepjes(paths, binary=None):
     seconds = time.perf_counter() - start
     if done.returncode not in (0, 1):
         raise RuntimeError(f"streepjes exited {done.returncode}: {done.stderr.strip()}")
-    results = _json_lines("streepjes", done.stdout, len(paths))
-    version = subprocess.run([binary, "--version"], capture_output=True, text=True).stdout
-    return results, seconds, version.strip()
+    return _json_lines("streepjes", done.stdout, len(paths)), seconds, _version(binary)
+
+
+# Code 128 alone, at the default effort; the paths follow.
+STREEPJES_OPTIONS = ["--formats", "code128", "--"]
+
+
+def _streepjes_binary(binary=None):
+    """The streepjes command: BINARY, else STREEPJES_BIN, else on the PATH."""
+    binary = binary or os.environ.get("STREEPJES_BIN") or shutil.which("streepjes")
+    if not binary or not os.path.exists(binary):
+        raise Unavailable("streepjes binary not found (set STREEPJES_BIN)")
+    return binary
+
+
+def _version(binary):
+    """What a reader's command prints for --version."""
+    return subprocess.run([binary, "--version"], capture_output=True, text=True).stdout.strip()
 
 
 def zxing_cpp(paths):
@@ -79,28 +92,30 @@ def zxing_cpp(paths):
     start = time.perf_counter()
     results = []
     for image in images:
-        # Plain text, as streepjes reports it: GS1 data without the
-        # parentheses of its application identifiers, which the default
-        # (HRI) adds and which the symbol does not hold.
-        found = zxingcpp.read_barcodes(
-            image, formats=zxingcpp.BarcodeFormat.Code128, text_mode=zxingcpp.TextMode.Plain
-        )
+        found = _zxing_read(zxingcpp, image)
         results.append({"texts": [r.text for r in found if r.valid]})
     seconds = time.perf_counter() - start
     return results, seconds, "zxing-cpp " + importlib.metadata.version("zxing-cpp")
 
 
+def _zxing_read(zxingcpp, image):
+    # Plain text, as streepjes reports it: GS1 data without the
+    # parentheses of its application identifiers, which the default
+    # (HRI) adds and which the symbol does not hold.
+    return zxingcpp.read_barcodes(
+        image, formats=zxingcpp.BarcodeFormat.Code128, text_mode=zxingcpp.TextMode.Plain
+    )
+
+
 def zbar(paths):
     """ZBar's `zbarimg`, one process per image (it stops at the first
     unreadable file), Code 128 only."""
-    binary = shutil.which("zbarimg")
-    if not binary:
-        raise Unavailable("zbarimg is not installed")
+    binary = _zbar_binary()
     results = []
     start = time.perf_counter()
     for path in paths:
         done = subprocess.run(
-            [binary, "--quiet", "--raw", "-Sdisable", "-Scode128.enable", path],
+            [binary, *ZBAR_OPTIONS, path],
             capture_output=True,
             text=True,
             check=False,
@@ -111,8 +126,18 @@ def zbar(paths):
         else:
             results.append({"texts": [], "error": done.stderr.strip()})
     seconds = time.perf_counter() - start
-    version = subprocess.run([binary, "--version"], capture_output=True, text=True).stdout
-    return results, seconds, "zbar " + version.strip()
+    return results, seconds, "zbar " + _version(binary)
+
+
+def _zbar_binary():
+    binary = shutil.which("zbarimg")
+    if not binary:
+        raise Unavailable("zbarimg is not installed")
+    return binary
+
+
+# ZBar's options for Code 128 alone, as every adapter reads.
+ZBAR_OPTIONS = ["--quiet", "--raw", "-Sdisable", "-Scode128.enable"]
 
 
 def vision(paths, binary=None):
@@ -121,6 +146,17 @@ def vision(paths, binary=None):
     Code 128 only. macOS only; the helper is built with `swiftc` the first
     time and kept (`_vision_binary`)."""
     binary = binary or _vision_binary()
+    version = _vision_version(binary)
+    start = time.perf_counter()
+    done = subprocess.run([binary, *paths], capture_output=True, text=True, check=False)
+    seconds = time.perf_counter() - start
+    if done.returncode != 0:
+        raise RuntimeError(f"vision exited {done.returncode}: {done.stderr.strip()}")
+    return _json_lines("vision", done.stdout, len(paths)), seconds, version
+
+
+def _vision_version(binary):
+    """The Vision helper's version, which also says whether it can run here."""
     if not os.path.exists(binary):
         raise Unavailable(f"the Vision helper is missing: {binary}")
     # The helper refuses, with exit 3, a macOS without the pinned revision.
@@ -129,12 +165,7 @@ def vision(paths, binary=None):
         raise Unavailable(probe.stderr.strip())
     if probe.returncode != 0:
         raise RuntimeError(f"vision --version exited {probe.returncode}: {probe.stderr.strip()}")
-    start = time.perf_counter()
-    done = subprocess.run([binary, *paths], capture_output=True, text=True, check=False)
-    seconds = time.perf_counter() - start
-    if done.returncode != 0:
-        raise RuntimeError(f"vision exited {done.returncode}: {done.stderr.strip()}")
-    return _json_lines("vision", done.stdout, len(paths)), seconds, probe.stdout.strip()
+    return probe.stdout.strip()
 
 
 def _vision_binary():

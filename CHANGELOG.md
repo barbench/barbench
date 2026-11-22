@@ -23,5 +23,7 @@ All notable changes to barbench are documented in this file. The format follows
 - A `vision` reader: Apple Vision's barcode detector at a pinned revision, on macOS, through a
   Swift helper (`barbench/vision.swift`) that the adapter builds with `swiftc` on first use. Its
   version names the macOS build and the chip, since Vision comes with the OS.
+- `barbench time DIR`: each reader's start-up and its cost per image, as medians of runs on the
+  tier's smallest image and on the whole tier, with the machine and the load average recorded.
 - Its own licence files, `AGENTS.md`, `CONTRIBUTING.md`, `ATTRIBUTION.md`, `scripts/ci.sh` and CI
   workflow. The Wikimedia User-Agent names this repository.

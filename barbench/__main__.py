@@ -6,10 +6,12 @@
         [--slices e,f] [--added-after YYYY-MM-DD] [--held-out-for a,b] [--dev-for a]
     python -m barbench run DIR [--readers a,b] [--out results.json]
         [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4]
+    python -m barbench time DIR [--readers a,b] [--runs N] [--out timing.json]
     python -m barbench plot REPORT --out curves.svg
     python -m barbench annotate VIEW ... --cache DIR   (views for placing corners; see annotate.py)
 
 Which photos a reader holds out is its own declaration; see slices.py.
+How `time` splits start-up from the cost per image is in timing.py.
 """
 
 import argparse
@@ -17,7 +19,7 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, annotate, corpus, photos, plot, score, slices, source
+from . import __version__, adapters, annotate, corpus, photos, plot, score, slices, source, timing
 
 
 def main(argv=None):
@@ -85,6 +87,11 @@ def main(argv=None):
         default="",
         help="comma-separated readers that must be available (else exit 1)",
     )
+    times = sub.add_parser("time", help="time readers on the corpus in DIR: start-up and cost per image")
+    times.add_argument("dir")
+    times.add_argument("--readers", default=",".join(adapters.ADAPTERS))
+    times.add_argument("--runs", type=int, default=timing.RUNS, help="timed runs, of which the median counts")
+    times.add_argument("--out", help="write the JSON report here")
     args = parser.parse_args(argv)
 
     if args.command == "annotate":
@@ -169,6 +176,32 @@ def main(argv=None):
 
     with open(os.path.join(args.dir, "manifest.json")) as f:
         manifest = json.load(f)
+
+    if args.command == "time":
+        readers = [r for r in args.readers.split(",") if r]
+        for name in readers:
+            if name not in adapters.ADAPTERS:
+                parser.error(f"unknown reader '{name}'")
+        if args.runs < 1:
+            parser.error("--runs must be at least 1")
+        files = [e["file"] for e in manifest["images"]]
+        # The cost per image is what the tier adds to a run on one image.
+        if len(files) < 2:
+            parser.error(f"timing needs two images or more; {args.dir} has {len(files)}")
+        report = {
+            "barbench": __version__,
+            "barbench_commit": source.commit(),
+            "tier": manifest["tier"],
+            "seed": manifest["seed"],
+            **timing.measure(args.dir, files, readers, args.runs),
+        }
+        if args.out:
+            with open(args.out, "w") as f:
+                json.dump(report, f, indent=1)
+                f.write("\n")
+        print(timing.table(report))
+        return 0
+
     paths = [os.path.join(args.dir, e["file"]) for e in manifest["images"]]
     report = {
         "barbench": __version__,

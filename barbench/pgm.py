@@ -15,6 +15,23 @@ def read(path):
 
     with open(path, "rb") as f:
         data = f.read()
+    width, height, at = _header(data, path)
+    raster = data[at + 1 : at + 1 + width * height]
+    if len(raster) != width * height:
+        raise ValueError(f"{path}: truncated")
+    return np.frombuffer(raster, dtype=np.uint8).reshape(height, width)
+
+
+def size(path):
+    """The width and height of a binary 8-bit PGM, from its header alone."""
+    with open(path, "rb") as f:
+        # A header `write` wrote is a few bytes; this allows for much more.
+        width, height, _ = _header(f.read(4096), path)
+    return width, height
+
+
+def _header(data, path):
+    """The width and height in a PGM's header, and where the header ends."""
     fields = []
     at = 0
     while len(fields) < 4:
@@ -26,8 +43,4 @@ def read(path):
         fields.append(data[start:at])
     if fields[0] != b"P5" or int(fields[3]) != 255:
         raise ValueError(f"{path}: not an 8-bit binary PGM")
-    width, height = int(fields[1]), int(fields[2])
-    raster = data[at + 1 : at + 1 + width * height]
-    if len(raster) != width * height:
-        raise ValueError(f"{path}: truncated")
-    return np.frombuffer(raster, dtype=np.uint8).reshape(height, width)
+    return int(fields[1]), int(fields[2]), at

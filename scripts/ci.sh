@@ -65,6 +65,9 @@ job_synthetic() {
     (cd "$target" && "$venv/bin/python" -m barbench corpus corpus --per-cell 1)
     (cd "$target" && "$venv/bin/python" -m barbench run corpus --readers "$readers" --require "$readers" \
         "${gates[@]}" --min-read zxing-cpp=0.4 --out synthetic-results.json)
+    # Timing has no gate, since CI machines vary; this checks that it runs.
+    (cd "$target" && "$venv/bin/python" -m barbench time corpus --readers "$readers" --runs 1 \
+        --out synthetic-timing.json)
 }
 
 job_photos() {
