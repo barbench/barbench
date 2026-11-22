@@ -298,9 +298,10 @@ def check_split(listing):
 
 
 def load_lists(names=None, split="dev"):
-    """The listings in `lists/` of the given split, by name; all of
-    them by default."""
-    if split not in SPLITS:
+    """The listings in `lists/` of the given split (of every split when
+    `split` is None, which only tools that score nothing ask for), by
+    name; all of them by default."""
+    if split is not None and split not in SPLITS:
         raise ValueError(f"split is {split!r}, not one of {', '.join(SPLITS)}")
     if names is not None and not names:
         raise ValueError("no photo sets named")
@@ -316,7 +317,7 @@ def load_lists(names=None, split="dev"):
             if group is not None and sides.setdefault(group, listing["split"]) != listing["split"]:
                 raise ValueError(f"group {group!r} is listed as both dev and test")
     if names is None:
-        chosen = [listing for listing in found.values() if listing["split"] == split]
+        chosen = [listing for listing in found.values() if split in (None, listing["split"])]
         if not chosen:
             raise ValueError(f"no {split} photos are listed")
         return chosen
@@ -324,10 +325,19 @@ def load_lists(names=None, split="dev"):
     if missing:
         raise ValueError(f"no photo set named {', '.join(missing)} (have {', '.join(found)})")
     # Dropping them silently would score fewer photos than were asked for.
-    other = [n for n in names if found[n]["split"] != split]
+    other = [n for n in names if split not in (None, found[n]["split"])]
     if other:
         raise ValueError(f"not {split} photos: {', '.join(other)}")
     return [found[n] for n in names]
+
+
+def cache_path(listing, file, cache):
+    """Where `fetch` keeps a listed photo: ZXing's under the cache itself,
+    as its files were cached before there were other sets, and every
+    other set's under a folder named for the set."""
+    if "archive" in listing or "host" in listing:
+        return os.path.join(cache, listing["name"], file)
+    return os.path.join(cache, file)
 
 
 def fetch(listing, cache, opener=urllib.request.urlopen):
@@ -345,7 +355,7 @@ def fetch(listing, cache, opener=urllib.request.urlopen):
     for entry in listing["images"]:
         if not FILE_NAME.fullmatch(entry["file"]):
             raise ValueError(f"{entry['file']!r}: not a listed photo's name")
-        path = os.path.join(cache, entry["file"])
+        path = cache_path(listing, entry["file"], cache)
         if not (os.path.exists(path) and _digest(path) == entry["sha256"]):
             os.makedirs(os.path.dirname(path), exist_ok=True)
             data = _download(base + entry["file"], opener)
@@ -373,7 +383,7 @@ def _fetch_files(listing, cache, opener):
             raise ValueError(f"{entry['file']!r}: not a listed photo's name")
         if not COMMONS_URL.fullmatch(entry["url"]):
             raise ValueError(f"{entry['url']!r}: not a pinned Commons original")
-        path = os.path.join(folder, entry["file"])
+        path = cache_path(listing, entry["file"], cache)
         if not (os.path.exists(path) and _digest(path) == entry["sha256"]):
             if downloaded:
                 time.sleep(COMMONS_PAUSE)
@@ -425,7 +435,7 @@ def _fetch_archive(listing, cache, opener):
     for entry in listing["images"]:
         if not MEMBER_NAME.fullmatch(entry["file"]) or ".." in entry["file"]:
             raise ValueError(f"{entry['file']!r}: not a listed photo's name")
-        path = os.path.join(folder, entry["file"])
+        path = cache_path(listing, entry["file"], cache)
         if not (os.path.exists(path) and _digest(path) == entry["sha256"]):
             missing.append((entry, path))
         paths.append(path)

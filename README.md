@@ -180,6 +180,19 @@ quadrilateral fits a curved or distorted label poorly. No source gives
 corners, and those a reader reports would favour that reader, so other
 photos have none yet.
 
+To place a symbol's corners, `python -m barbench annotate` draws views
+from the photo cache `barbench photos` filled, naming a photo `SET/FILE`
+as the lists do: `overview` (the whole photo with a grid labelled in its
+pixels), `zoom` (a magnified square round a point), `corners` (the four
+proposed corners magnified and marked, laid out start-top and stop-top
+over start-bottom and stop-bottom) and `overlay` (the quadrilateral drawn
+on the photo, its first edge green). Move each corner until its mark sits
+on the corner, check the overlay, and write the corners into the list; the
+views refuse corners that break the rules a list's corners must keep.
+`annotate sheet SET PREFIX` draws every listed symbol of a set with its
+corners in the list's order, to check a list by eye; a second person
+placing a few without seeing the first is the better check.
+
 ### Development and test data
 
 Every list says which split its photos are in, and every manifest row

@@ -6,6 +6,7 @@
     python -m barbench run DIR [--readers a,b] [--out results.json]
         [--require a,b] [--no-misreads a,b] [--min-read a=0.5,b=0.4] [--split test]
     python -m barbench plot REPORT --out curves.svg
+    python -m barbench annotate VIEW ... --cache DIR   (views for placing corners; see annotate.py)
 
 Every command that makes or runs a corpus works on development data
 unless given --split test; see split.py.
@@ -16,7 +17,7 @@ import json
 import os
 import sys
 
-from . import __version__, adapters, corpus, photos, plot, score, source, split
+from . import __version__, adapters, annotate, corpus, photos, plot, score, source, split
 
 
 SEED_HELP = f"development or test images; test seeds are {split.TEST_SEEDS} and up"
@@ -44,6 +45,26 @@ def main(argv=None):
     shots.add_argument("--cache", help="where downloads are kept (default: DIR-cache)")
     shots.add_argument("--sets", help="comma-separated photo sets (default: every list of the split)")
     shots.add_argument("--split", choices=split.SPLITS, default="dev", help="development or test photos")
+    views = sub.add_parser("annotate", help="draw views for placing a symbol's corners by eye")
+    kinds = views.add_subparsers(dest="view", required=True)
+    for name, extra, about in (
+        ("overview", [], "the whole photo, gridded"),
+        ("zoom", ["x", "y", "r"], "a square of half-width R round (X, Y)"),
+        ("corners", ["quad"], "the four corners x,y;x,y;x,y;x,y magnified"),
+        ("overlay", ["quad"], "the whole photo with the quadrilateral drawn"),
+    ):
+        kind = kinds.add_parser(name, help=about)
+        kind.add_argument("photo", help="SET/FILE, as named in the lists")
+        for arg in extra:
+            kind.add_argument(arg, type=float) if arg in ("x", "y", "r") else kind.add_argument(arg)
+        kind.add_argument("out", help="the PNG to write")
+        kind.add_argument("--cache", required=True, help="the photo cache `barbench photos` filled")
+        if name == "corners":
+            kind.add_argument("--radius", type=float, help="half-width of each square, in photo pixels")
+    sheets = kinds.add_parser("sheet", help="every listed symbol of a set with its corners, to check them")
+    sheets.add_argument("set")
+    sheets.add_argument("prefix", help="pages are written as PREFIX-00.png, PREFIX-01.png, ...")
+    sheets.add_argument("--cache", required=True, help="the photo cache `barbench photos` filled")
     run = sub.add_parser("run", help="run readers on the corpus in DIR")
     run.add_argument("dir")
     run.add_argument("--readers", default=",".join(adapters.ADAPTERS))
@@ -70,6 +91,28 @@ def main(argv=None):
         help="the split the corpus must hold; test only when a release is tagged",
     )
     args = parser.parse_args(argv)
+
+    if args.command == "annotate":
+        try:
+            if args.view == "sheet":
+                rows = annotate.sheet_rows(args.set, args.cache)
+                for path, files in annotate.write_sheets(rows, args.prefix):
+                    print(path, " ".join(files))
+                return 0
+            img = annotate.load_photo(args.photo, args.cache)
+            if args.view == "overview":
+                rgb = annotate.overview(img)
+            elif args.view == "zoom":
+                rgb = annotate.zoom(img, args.x, args.y, args.r)
+            elif args.view == "corners":
+                rgb = annotate.corners(img, annotate.parse_quad(args.quad, img), args.radius)
+            else:
+                rgb = annotate.overlay(img, annotate.parse_quad(args.quad, img))
+            annotate.write_png(args.out, rgb)
+        except (ValueError, OSError) as e:
+            parser.error(str(e))
+        print(f"{args.photo}: {img.shape[1]}x{img.shape[0]}, wrote {args.out}")
+        return 0
 
     if args.command in ("corpus", "sweep"):
         try:
