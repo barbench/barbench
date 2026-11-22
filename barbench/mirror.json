@@ -1,0 +1,26 @@
+{
+ "release": "photos-1",
+ "built_from": "dd48b83440716b342fd7ca5da44519eb505008f0",
+ "sets": {
+  "artelab-medium": {
+   "file": "photos-artelab-medium.tar",
+   "bytes": 87367680,
+   "sha256": "2ef602aa7e34b63851341474f1198133a2018394aad33ac5870c12063a391d3e"
+  },
+  "commons-code128": {
+   "file": "photos-commons-code128.tar",
+   "bytes": 12124160,
+   "sha256": "e338c767620711287746e9fbdf673f55fc2a7268804a6c00140ccae52c73bf68"
+  },
+  "kaist-real": {
+   "file": "photos-kaist-real.tar",
+   "bytes": 21442560,
+   "sha256": "200553d301501a384243c8ae2e4d387c26136a59d451bc6907c4a86781217044"
+  },
+  "zxing-blackbox": {
+   "file": "photos-zxing-blackbox.tar",
+   "bytes": 20254720,
+   "sha256": "150fe406e7c888c1634109fe9df1556b7725a9ae802a56669c9c76bd09433f9b"
+  }
+ }
+}

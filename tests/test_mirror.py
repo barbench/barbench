@@ -290,5 +290,21 @@ class MirrorTest(unittest.TestCase):
         self.assertEqual(mirror.load(path), good)
 
 
+class ShippedMirrorTest(unittest.TestCase):
+    def test_the_shipped_mirror_names_a_release_for_every_set(self):
+        # Every set has a tar in the release, so a fresh cache is filled
+        # from the mirror; a set left out would fall back to its source
+        # without anyone noticing. A new set's list lands together with
+        # the release's mirror.json (CONTRIBUTING.md), and the tars come
+        # from a clean checkout of a commit, which built_from names.
+        config = mirror.load()
+        self.assertIsNotNone(config, "barbench/mirror.json is missing")
+        names = {listing["name"] for listing in photos.load_lists()}
+        self.assertEqual(set(config["sets"]), names)
+        for name, asset in config["sets"].items():
+            self.assertEqual(asset["file"], f"photos-{name}.tar")
+        self.assertRegex(str(config.get("built_from")), r"\A[0-9a-f]{40}\Z")
+
+
 if __name__ == "__main__":
     unittest.main()

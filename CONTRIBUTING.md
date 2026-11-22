@@ -33,11 +33,18 @@ then the first hex digit of the group's SHA-256, which barbench checks; and the 
 
 ## Releasing a photo mirror
 
-When the photos listed change, a maintainer builds the next release's assets with
+When the photos listed change, a maintainer builds the next release's assets from a clean
+checkout of the commit that lists them, with
 `python -m barbench mirror OUT --cache DIR --release photos-N`, checks the credits in each tar,
-publishes the tars as release `photos-N` of this repository, and then commits the `mirror.json`
-that `OUT` holds as `barbench/mirror.json`, so no barbench points at a release before it exists. Releases are publishing:
-AGENTS.md's rule 7 asks before each one.
+publishes the tars as release `photos-N` of this repository with its tag on that commit, and then
+commits the `mirror.json` that `OUT` holds as `barbench/mirror.json`, so no barbench points at a
+release before it exists. Releases are publishing: AGENTS.md's rule 7 asks before each one.
+
+A new set fails the tests until the mirror has it, since a set the mirror leaves out would quietly
+come from its source. So its list is committed on a branch, which is pushed for the release's tag,
+and `main` is fast-forwarded to the list and the new `mirror.json` together, once `scripts/ci.sh`
+passes on the second. Photos added to a set the mirror has come from the source, with a warning,
+until the next release.
 
 ## Declaring what a reader holds out
 

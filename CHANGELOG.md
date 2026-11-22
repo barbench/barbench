@@ -29,5 +29,6 @@ All notable changes to barbench are documented in this file. The format follows
   licence texts, for a release `photos-N`, and `barbench photos` takes missing photos from the
   release `mirror.json` names before each set's source, falling back to the source with a warning
   (`BARBENCH_NO_MIRROR` skips it). ZXing's list names its `LICENSE` and `NOTICE` for the tar.
+  Its first release, `photos-1`, holds the 1,002 photos listed at 22 November 2026.
 - Its own licence files, `AGENTS.md`, `CONTRIBUTING.md`, `ATTRIBUTION.md`, `scripts/ci.sh` and CI
   workflow. The Wikimedia User-Agent names this repository.
