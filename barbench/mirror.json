@@ -1,6 +1,6 @@
 {
- "release": "photos-1",
- "built_from": "dd48b83440716b342fd7ca5da44519eb505008f0",
+ "release": "photos-2",
+ "built_from": "a03027f58a5bceb53f0e330d8c712c19d3801550",
  "sets": {
   "artelab-medium": {
    "file": "photos-artelab-medium.tar",
@@ -16,6 +16,11 @@
    "file": "photos-kaist-real.tar",
    "bytes": 21442560,
    "sha256": "200553d301501a384243c8ae2e4d387c26136a59d451bc6907c4a86781217044"
+  },
+  "maintainer-photos": {
+   "file": "photos-maintainer-photos.tar",
+   "bytes": 2304000,
+   "sha256": "fbe29b00ba868d92d0f8119879a083c0a4b5ba7e4ec430735fb87288044ce47c"
   },
   "zxing-blackbox": {
    "file": "photos-zxing-blackbox.tar",
