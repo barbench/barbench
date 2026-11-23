@@ -1,6 +1,6 @@
 """Command line: build a corpus, run readers on it, report.
 
-    python -m barbench corpus DIR [--seed N] [--per-cell N]
+    python -m barbench corpus DIR [--seed N] [--per-cell N] [--symbology code128|qr|datamatrix]
     python -m barbench sweep DIR [--seed N] [--per-point N]
     python -m barbench photos DIR [--cache DIR] [--sets a,b]
         [--slices e,f] [--added-after YYYY-MM-DD] [--held-out-for a,b] [--dev-for a]
@@ -31,6 +31,12 @@ def main(argv=None):
     make.add_argument("--seed", type=int, default=1)
     make.add_argument("--per-cell", type=int, default=2, help="images per grid cell")
     make.add_argument("--negatives", type=int, default=8)
+    make.add_argument(
+        "--symbology",
+        choices=corpus.SYMBOLOGIES,
+        default="code128",
+        help="the symbols to draw; QR Code and Data Matrix corpora are for `time`, not `run`",
+    )
     sweep = sub.add_parser("sweep", help="write the sweep tier, for curves, to DIR")
     sweep.add_argument("dir")
     sweep.add_argument("--seed", type=int, default=1)
@@ -184,12 +190,16 @@ def main(argv=None):
         return 0
 
     if args.command == "corpus":
-        manifest = corpus.generate(args.dir, args.seed, args.per_cell, args.negatives)
+        manifest = corpus.generate(args.dir, args.seed, args.per_cell, args.negatives, args.symbology)
         print(f"wrote {len(manifest['images'])} images to {args.dir}")
         return 0
 
     with open(os.path.join(args.dir, "manifest.json")) as f:
         manifest = json.load(f)
+    # Older corpora and the photo tier name none: they hold Code 128.
+    symbology = manifest.get("symbology", "code128")
+    if symbology not in corpus.SYMBOLOGIES:
+        parser.error(f"{args.dir} holds {symbology!r} symbols, which barbench does not know")
 
     if args.command == "time":
         readers = [r for r in args.readers.split(",") if r]
@@ -207,7 +217,7 @@ def main(argv=None):
             "barbench_commit": source.commit(),
             "tier": manifest["tier"],
             "seed": manifest["seed"],
-            **timing.measure(args.dir, files, readers, args.runs),
+            **timing.measure(args.dir, files, readers, args.runs, symbology),
         }
         if args.out:
             with open(args.out, "w") as f:
@@ -216,6 +226,10 @@ def main(argv=None):
         print(timing.table(report))
         return 0
 
+    # Every adapter `run` calls asks for Code 128, and scoring knows its
+    # texts only: on other symbols every reader would score nothing.
+    if symbology != "code128":
+        parser.error(f"run scores Code 128 only; {args.dir} holds {symbology} symbols, for `barbench time`")
     paths = [os.path.join(args.dir, e["file"]) for e in manifest["images"]]
     report = {
         "barbench": __version__,

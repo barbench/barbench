@@ -33,6 +33,13 @@ two Python start-ups, is mostly noise.
 Times are wall-clock, so they depend on the machine and on what else runs
 on it: the report names the machine and gives the load average before and
 after.
+
+Every reader is asked for the corpus's symbology alone: Code 128, or QR
+Code or Data Matrix on a corpus `barbench corpus --symbology` drew. A
+reader that does not read it (ZBar reads no Data Matrix, and a streepjes
+build may lack either) is skipped, as one that is not installed is, so
+that every time in a report is for the same request. Those corpora are
+drawn and checked by zxing-cpp alone (corpus.py).
 """
 
 import importlib.metadata
@@ -67,31 +74,34 @@ def split(startup_runs, tier_runs, count):
     }
 
 
-def _streepjes():
+def _streepjes(symbology):
     binary = adapters._streepjes_binary()
-    return [binary, *adapters.STREEPJES_OPTIONS], (0, 1), True, adapters._version(binary)
+    adapters.streepjes_reads(binary, symbology)
+    return [binary, *adapters.streepjes_options(symbology)], (0, 1), True, adapters._version(binary)
 
 
-def _zbar():
+def _zbar(symbology):
     binary = adapters._zbar_binary()
     # Exit 4 means it found nothing in any file; it prints no line per file.
-    return [binary, *adapters.ZBAR_OPTIONS], (0, 4), False, "zbar " + adapters._version(binary)
+    return [binary, *adapters.zbar_options(symbology)], (0, 4), False, "zbar " + adapters._version(binary)
 
 
-def _vision():
+def _vision(symbology):
+    options = adapters.vision_options(symbology)
     binary = adapters._vision_binary()
-    return [binary], (0,), True, adapters._vision_version(binary)
+    return [binary, *options], (0,), True, adapters._vision_version(binary)
 
 
-# How each process reader is run: its command before the paths, the exit
-# codes that mean it worked, whether it prints a JSON line per file, and
-# its version.
+# How each process reader is run, asked for a symbology: its command before
+# the paths, the exit codes that mean it worked, whether it prints a JSON
+# line per file, and its version. Each raises `adapters.Unavailable` if the
+# reader is missing or does not read the symbology.
 PROCESSES = {"streepjes": _streepjes, "zbar": _zbar, "vision": _vision}
 
 
-def time_process(name, paths, small, runs):
+def time_process(name, paths, small, runs, symbology="code128"):
     """Times a reader that runs as a process; see the module's docstring."""
-    command, ok, lines, version = PROCESSES[name]()
+    command, ok, lines, version = PROCESSES[name](symbology)
 
     def once(chosen):
         start = time.perf_counter()
@@ -113,8 +123,9 @@ def time_process(name, paths, small, runs):
     return {"version": version, **split(startup, tier, len(paths))}
 
 
-def time_zxing_cpp(paths, runs):
+def time_zxing_cpp(paths, runs, symbology="code128"):
     """Times zxing-cpp in this process; see the module's docstring."""
+    adapters.format_name("zxing-cpp", symbology)
     try:
         import zxingcpp
     except ImportError as e:
@@ -137,7 +148,7 @@ def time_zxing_cpp(paths, runs):
     def read():
         start = time.perf_counter()
         for image in images:
-            adapters._zxing_read(zxingcpp, image)
+            adapters._zxing_read(zxingcpp, image, symbology)
         return time.perf_counter() - start
 
     # Warm-up: not counted.
@@ -162,8 +173,9 @@ def time_zxing_cpp(paths, runs):
     }
 
 
-def measure(directory, files, readers, runs=RUNS):
-    """Times READERS on the images FILES in DIRECTORY, RUNS runs each."""
+def measure(directory, files, readers, runs=RUNS, symbology="code128"):
+    """Times READERS on the images FILES in DIRECTORY, RUNS runs each,
+    asking each for SYMBOLOGY."""
     paths = [os.path.join(directory, f) for f in files]
     pixels = []
     for path in paths:
@@ -171,6 +183,7 @@ def measure(directory, files, readers, runs=RUNS):
         pixels.append(width * height)
     smallest = pixels.index(min(pixels))
     report = {
+        "symbology": symbology,
         "runs": runs,
         "images": len(paths),
         "median_pixels": statistics.median(pixels),
@@ -182,9 +195,9 @@ def measure(directory, files, readers, runs=RUNS):
     for name in readers:
         try:
             if name == "zxing-cpp":
-                timed = time_zxing_cpp(paths, runs)
+                timed = time_zxing_cpp(paths, runs, symbology)
             else:
-                timed = time_process(name, paths, paths[smallest], runs)
+                timed = time_process(name, paths, paths[smallest], runs, symbology)
         except adapters.Unavailable as e:
             timed = {"skipped": str(e)}
         report["readers"][name] = timed
@@ -235,7 +248,7 @@ def table(report):
     if report["load_before"] and report["load_after"]:
         load = f", load {report['load_before'][0]:.1f} before and {report['load_after'][0]:.1f} after"
     lines = [
-        f"{report['images']} images of {report['median_pixels']:.0f} pixels (median),"
+        f"{report['images']} images of {report['median_pixels']:.0f} pixels (median), {report['symbology']},"
         f" median of {report['runs']} runs{load}",
         f"{'reader':<12} {'start-up':>10} {'per image':>11} {'whole tier':>11}",
     ]

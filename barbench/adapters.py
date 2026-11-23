@@ -4,6 +4,10 @@ An adapter takes the paths of PGM images and returns, for each, the texts
 the reader decoded (Code 128 only), in order, plus the wall-clock seconds
 the whole batch took. A reader that is not installed raises `Unavailable`,
 and the run skips it.
+
+`barbench time` asks readers for a corpus's own symbology, which may be QR
+Code or Data Matrix too; `FORMAT_NAMES` says what each reader calls each,
+and the options below build each reader's request from it.
 """
 
 import contextlib
@@ -63,8 +67,52 @@ def streepjes(paths, binary=None):
     return _json_lines("streepjes", done.stdout, len(paths)), seconds, _version(binary)
 
 
+#: What each reader calls the symbologies barbench asks for. A reader
+#: with no entry for one does not read it, and is skipped for it. QR Code
+#: is Model 2 alone, as the corpus holds and streepjes reads: zxing-cpp's
+#: `QRCode` would add Model 1, Micro QR and rMQR. Whether a
+#: streepjes build reads QR Code depends on its features, which
+#: `streepjes_reads` asks it.
+FORMAT_NAMES = {
+    "streepjes": {"code128": "code128", "qr": "qr", "datamatrix": "data_matrix"},
+    "zxing-cpp": {"code128": "Code128", "qr": "QRCodeModel2", "datamatrix": "DataMatrix"},
+    "zbar": {"code128": "code128", "qr": "qrcode"},
+    "vision": {"code128": "code128", "qr": "qr", "datamatrix": "datamatrix"},
+}
+
+
+def format_name(reader, symbology):
+    """What READER calls SYMBOLOGY; `Unavailable` if it does not read it."""
+    name = FORMAT_NAMES[reader].get(symbology)
+    if name is None:
+        raise Unavailable(f"{reader} does not read {symbology}")
+    return name
+
+
+def streepjes_options(symbology="code128"):
+    """streepjes's options for SYMBOLOGY alone, at the default effort; the
+    paths follow."""
+    return ["--formats", format_name("streepjes", symbology), "--"]
+
+
 # Code 128 alone, at the default effort; the paths follow.
-STREEPJES_OPTIONS = ["--formats", "code128", "--"]
+STREEPJES_OPTIONS = streepjes_options()
+
+
+def streepjes_reads(binary, symbology):
+    """Raises `Unavailable` unless the streepjes BINARY reads SYMBOLOGY. It
+    refuses a format it was built without, or does not know, as a usage
+    error (exit 2), which it checks before `--version` is reached."""
+    name = format_name("streepjes", symbology)
+    probe = subprocess.run(
+        [binary, "--formats", name, "--version"], capture_output=True, text=True, check=False
+    )
+    if probe.returncode == 2:
+        # Its first line says why; the next points to --help.
+        why = (probe.stderr.strip().splitlines() or ["(no message)"])[0].removeprefix("streepjes: ")
+        raise Unavailable(f"streepjes does not read {symbology}: {why}")
+    if probe.returncode != 0:
+        raise RuntimeError(f"streepjes --formats {name} --version exited {probe.returncode}: {probe.stderr.strip()}")
 
 
 def _streepjes_binary(binary=None):
@@ -98,13 +146,12 @@ def zxing_cpp(paths):
     return results, seconds, "zxing-cpp " + importlib.metadata.version("zxing-cpp")
 
 
-def _zxing_read(zxingcpp, image):
+def _zxing_read(zxingcpp, image, symbology="code128"):
     # Plain text, as streepjes reports it: GS1 data without the
     # parentheses of its application identifiers, which the default
     # (HRI) adds and which the symbol does not hold.
-    return zxingcpp.read_barcodes(
-        image, formats=zxingcpp.BarcodeFormat.Code128, text_mode=zxingcpp.TextMode.Plain
-    )
+    formats = getattr(zxingcpp.BarcodeFormat, format_name("zxing-cpp", symbology))
+    return zxingcpp.read_barcodes(image, formats=formats, text_mode=zxingcpp.TextMode.Plain)
 
 
 def zbar(paths):
@@ -136,8 +183,18 @@ def _zbar_binary():
     return binary
 
 
+def zbar_options(symbology="code128"):
+    """ZBar's options for SYMBOLOGY alone; the path follows."""
+    return ["--quiet", "--raw", "-Sdisable", f"-S{format_name('zbar', symbology)}.enable"]
+
+
 # ZBar's options for Code 128 alone, as every adapter reads.
-ZBAR_OPTIONS = ["--quiet", "--raw", "-Sdisable", "-Scode128.enable"]
+ZBAR_OPTIONS = zbar_options()
+
+
+def vision_options(symbology="code128"):
+    """The Vision helper's options for SYMBOLOGY alone; the paths follow."""
+    return ["--symbology", format_name("vision", symbology)]
 
 
 def vision(paths, binary=None):
@@ -148,7 +205,7 @@ def vision(paths, binary=None):
     binary = binary or _vision_binary()
     version = _vision_version(binary)
     start = time.perf_counter()
-    done = subprocess.run([binary, *paths], capture_output=True, text=True, check=False)
+    done = subprocess.run([binary, *vision_options(), *paths], capture_output=True, text=True, check=False)
     seconds = time.perf_counter() - start
     if done.returncode != 0:
         raise RuntimeError(f"vision exited {done.returncode}: {done.stderr.strip()}")

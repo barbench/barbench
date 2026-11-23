@@ -7,6 +7,12 @@ All notable changes to barbench are documented in this file. The format follows
 
 ### Added
 
+- `barbench corpus --symbology qr` or `datamatrix` draws the synthetic grid with QR Code (Model
+  2) or square Data Matrix symbols of 4 to 64 characters, drawn and checked by zxing-cpp, and
+  `barbench time` on such a corpus asks every reader for that symbology alone, skipping a reader
+  that does not read it (ZBar's Data Matrix, or a streepjes build without it). `run` scores Code
+  128 only and refuses those corpora. The Vision helper takes `--symbology`, and a synthetic
+  corpus's manifest names its symbology; one that names none holds Code 128.
 - The `maintainer-photos` set: 14 phone photos of barcodes taken by a Streepjes maintainer and
   dedicated under CC0, kept in the new [barbench/photos](https://github.com/barbench/photos)
   repository at a pinned commit and in the photo mirror's release `photos-2`. Two are Code 128

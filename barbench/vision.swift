@@ -1,12 +1,15 @@
 // Apple Vision's barcode detector, for barbench's `vision` adapter
 // (barbench/adapters.py), which builds this file with `swiftc` on macOS.
 //
-//   vision PATH...    one JSON line per file, in order:
+//   vision [--symbology NAME] PATH...
+//                     one JSON line per file, in order:
 //                     {"codes": [{"text": ..., "bytes": ...}]} or {"error": ...}
 //   vision --version  the detector's revision, the macOS build and the chip
 //
-// It asks for Code 128 only, as every adapter does, and pins the request's
-// revision: a newer default would otherwise change the numbers with the OS.
+// It asks for one symbology only: Code 128, as every adapter does in
+// `barbench run`, unless --symbology names `qr` or `datamatrix` (for
+// `barbench time` on such a corpus). It pins the request's revision: a
+// newer default would otherwise change the numbers with the OS.
 // Files are binary 8-bit PGM, as barbench/pgm.py writes them.
 
 import CoreGraphics
@@ -67,11 +70,11 @@ func loadPGM(_ path: String) throws -> CGImage {
 /// (for Code 128, Vision's `payloadData` holds the symbol's codewords, start,
 /// check and stop included), which the adapter reports when Vision gives no text,
 /// so that a misread of them still counts.
-func read(_ path: String) throws -> [[String: Any]] {
+func read(_ path: String, _ symbology: VNBarcodeSymbology) throws -> [[String: Any]] {
     let image = try loadPGM(path)
     let request = VNDetectBarcodesRequest()
     request.revision = revision
-    request.symbologies = [.code128]
+    request.symbologies = [symbology]
     try VNImageRequestHandler(cgImage: image, options: [:]).perform([request])
     return (request.results ?? []).map { found in
         let hex = found.payloadData.map { $0.map { String(format: "%02x", $0) }.joined() }
@@ -101,7 +104,19 @@ func chip() -> String {
     return String(decoding: name.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }, as: UTF8.self)
 }
 
-let arguments = Array(CommandLine.arguments.dropFirst())
+/// The symbologies --symbology may name, as barbench names them.
+let symbologies: [String: VNBarcodeSymbology] = ["code128": .code128, "qr": .qr, "datamatrix": .dataMatrix]
+
+var arguments = Array(CommandLine.arguments.dropFirst())
+var symbology = VNBarcodeSymbology.code128
+if arguments.first == "--symbology" {
+    guard arguments.count >= 2, let chosen = symbologies[arguments[1]] else {
+        FileHandle.standardError.write(Data("--symbology needs one of code128, qr, datamatrix\n".utf8))
+        exit(2)
+    }
+    symbology = chosen
+    arguments.removeFirst(2)
+}
 guard VNDetectBarcodesRequest.supportedRevisions.contains(revision) else {
     FileHandle.standardError.write(
         Data("VNDetectBarcodesRequest revision \(revision) is not supported here\n".utf8))
@@ -114,7 +129,7 @@ if arguments == ["--version"] {
 }
 for path in arguments {
     do {
-        emit(["codes": try read(path)])
+        emit(["codes": try read(path, symbology)])
     } catch let failure as Failure {
         emit(["error": failure.message])
     } catch {

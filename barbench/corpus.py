@@ -1,5 +1,5 @@
 """The synthetic tier: Code 128 symbols from third-party encoders, rendered
-and degraded with numpy.
+and degraded with numpy; or, for timing, QR Code or Data Matrix symbols.
 
 Each image is a symbol on paper: its modules come from zxing-cpp or
 python-barcode (alternating), and it is drawn at a module size, rotation,
@@ -8,6 +8,21 @@ plain noise, and random bars that spell nothing. Everything follows from
 the seed, and `manifest.json` records what each image holds. Every clean
 symbol is read back before it is used, and payloads an encoder gets wrong
 are listed in the manifest and replaced.
+
+`generate(..., symbology="qr")` or `"datamatrix"` draws the same grid with
+QR Code (Model 2) or Data Matrix (ECC 200) symbols instead, for `barbench
+time`, which asks each reader for the corpus's symbology; `run` scores
+Code 128 only and refuses them. zxing-cpp alone draws them, as the one
+pinned encoder that writes them, and it checks them too, so they favour
+zxing-cpp more than the Code 128 symbols do: they are for timing, not
+read rates. Their payloads run from 4 to 64 characters, so that they come
+in several sizes (in the default corpus, QR Code versions 1 to 4, at the
+highest error-correction level that fits the smallest version, as
+zxing-cpp chooses, and square Data Matrix symbols from 12 × 12 to 32 × 32
+modules), and each entry records its symbol's size in modules. Like the
+Code 128 grid, its harder cells defeat every reader often, so the times
+mix reads with failed attempts. Their negatives are noise and random
+modules.
 """
 
 import itertools
@@ -19,6 +34,12 @@ from . import pgm
 
 #: Quiet zone on each side of a symbol, in modules (ISO/IEC 15417's minimum).
 QUIET = 10
+#: The symbologies a synthetic corpus may hold, as `photos.SYMBOLOGIES`
+#: names them.
+SYMBOLOGIES = ("code128", "qr", "datamatrix")
+#: The 2D symbologies' quiet zones, in modules: the minimums of ISO/IEC
+#: 18004 and ISO/IEC 16022.
+QUIET_2D = {"qr": 4, "datamatrix": 1}
 #: Paper and ink levels.
 PAPER, INK = 225.0, 35.0
 #: Each pixel's ink is averaged over SUPERSAMPLE × SUPERSAMPLE points.
@@ -49,6 +70,71 @@ def payload(rng):
     inner = "".join(ALPHABET[int(k)] for k in rng.integers(0, len(ALPHABET), n - 2))
     first, last = (edge[int(k)] for k in rng.integers(0, len(edge), 2))
     return first + inner + last
+
+
+def payload_2d(rng):
+    """A payload of 4 to 64 characters of `ALPHABET` for a 2D symbol,
+    drawn from `rng`, neither starting nor ending with a space."""
+    n = int(rng.integers(4, 65))
+    edge = ALPHABET.replace(" ", "")
+    inner = "".join(ALPHABET[int(k)] for k in rng.integers(0, len(ALPHABET), n - 2))
+    first, last = (edge[int(k)] for k in rng.integers(0, len(edge), 2))
+    return first + inner + last
+
+
+def _zxing_format(symbology):
+    """zxing-cpp's format for a 2D symbology. QR Code is Model 2 alone, as
+    adapters.FORMAT_NAMES asks every reader for."""
+    import zxingcpp
+
+    return {"qr": zxingcpp.BarcodeFormat.QRCodeModel2, "datamatrix": zxingcpp.BarcodeFormat.DataMatrix}[
+        symbology
+    ]
+
+
+def zxing_matrix(text, symbology):
+    """The modules (1 = dark) zxing-cpp encodes `text` as in a 2D
+    symbology, a numpy array of rows, without quiet zones."""
+    import numpy as np
+    import zxingcpp
+
+    # Square Data Matrix symbols only, as ISO/IEC 16022 has them besides
+    # six rectangles: zxing-cpp would otherwise pick DMRE rectangles too
+    # (ISO/IEC 21471), which many readers do not read. It ignores an
+    # option it does not know, so a test checks that every symbol is square.
+    options = {"forceSquare": True} if symbology == "datamatrix" else {}
+    barcode = zxingcpp.create_barcode(text, _zxing_format(symbology), **options)
+    image = np.asarray(barcode.to_image(scale=1, add_quiet_zones=False))
+    return (image < 128).astype(np.uint8)
+
+
+def round_trips_2d(matrix, text, symbology):
+    """Whether a clean drawing of `matrix`, at four pixels per module with
+    four modules more than its quiet zone, reads back as `text`; see
+    `round_trips`. It checks the encoding, not the drawing."""
+    import numpy as np
+    import zxingcpp
+
+    padded = np.pad(matrix, QUIET_2D[symbology] + 4)
+    image = np.kron(255 - 255 * padded, np.ones((4, 4), dtype=np.uint8)).astype(np.uint8)
+    found = zxingcpp.read_barcodes(image, formats=_zxing_format(symbology))
+    return [r.text for r in found] == [text]
+
+
+def symbol_2d(rng, symbology, rejected):
+    """A payload and its modules from zxing-cpp in a 2D symbology, read back
+    before use as `symbol` reads a Code 128 symbol back."""
+    text = payload_2d(rng)
+    matrix = zxing_matrix(text, symbology)
+    tries = 0
+    while not round_trips_2d(matrix, text, symbology):
+        rejected.append({"encoder": "zxing-cpp", "payload": text})
+        tries += 1
+        if tries >= MAX_REJECTS:
+            raise RuntimeError(f"zxing-cpp got {tries} {symbology} payloads in a row wrong")
+        text = payload_2d(rng)
+        matrix = zxing_matrix(text, symbology)
+    return text, matrix
 
 
 def zxing_modules(text):
@@ -126,8 +212,15 @@ def render(modules, module_px, rotation, blur, noise, rng, shift=(0.0, 0.0)):
         index = np.clip(u.astype(np.int64), 0, length - 1)
         ink += np.where(inside, pattern[index], 0.0)
     ink /= SUPERSAMPLE * SUPERSAMPLE
+    return _degrade(ink, blur * module_px, noise, rng)
+
+
+def _degrade(ink, sigma, noise, rng):
+    """Ink coverage (0 to 1) as grey levels on paper, blurred by a Gaussian
+    of `sigma` pixels and noised by one of `noise` grey levels, as uint8."""
+    import numpy as np
+
     image = PAPER + (INK - PAPER) * ink
-    sigma = blur * module_px
     if sigma > 0:
         radius = int(math.ceil(3 * sigma))
         taps = np.exp(-0.5 * (np.arange(-radius, radius + 1) / sigma) ** 2)
@@ -140,10 +233,42 @@ def render(modules, module_px, rotation, blur, noise, rng, shift=(0.0, 0.0)):
     return np.clip(np.rint(image), 0, 255).astype(np.uint8)
 
 
-def generate(out_dir, seed=1, per_cell=2, negatives=8):
-    """Writes the corpus to `out_dir`: PGM images and `manifest.json`.
-    Returns the manifest."""
+def render_matrix(matrix, quiet, module_px, rotation, blur, noise, rng):
+    """A 2D symbol's `matrix` of modules (rows, 1 = dark) drawn with a quiet
+    zone of `quiet` modules, rotated, blurred and noised as `render` draws
+    a Code 128 symbol."""
     import numpy as np
+
+    pattern = np.pad(np.asarray(matrix, dtype=np.float64), quiet)
+    rows, cols = pattern.shape
+    theta = math.radians(rotation)
+    c, s = math.cos(theta), math.sin(theta)
+    half_w, half_h = cols * module_px / 2, rows * module_px / 2
+    margin = 8 + 4 * blur * module_px
+    width = int(math.ceil(2 * (abs(c) * half_w + abs(s) * half_h) + 2 * margin))
+    tall = int(math.ceil(2 * (abs(s) * half_w + abs(c) * half_h) + 2 * margin))
+    offsets = (np.arange(SUPERSAMPLE) + 0.5) / SUPERSAMPLE
+    ys, xs = np.mgrid[0:tall, 0:width].astype(np.float64)
+    ink = np.zeros((tall, width))
+    for oy, ox in itertools.product(offsets, offsets):
+        dx, dy = xs + ox - width / 2, ys + oy - tall / 2
+        u = (dx * c + dy * s) / module_px + cols / 2
+        v = (-dx * s + dy * c) / module_px + rows / 2
+        inside = (u >= 0) & (u < cols) & (v >= 0) & (v < rows)
+        column = np.clip(u.astype(np.int64), 0, cols - 1)
+        row = np.clip(v.astype(np.int64), 0, rows - 1)
+        ink += np.where(inside, pattern[row, column], 0.0)
+    ink /= SUPERSAMPLE * SUPERSAMPLE
+    return _degrade(ink, blur * module_px, noise, rng)
+
+
+def generate(out_dir, seed=1, per_cell=2, negatives=8, symbology="code128"):
+    """Writes the corpus to `out_dir`: PGM images and `manifest.json`, with
+    symbols of `symbology`, one of `SYMBOLOGIES`. Returns the manifest."""
+    import numpy as np
+
+    if symbology not in SYMBOLOGIES:
+        raise ValueError(f"unknown symbology {symbology!r}")
 
     rng = np.random.default_rng(seed)
     os.makedirs(out_dir, exist_ok=True)
@@ -159,9 +284,16 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
         # image's place in it: every value of every axis gets each encoder
         # equally often, so no axis stands in for the encoder. (Any fixed
         # cycle over images would line up with some axis.)
-        encoder = names[(sum(index) + i % per_cell) % len(names)]
-        text, modules = symbol(rng, encoder, rejected)
-        image = render(modules, module_px, rotation, blur, noise, rng)
+        if symbology == "code128":
+            encoder = names[(sum(index) + i % per_cell) % len(names)]
+            text, modules = symbol(rng, encoder, rejected)
+            image = render(modules, module_px, rotation, blur, noise, rng)
+            size = {}
+        else:
+            encoder = "zxing-cpp"
+            text, matrix = symbol_2d(rng, symbology, rejected)
+            image = render_matrix(matrix, QUIET_2D[symbology], module_px, rotation, blur, noise, rng)
+            size = {"modules": list(matrix.shape)}
         name = f"pos-{i:04d}.pgm"
         pgm.write(os.path.join(out_dir, name), image)
         entries.append(
@@ -169,6 +301,7 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
                 "file": name,
                 "expected": text,
                 "encoder": encoder,
+                **size,
                 "module_px": module_px,
                 "blur": blur,
                 "rotation": rotation,
@@ -182,18 +315,29 @@ def generate(out_dir, seed=1, per_cell=2, negatives=8):
                 np.rint(rng.normal(128.0, 40.0, (120, 240))), 0, 255
             ).astype(np.uint8)
             kind = "noise"
-        else:
+        elif symbology == "code128":
             # Random bars and spaces of 1 to 4 modules: no symbol.
             widths = rng.integers(1, 5, 60)
             modules = [1 - k % 2 for k, w in enumerate(widths) for _ in range(int(w))]
             image = render(modules, 2.0, float(rng.integers(0, 180)), 0.0, 4.0, rng)
             kind = "random-bars"
+        else:
+            # Random modules, with no finder pattern: no symbol.
+            matrix = rng.integers(0, 2, (21, 21))
+            quiet = QUIET_2D[symbology]
+            image = render_matrix(matrix, quiet, 2.0, float(rng.integers(0, 180)), 0.0, 4.0, rng)
+            kind = "random-modules"
         pgm.write(os.path.join(out_dir, name), image)
         entries.append({"file": name, "expected": None, "kind": kind})
+    encoders = encoder_versions()
+    if symbology != "code128":
+        encoders = {"zxing-cpp": encoders["zxing-cpp"]}
     manifest = {
         "tier": "synthetic",
         "seed": seed,
-        "encoders": encoder_versions(),
+        # A manifest without one, such as the photo tier's, holds Code 128.
+        "symbology": symbology,
+        "encoders": encoders,
         "grid": GRID,
         "rejected": rejected,
         "images": entries,

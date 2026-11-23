@@ -353,6 +353,18 @@ leaves out reading the files. The times are wall-clock, so the report
 names the machine and gives the load average; `barbench/timing.py` says
 more.
 
+To time QR Code or Data Matrix, `python -m barbench corpus DIR --symbology
+qr` (or `datamatrix`) draws the synthetic grid with those symbols, and
+`time` on it asks every reader for that symbology alone: QR Code Model 2,
+or square Data Matrix (ECC 200). A reader that does not read it is
+skipped, as one that is not installed is: ZBar reads no Data Matrix, and
+a streepjes build may lack either, which `time` asks it. Their payloads
+run from 4 to 64 characters, so the symbols come in several sizes, each
+recorded in the manifest. zxing-cpp alone draws them, being the one
+pinned encoder that writes them, and checks them too, so they are for
+timing rather than read rates: `run` scores Code 128 only and refuses
+them.
+
 For the photo tier, `python -m barbench photos DIR` in place of `corpus`
 downloads and converts the photos into `DIR-cache`: about 143 MB from the
 mirror, or about 450 MB of archives from the sources when the mirror

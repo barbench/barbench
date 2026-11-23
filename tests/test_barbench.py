@@ -76,6 +76,19 @@ class RenderTest(unittest.TestCase):
         self.assertFalse(np.any(np.abs(row_still.astype(float) - mid) < 2))
         self.assertTrue(np.any(np.abs(row_moved.astype(float) - mid) < 2))
 
+    def test_a_2d_symbol_has_its_modules(self):
+        matrix = np.array([[1, 0, 1, 1], [0, 0, 1, 0], [1, 1, 0, 1]])
+        image = corpus.render_matrix(matrix, 2, 3.0, 0.0, 0.0, 0.0, np.random.default_rng(0))
+        dark = np.argwhere(image < 128)
+        top, left = dark.min(axis=0)
+        # Centred, with its quiet zone of two modules all round.
+        rows, cols = (np.array(matrix.shape) + 4) * 3
+        self.assertLessEqual(abs(top - (image.shape[0] - rows) / 2 - 6), 1)
+        self.assertLessEqual(abs(left - (image.shape[1] - cols) / 2 - 6), 1)
+        sampled = [[int(image[top + 3 * r + 1, left + 3 * c + 1] < 128) for c in range(4)] for r in range(3)]
+        self.assertEqual(sampled, matrix.tolist())
+        self.assertEqual(dark.max(axis=0).tolist(), [top + 3 * 3 - 1, left + 3 * 4 - 1])
+
     def test_encoders_agree_with_a_reader(self):
         for name, encode in corpus.ENCODERS.items():
             self.assertTrue(corpus.round_trips(encode("Streepjes 128"), "Streepjes 128"), name)
@@ -132,6 +145,73 @@ class CorpusTest(unittest.TestCase):
             self.assertEqual(len(first["images"]), cells + 2)
             self.assertTrue(all(corpus.round_trips(corpus.ENCODERS[e["encoder"]](e["expected"]), e["expected"])
                                 for e in first["images"] if e["expected"] is not None))
+
+
+class Corpus2dTest(unittest.TestCase):
+    """QR Code and Data Matrix corpora, for `barbench time`."""
+
+    def test_payloads(self):
+        rng = np.random.default_rng(3)
+        drawn = [corpus.payload_2d(rng) for _ in range(500)]
+        self.assertTrue(all(4 <= len(p) <= 64 for p in drawn))
+        self.assertTrue(all(p == p.strip() for p in drawn))
+        self.assertEqual((min(map(len, drawn)), max(map(len, drawn))), (4, 64))
+
+    def test_symbols_are_checked_and_come_in_several_sizes(self):
+        for symbology in ("qr", "datamatrix"):
+            with tempfile.TemporaryDirectory() as d:
+                manifest = corpus.generate(d, seed=4, per_cell=1, negatives=2, symbology=symbology)
+                again = corpus.generate(d + "-again", seed=4, per_cell=1, negatives=2, symbology=symbology)
+                try:
+                    for e in manifest["images"]:
+                        with open(os.path.join(d, e["file"]), "rb") as a, open(
+                            os.path.join(d + "-again", e["file"]), "rb"
+                        ) as b:
+                            self.assertEqual(a.read(), b.read(), (symbology, e["file"]))
+                finally:
+                    shutil.rmtree(d + "-again")
+            self.assertEqual(manifest, again)
+            self.assertEqual(manifest["symbology"], symbology)
+            self.assertEqual(list(manifest["encoders"]), ["zxing-cpp"])
+            positives = [e for e in manifest["images"] if e["expected"] is not None]
+            self.assertEqual(len(positives), len(manifest["images"]) - 2)
+            sizes = set()
+            for e in positives:
+                matrix = corpus.zxing_matrix(e["expected"], symbology)
+                self.assertEqual(e["encoder"], "zxing-cpp")
+                self.assertEqual(e["modules"], list(matrix.shape))
+                self.assertTrue(corpus.round_trips_2d(matrix, e["expected"], symbology))
+                sizes.add(matrix.shape)
+            self.assertGreaterEqual(len(sizes), 3, (symbology, sizes))
+            self.assertEqual([e.get("kind") for e in manifest["images"][-2:]], ["noise", "random-modules"])
+            # zxing-cpp would draw DMRE rectangles without forceSquare, which
+            # it ignores if misspelt: every symbol is square, as QR Code's are.
+            self.assertTrue(all(rows == cols for rows, cols in sizes), (symbology, sizes))
+
+    def test_a_code128_corpus_says_so(self):
+        with tempfile.TemporaryDirectory() as d:
+            manifest = corpus.generate(d, seed=1, per_cell=1, negatives=0)
+        self.assertEqual(manifest["symbology"], "code128")
+        self.assertEqual(set(manifest["encoders"]), set(corpus.ENCODERS))
+
+    def test_unknown_symbologies_and_wrong_encodings_stop_the_corpus(self):
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(ValueError):
+                corpus.generate(d, symbology="aztec")
+            with mock.patch.object(corpus, "round_trips_2d", return_value=False):
+                with self.assertRaisesRegex(RuntimeError, "qr payloads in a row wrong"):
+                    corpus.generate(d, seed=1, per_cell=1, negatives=0, symbology="qr")
+
+    def test_run_refuses_a_corpus_that_is_not_code128(self):
+        with tempfile.TemporaryDirectory() as d:
+            with contextlib.redirect_stdout(io.StringIO()):
+                cli.main(["corpus", d, "--symbology", "datamatrix", "--per-cell", "1", "--negatives", "0"])
+            with open(os.path.join(d, "manifest.json")) as f:
+                self.assertEqual(json.load(f)["symbology"], "datamatrix")
+            with self.assertRaises(SystemExit) as e, contextlib.redirect_stderr(io.StringIO()) as err:
+                cli.main(["run", d, "--readers", "zxing-cpp"])
+        self.assertEqual(e.exception.code, 2)
+        self.assertIn("Code 128 only", err.getvalue())
 
 
 class ScoreTest(unittest.TestCase):
@@ -698,6 +778,65 @@ class AdapterTest(unittest.TestCase):
             results, _, _ = adapters.zxing_cpp([path])
         self.assertEqual(results, [{"texts": ["96991001"]}])
 
+    def test_each_reader_is_asked_for_one_symbology_by_its_own_name(self):
+        self.assertEqual(set(adapters.FORMAT_NAMES), set(adapters.ADAPTERS))
+        for reader, names in adapters.FORMAT_NAMES.items():
+            self.assertIn("code128", names, reader)
+            self.assertLessEqual(set(names), set(corpus.SYMBOLOGIES), reader)
+        # What `run` asks for is unchanged.
+        self.assertEqual(adapters.STREEPJES_OPTIONS, ["--formats", "code128", "--"])
+        self.assertEqual(adapters.ZBAR_OPTIONS, ["--quiet", "--raw", "-Sdisable", "-Scode128.enable"])
+        self.assertEqual(adapters.vision_options(), ["--symbology", "code128"])
+        self.assertEqual(adapters.streepjes_options("datamatrix"), ["--formats", "data_matrix", "--"])
+        self.assertEqual(adapters.zbar_options("qr")[-1], "-Sqrcode.enable")
+        self.assertEqual(adapters.vision_options("datamatrix"), ["--symbology", "datamatrix"])
+        with self.assertRaisesRegex(adapters.Unavailable, "zbar does not read datamatrix"):
+            adapters.zbar_options("datamatrix")
+
+    def test_a_streepjes_build_is_asked_what_it_reads(self):
+        with tempfile.TemporaryDirectory() as d:
+            refusing = _script(d, "refusing", '[ "$2" = code128 ] && exit 0\n'
+                               "echo \"streepjes: format '$2' is not available in this build\" >&2\n"
+                               "echo \"Try 'streepjes --help' for more.\" >&2\nexit 2\n")
+            adapters.streepjes_reads(refusing, "code128")
+            with self.assertRaises(adapters.Unavailable) as e:
+                adapters.streepjes_reads(refusing, "datamatrix")
+            self.assertEqual(
+                str(e.exception),
+                "streepjes does not read datamatrix: format 'data_matrix' is not available in this build",
+            )
+            # Any other failure is not a skip.
+            broken = _script(d, "broken", "exit 70\n")
+            with self.assertRaisesRegex(RuntimeError, "exited 70"):
+                adapters.streepjes_reads(broken, "qr")
+
+    def test_zxing_cpp_reads_qr_and_data_matrix_only_when_asked(self):
+        try:
+            import zxingcpp
+        except ImportError:
+            self.skipTest("zxing-cpp is not installed")
+        for symbology in ("qr", "datamatrix"):
+            matrix = corpus.zxing_matrix("Streepjes 2D", symbology)
+            image = corpus.render_matrix(matrix, 4, 3.0, 10.0, 0.0, 0.0, np.random.default_rng(0))
+            found = adapters._zxing_read(zxingcpp, image, symbology)
+            self.assertEqual([r.text for r in found], ["Streepjes 2D"], symbology)
+            self.assertEqual(adapters._zxing_read(zxingcpp, image), [], symbology)
+
+    @unittest.skipUnless(os.environ.get("STREEPJES_BIN"), "STREEPJES_BIN not set")
+    def test_streepjes_reads_a_rendered_qr_symbol_if_built_to(self):
+        binary = os.environ["STREEPJES_BIN"]
+        try:
+            adapters.streepjes_reads(binary, "qr")
+        except adapters.Unavailable:
+            self.skipTest("this streepjes build does not read QR Code")
+        matrix = corpus.zxing_matrix("Streepjes 2D", "qr")
+        image = corpus.render_matrix(matrix, 4, 3.0, 10.0, 0.0, 0.0, np.random.default_rng(0))
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "a.pgm")
+            pgm.write(path, image)
+            done = subprocess.run([binary, *adapters.streepjes_options("qr"), path], capture_output=True, text=True)
+        self.assertEqual(adapters._json_lines("streepjes", done.stdout, 1), [{"texts": ["Streepjes 2D"]}])
+
     @unittest.skipUnless(os.environ.get("STREEPJES_BIN"), "STREEPJES_BIN not set")
     def test_streepjes_reads_a_rendered_symbol(self):
         rng = np.random.default_rng(0)
@@ -810,6 +949,31 @@ class VisionAdapterTest(unittest.TestCase):
         self.assertTrue(version.startswith("Apple Vision barcodes revision 4, macOS "), version)
 
 
+class VisionSymbologyTest(unittest.TestCase):
+    @unittest.skipUnless(sys.platform == "darwin" and shutil.which("swiftc"), "needs macOS and swiftc")
+    def test_vision_reads_the_symbology_it_is_asked_for(self):
+        with tempfile.TemporaryDirectory() as d:
+            paths = {}
+            for symbology in ("qr", "datamatrix"):
+                matrix = corpus.zxing_matrix("Streepjes 2D", symbology)
+                image = corpus.render_matrix(matrix, 4, 3.0, 10.0, 0.0, 0.0, np.random.default_rng(0))
+                paths[symbology] = os.path.join(d, symbology + ".pgm")
+                pgm.write(paths[symbology], image)
+            with mock.patch.dict(os.environ, {"BARBENCH_VISION_CACHE": os.path.join(d, "cache")}):
+                helper = adapters._vision_binary()
+            for symbology in ("qr", "datamatrix"):
+                for asked, expected in ((symbology, ["Streepjes 2D"]), ("code128", [])):
+                    done = subprocess.run(
+                        [helper, *adapters.vision_options(asked), paths[symbology]], capture_output=True, text=True
+                    )
+                    self.assertEqual(done.returncode, 0, done.stderr)
+                    results = adapters._json_lines("vision", done.stdout, 1)
+                    self.assertEqual(results, [{"texts": expected}], (symbology, asked))
+            done = subprocess.run([helper, "--symbology", "aztec", paths["qr"]], capture_output=True, text=True)
+            self.assertEqual(done.returncode, 2)
+            self.assertIn("--symbology needs one of", done.stderr)
+
+
 def _runs(log):
     """The files of each run a fake reader logged, one run per line."""
     return [line.rstrip("\n").split("|")[:-1] for line in log]
@@ -831,16 +995,40 @@ class TimingTest(unittest.TestCase):
     def tearDown(self):
         self.dir.cleanup()
 
-    def write_manifest(self, files):
+    def write_manifest(self, files, symbology=None):
         manifest = {"tier": "synthetic", "seed": 0, "images": [{"file": f} for f in files]}
+        if symbology:
+            manifest["symbology"] = symbology
         with open(os.path.join(self.dir.name, "manifest.json"), "w") as f:
             json.dump(manifest, f)
 
-    def fake_streepjes(self, status=0, lines="for f; do echo '{\"codes\": []}'; done\n"):
-        """A streepjes that logs the files of each run and prints LINES."""
+    def fake_streepjes(self, status=0, lines="for f; do echo '{\"codes\": []}'; done\n", reads="code128,qr"):
+        """A streepjes built to read READS that logs the files of each run,
+        and its options to LOG-options, and prints LINES."""
         return _script(self.dir.name, "streepjes",
                        '[ "$1" = --version ] && { echo "streepjes 0.0.0"; exit 0; }\n'
+                       '[ "$1" = --formats ] && [ "$3" = --version ] && case ",' + reads + ',"'
+                       ' in *",$2,"*) echo "streepjes 0.0.0"; exit 0;;'
+                       " *) echo \"streepjes: format '$2' is not available in this build\" >&2; exit 2;; esac\n"
+                       f'echo "$1 $2 $3" >> "{self.log}-options"\n'
                        f'shift 3\nprintf "%s|" "$@" >> "{self.log}"\necho >> "{self.log}"\n{lines}exit {status}\n')
+
+    def fake_zbar(self):
+        """A zbarimg on the PATH that logs its options and files."""
+        _script(self.dir.name, "zbarimg", '[ "$1" = --version ] && { echo 0.23; exit 0; }\n'
+                f'echo "$4" >> "{self.log}-zbar-options"\n'
+                f'shift 4\nprintf "%s|" "$@" >> "{self.log}-zbar"\necho >> "{self.log}-zbar"\nexit 4\n')
+        return {"PATH": self.dir.name + os.pathsep + os.environ.get("PATH", "")}
+
+    def fake_vision(self):
+        """A Vision helper that logs its options and prints a line per file."""
+        return _script(self.dir.name, "vision", '[ "$1" = --version ] && { echo "Apple Vision"; exit 0; }\n'
+                       f'echo "$1 $2" >> "{self.log}-vision-options"\nshift 2\n'
+                       "for f; do echo '{\"codes\": []}'; done\n")
+
+    def read_log(self, suffix):
+        with open(self.log + suffix) as f:
+            return f.read().splitlines()
 
     def time(self, *args, env=None):
         out = os.path.join(self.dir.name, "timing.json")
@@ -878,6 +1066,9 @@ class TimingTest(unittest.TestCase):
         self.assertEqual((report["images"], report["smallest"], report["runs"]), (3, "b.pgm", 2))
         self.assertEqual(report["median_pixels"], 64)
         self.assertEqual(report["tier"], "synthetic")
+        # A manifest that names no symbology holds Code 128.
+        self.assertEqual(report["symbology"], "code128")
+        self.assertEqual(set(self.read_log("-options")), {"--formats code128 --"})
         streepjes = report["readers"]["streepjes"]
         self.assertEqual(streepjes["version"], "streepjes 0.0.0")
         self.assertEqual((len(streepjes["startup_runs"]), len(streepjes["tier_runs"])), (2, 2))
@@ -910,11 +1101,56 @@ class TimingTest(unittest.TestCase):
         self.assertIn("not found", report["readers"]["streepjes"]["skipped"])
         self.assertIn("skipped", timing.table(report))
 
+    def test_readers_are_asked_for_the_corpus_symbology(self):
+        self.write_manifest(["a.pgm", "b.pgm", "c.pgm"], "qr")
+        env = {"STREEPJES_BIN": self.fake_streepjes(), **self.fake_zbar()}
+        with mock.patch.object(adapters, "_vision_binary", return_value=self.fake_vision()):
+            report = self.time("--readers", "streepjes,zbar,vision", "--runs", "1", env=env)
+        self.assertEqual(report["symbology"], "qr")
+        self.assertEqual(set(report["readers"]), {"streepjes", "zbar", "vision"})
+        self.assertFalse(any("skipped" in r for r in report["readers"].values()), report["readers"])
+        self.assertEqual(set(self.read_log("-options")), {"--formats qr --"})
+        self.assertEqual(set(self.read_log("-zbar-options")), {"-Sqrcode.enable"})
+        self.assertEqual(set(self.read_log("-vision-options")), {"--symbology qr"})
+
+    def test_zxing_cpp_is_asked_for_the_corpus_symbology(self):
+        try:
+            import zxingcpp  # noqa: F401
+        except ImportError:
+            self.skipTest("zxing-cpp is not installed")
+        self.write_manifest(["a.pgm", "b.pgm", "c.pgm"], "datamatrix")
+        with mock.patch.object(adapters, "_zxing_read", wraps=adapters._zxing_read) as read:
+            report = self.time("--readers", "zxing-cpp", "--runs", "1")
+        self.assertNotIn("skipped", report["readers"]["zxing-cpp"])
+        self.assertEqual({c.args[2] for c in read.call_args_list}, {"datamatrix"})
+
+    def test_a_reader_that_does_not_read_the_symbology_is_skipped(self):
+        self.write_manifest(["a.pgm", "b.pgm", "c.pgm"], "datamatrix")
+        env = {"STREEPJES_BIN": self.fake_streepjes(), **self.fake_zbar()}
+        with mock.patch.object(adapters, "_vision_binary", return_value=self.fake_vision()):
+            report = self.time("--readers", "streepjes,zbar,vision", "--runs", "1", env=env)
+        readers = report["readers"]
+        self.assertEqual(
+            readers["streepjes"]["skipped"],
+            "streepjes does not read datamatrix: format 'data_matrix' is not available in this build",
+        )
+        self.assertEqual(readers["zbar"]["skipped"], "zbar does not read datamatrix")
+        # Neither ran; the reader that reads it still did.
+        self.assertFalse(os.path.exists(self.log) or os.path.exists(self.log + "-zbar"))
+        self.assertGreaterEqual(readers["vision"]["per_image_s"], 0.0)
+        self.assertEqual(set(self.read_log("-vision-options")), {"--symbology datamatrix"})
+        self.assertIn("datamatrix", timing.table(report))
+
     def test_usage_errors(self):
         for args in (["--readers", "streepjs"], ["--runs", "0"]):
             with self.assertRaises(SystemExit) as e, contextlib.redirect_stderr(io.StringIO()):
                 cli.main(["time", self.dir.name, *args])
             self.assertEqual(e.exception.code, 2, args)
+        # A symbology barbench does not know.
+        self.write_manifest(["a.pgm", "b.pgm"], "aztec")
+        with self.assertRaises(SystemExit) as e, contextlib.redirect_stderr(io.StringIO()):
+            cli.main(["time", self.dir.name, "--readers", "streepjes"])
+        self.assertEqual(e.exception.code, 2)
         # One image gives no cost per image.
         self.write_manifest(["a.pgm"])
         with self.assertRaises(SystemExit) as e, contextlib.redirect_stderr(io.StringIO()):

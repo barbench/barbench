@@ -66,9 +66,18 @@ job_synthetic() {
     (cd "$target" && "$venv/bin/python" -m barbench corpus corpus --per-cell 1)
     (cd "$target" && "$venv/bin/python" -m barbench run corpus --readers "$readers" --require "$readers" \
         "${gates[@]}" --min-read zxing-cpp=0.4 --out synthetic-results.json)
-    # Timing has no gate, since CI machines vary; this checks that it runs.
+    # Timing has no gate, since CI machines vary; this checks that it runs,
+    # on Code 128 and on small QR Code and Data Matrix corpora, which
+    # `run` does not score. A streepjes without either is skipped there.
     (cd "$target" && "$venv/bin/python" -m barbench time corpus --readers "$readers" --runs 1 \
         --out synthetic-timing.json)
+    for symbology in qr datamatrix; do
+        rm -rf "$target/corpus-$symbology"
+        (cd "$target" && "$venv/bin/python" -m barbench corpus "corpus-$symbology" --symbology "$symbology" \
+            --per-cell 1 --negatives 2)
+        (cd "$target" && "$venv/bin/python" -m barbench time "corpus-$symbology" --readers "$readers" \
+            --runs 1 --out "synthetic-timing-$symbology.json")
+    done
 }
 
 job_photos() {
